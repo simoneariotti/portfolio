@@ -48,6 +48,7 @@
   --ease-viscoso:cubic-bezier(0.22,1,0.36,1);
   --durata-micro:220ms;
   --misura-prosa:70ch;
+  --materia:.65;   /* quanto emerge la materia di fondo. Verificato: oltre .65 il testo secondario scende sotto 4.5:1 */
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -108,6 +109,19 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--funzione);outline-o
 .icona{width:20px;height:20px;flex:0 0 auto;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
 .wrap{max-width:1160px;margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
 .wrap-prosa{max-width:calc(var(--misura-prosa) + 2*clamp(20px,4.5vw,56px));margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
+
+/* ── MATERIA DI FONDO: la struttura non finisce con la hero.
+   Un livello fisso dietro tutta la pagina, immobile mentre il contenuto scorre.
+   E un'immagine, non lo shader: tenere accesa la GPU per dieci schermate di scroll
+   si paga in batteria e fluidita, e le prestazioni sono una regola non negoziabile.
+   --materia governa quanto emerge: oltre .65 il testo secondario scende sotto 4.5:1,
+   quindi non si alza a occhio. ── */
+.materia{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:url('assets/materia.webp') center center / cover no-repeat;
+  opacity:var(--materia);
+}
+@media (max-width:760px){.materia{opacity:calc(var(--materia) * .8)}}
 
 /* ── NAV: filetto sottile, nessuna banda ── */
 nav.principale{
@@ -236,6 +250,7 @@ footer .chiudi{
   <symbol id="i-indietro" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
 </svg>
 
+<div class="materia" aria-hidden="true"></div>
 <nav class="principale" aria-label="Principale">
   <a class="logo" href="index.html"><svg class="icona" style="width:18px;height:18px" aria-hidden="true"><use href="#i-indietro"/></svg>Simone Ariotti</a>
   <ul>
