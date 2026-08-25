@@ -343,12 +343,25 @@ section{padding:clamp(72px,9vw,110px) 0;border-top:1px solid var(--bordo)}
   .filo.statico .desc{margin:12px 0 0;max-width:none}
   .filo.statico .voce{font-size:clamp(20px,5.4vw,26px)}
 }
+/* le stazioni entrano una alla volta invece di essere gia tutte li: senza JS
+   o con reduced-motion la regola non si applica e resta tutto visibile */
+.reveal-on .filo.statico .tappa,.reveal-on .filo.statico .ritratto-wrap{
+  opacity:0;transform:translateY(20px);
+  transition:opacity 760ms var(--ease-viscoso),transform 760ms var(--ease-viscoso);
+}
+.reveal-on .filo.statico .tappa.entra,.reveal-on .filo.statico .ritratto-wrap.entra{opacity:1;transform:none}
 .filo.statico{height:auto}
 .filo.statico .stage{position:static;height:auto;overflow:visible;padding:clamp(64px,9vw,110px) 0}
 .filo.statico .titolo{position:static;margin-bottom:36px}
 .filo.statico .colonna{position:static;transform:none}
 .filo.statico .thread{display:none}
-.filo.statico .tappa,.filo.statico .ritratto-wrap{--on:1;--focus:.35;--vis:1}
+/* statico: le stazioni sono tutte alla loro forma piena. A .35 restavano a meta
+   accensione e i titoli leggevano come uno stato disabilitato, che non si attiva mai */
+.filo.statico .tappa,.filo.statico .ritratto-wrap{--on:1;--focus:1;--vis:1}
+/* con focus pieno bordo e alone diventerebbero da elemento selezionato: qui nessuna
+   cella e "quella a fuoco", quindi si riportano a un valore di riposo */
+.filo.statico .cella{border-color:color-mix(in srgb, var(--ghiaccio) 24%, transparent);box-shadow:0 20px 50px -34px rgba(0,0,0,.6)}
+.filo.statico .nodo{transform:translateX(-50%) scale(1);box-shadow:0 0 10px color-mix(in srgb, var(--ghiaccio) 45%, transparent)}
 .filo.statico .tappa{margin-bottom:36px}
 .filo.statico .nodo{top:0}
 .filo.statico .desc{opacity:1;transform:none}
@@ -1067,6 +1080,21 @@ document.querySelectorAll('[data-anno]').forEach(e=>{e.textContent=new Date().ge
   function stato(){ atteso=false; nav.classList.toggle('ancorata', scrollY>24); }
   addEventListener('scroll',()=>{ if(!atteso){ atteso=true; requestAnimationFrame(stato); } },{passive:true});
   stato();
+})();
+</script>
+<script>
+/* Il filo in modalita statica (touch e schermi piccoli) non ha nessun movimento:
+   le stazioni entrano una alla volta mentre si scorre. In modalita dinamica queste
+   regole CSS non esistono, quindi la classe aggiunta qui non ha alcun effetto. */
+(function(){
+  const filo=document.querySelector('.filo');
+  if(!filo||!window.IntersectionObserver) return;
+  const stazioni=[...filo.querySelectorAll('.tappa, .ritratto-wrap')];
+  const io=new IntersectionObserver((voci,oss)=>{
+    voci.forEach(v=>{ if(!v.isIntersecting) return;
+      v.target.classList.add('entra'); oss.unobserve(v.target); });
+  },{threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+  stazioni.forEach(s=>io.observe(s));
 })();
 </script>
 </body>
