@@ -1,0 +1,18 @@
+# .gitignore del portfolio RETICOLO
+# Regola: entra nel repo solo cio che compone il sito pubblico.
+# Sito pubblico = index.html, about.html, case-study-01.html, case-study-02.html, assets/
+# Tutto il resto resta locale.
+# Ricorda: questo file previene il tracciamento futuro, non cancella
+# cio che e gia stato caricato su GitHub.
+
+# --- File di sistema macOS ---
+.DS_Store
+
+# --- Tutto il materiale di lavoro: reference, concept, bozze, riferimenti interni ---
+_materiale-di-lavoro/
+
+# --- Istruzioni interne di progetto: servono a noi, non al pubblico ---
+CLAUDE.md
+
+# --- Documenti di lavoro (piani, censimenti): materiale locale ---
+_*.md

@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simone Ariotti · Digital Product Designer</title>
+<meta name="description" content="Digital Product Designer. Progetto sistemi che reggono la crescita: design system, esperienze con AI e piattaforme enterprise B2B. Case study, percorso e contatti.">
+<link rel="canonical" href="https://simoneariotti.github.io/portfolio/">
+<meta name="author" content="Simone Ariotti">
+<meta name="theme-color" content="#080B18">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Simone Ariotti">
+<meta property="og:locale" content="it_IT">
+<meta property="og:url" content="https://simoneariotti.github.io/portfolio/">
+<meta property="og:title" content="Simone Ariotti · Digital Product Designer">
+<meta property="og:description" content="Digital Product Designer. Progetto sistemi che reggono la crescita: design system, esperienze con AI e piattaforme enterprise B2B. Case study, percorso e contatti.">
+<meta property="og:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Struttura reticolare viola-ghiaccio su fondo indaco, con la scritta: Progetto sistemi che reggono la crescita.">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Simone Ariotti · Digital Product Designer">
+<meta name="twitter:description" content="Digital Product Designer. Progetto sistemi che reggono la crescita: design system, esperienze con AI e piattaforme enterprise B2B. Case study, percorso e contatti.">
+<meta name="twitter:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
+<style>
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&f[]=general-sans@400,500,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400&display=swap');
+
+:root{
+  /* ── Palette RETICOLO: un solo tema, scuro ── */
+  --abisso:#080B18;      /* fondo, indaco profondissimo, mai nero puro */
+  --ghiaccio:#C4CEF5;    /* la struttura, viola-ghiaccio */
+  --testo:#EAEDFA;
+  --mezzo:#7E86AD;       /* testo secondario, metadata */
+  --funzione:#A9B4F5;    /* accento funzionale: SOLO interattivo */
+
+  --superficie:color-mix(in srgb, var(--ghiaccio) 7%, var(--abisso));
+  --bordo:color-mix(in srgb, var(--testo) 14%, transparent);
+  --bordo-forte:color-mix(in srgb, var(--testo) 28%, transparent);
+
+  /* trama di fondo: gradiente unico e continuo per tutta la pagina, mai bande per sezione */
+  --trama-fondo:
+    radial-gradient(125% 85% at 86% -12%, #141A3C 0%, rgba(20,26,60,0) 50%),
+    radial-gradient(115% 95% at -14% 114%, #0E1330 0%, rgba(14,19,48,0) 48%),
+    var(--abisso);
+
+  --font-display:'Clash Display','Segoe UI',system-ui,sans-serif;
+  --font-body:'General Sans',system-ui,sans-serif;
+  --font-mono:'Space Mono',ui-monospace,monospace;
+
+  --ease-viscoso:cubic-bezier(0.22,1,0.36,1);
+  --durata-micro:220ms; --durata-orchestrata:800ms;
+  --misura-prosa:70ch;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+/* la barra resta in cima: gli ancoraggi devono fermarsi sotto, non sparirci dietro */
+:target,section[id],header[id],div[id]{scroll-margin-top:96px}
+@media(max-width:760px){:target,section[id],header[id],div[id]{scroll-margin-top:110px}}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:1ms!important}
+}
+body{background:var(--trama-fondo);background-attachment:fixed;color:var(--testo);font-family:var(--font-body);font-size:17px;line-height:1.65}
+
+a{color:var(--funzione)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--funzione);outline-offset:3px;border-radius:2px}
+
+.salta{position:absolute;left:-9999px;top:0;background:var(--funzione);color:var(--abisso);padding:10px 18px;border-radius:0 0 8px 0;z-index:50}
+.salta:focus{left:0}
+
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
+
+/* ── NAV ── */
+nav.principale{
+  position:sticky;top:0;z-index:40;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px clamp(20px,4.5vw,56px);
+  background:rgba(8,11,24,.985);
+  border-bottom:1px solid var(--bordo);
+  transition:background-color var(--durata-micro) var(--ease-viscoso),
+             border-color var(--durata-micro) var(--ease-viscoso),
+             padding var(--durata-micro) var(--ease-viscoso);
+}
+/* appena si lascia la cima la barra si stringe: resta consultabile senza rubare schermo */
+nav.principale.ancorata{padding-top:14px;padding-bottom:14px}
+/* sulla home galleggia sopra la hero: trasparente in cima, prende corpo quando si scende.
+   Fondo pieno e non sfocato: un blur permanente sopra il canvas si paga a ogni frame */
+nav.principale.sovrapposta{position:fixed;left:0;right:0;background:transparent;border-bottom-color:transparent}
+nav.principale.sovrapposta.ancorata{background:rgba(8,11,24,.985);border-bottom-color:var(--bordo)}
+nav.principale .logo{font-family:var(--font-display);font-weight:500;font-size:17px;color:var(--testo);text-decoration:none}
+nav.principale ul{display:flex;gap:clamp(16px,2.6vw,32px);list-style:none}
+nav.principale ul a{
+  font-size:15px;font-weight:500;text-decoration:none;color:var(--testo);
+  transition:color var(--durata-micro) var(--ease-viscoso);
+}
+nav.principale ul a:hover{color:var(--funzione)}
+@media(max-width:760px){
+  /* sotto i 760px le voci non stanno su una riga con il logo: il logo prende la sua riga,
+     le voci vanno a capo per conto loro e ricevono l'area tattile che a 15px non avevano */
+  nav.principale{flex-direction:column;align-items:flex-start;gap:2px;padding:18px clamp(20px,4.5vw,56px)}
+  nav.principale .logo{white-space:nowrap}
+  nav.principale ul{flex-wrap:wrap;gap:0 20px}
+  nav.principale ul a{font-size:13px;padding:9px 0;display:inline-block}
+  /* a due righe su schermo stretto la barra pesa: da ancorata si stringe ancora */
+  nav.principale.ancorata{padding-top:9px;padding-bottom:7px}
+  nav.principale.ancorata .logo{font-size:15px}
+}
+@media (prefers-reduced-motion: reduce){nav.principale{transition:none}}
+
+/* ── HERO: la materia e il reticolo, momento orchestrato della pagina ── */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+#reticolo{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:pan-y pinch-zoom}
+.hero-scrim{ /* protezione di lettura sul lato del testo */
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(to top, rgba(8,11,24,.88) 0px, rgba(8,11,24,0) 150px),
+    linear-gradient(100deg, rgba(8,11,24,.93) 0%, rgba(8,11,24,.86) 34%, rgba(8,11,24,.55) 58%, rgba(8,11,24,.12) 78%, rgba(8,11,24,0) 92%);
+}
+@media(max-width:900px){
+  /* su schermo stretto il testo va da bordo a bordo: lo scrim diventa una fascia verticale,
+     altrimenti la meta destra di ogni riga finisce sopra la struttura illuminata */
+  .hero-scrim{
+    background:
+      linear-gradient(to top, rgba(8,11,24,.92) 0px, rgba(8,11,24,0) 170px),
+      linear-gradient(180deg, rgba(8,11,24,.58) 0%, rgba(8,11,24,.74) 18%, rgba(8,11,24,.74) 74%, rgba(8,11,24,.42) 100%);
+  }
+}
+.hero-testo{
+  position:relative;z-index:2;
+  padding:96px clamp(20px,4.5vw,56px) 0;
+  max-width:1050px;
+}
+.hero .eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ghiaccio);margin-bottom:24px}
+.hero h1{
+  font-family:var(--font-display);font-weight:500;
+  font-size:clamp(38px,5.8vw,84px);line-height:1.05;letter-spacing:-.015em;text-wrap:balance;
+  margin-bottom:26px;text-shadow:0 4px 54px rgba(8,11,24,.75);
+}
+.hero .firma{font-size:16px;color:var(--ghiaccio);max-width:54ch;margin-bottom:38px;text-shadow:0 2px 30px rgba(8,11,24,.85)}
+.hero .firma strong{color:var(--testo);font-weight:500}
+.hero-basso{
+  position:absolute;bottom:26px;left:0;right:0;z-index:2;
+  display:flex;justify-content:flex-start;align-items:center;
+  padding:0 clamp(20px,4.5vw,56px);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ghiaccio);
+}
+.hero-basso .hint{display:flex;align-items:center;gap:10px}
+.hero-basso .hint::before{
+  content:'';width:7px;height:7px;border-radius:50%;background:var(--funzione);opacity:.85;
+  animation:pulse 3.4s var(--ease-viscoso) infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.55);opacity:.3}}
+@media (pointer:coarse){
+  /* niente cursore da muovere: l'istruzione sparisce, e con essa l'intera riga */
+  .hero-basso{display:none}
+}
+
+/* ── BOTTONI (DS): parti del reticolo, raggio organico e luce che segue il puntatore ── */
+.icona{width:20px;height:20px;flex:0 0 auto;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.btn{
+  position:relative;overflow:hidden;isolation:isolate;
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-body);font-weight:500;font-size:15px;
+  border-radius:16px 22px 16px 22px;padding:13px 26px;cursor:pointer;border:1px solid transparent;text-decoration:none;
+  transition:background var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso),
+             color var(--durata-micro) var(--ease-viscoso), transform var(--durata-micro) var(--ease-viscoso);
+}
+.btn:active{transform:scale(.985)}
+.btn .freccia{transition:transform var(--durata-micro) var(--ease-viscoso)}
+.btn:hover .freccia{transform:translateX(4px)}
+.btn:hover .freccia-giu{transform:translateY(3px)}
+.btn-primaria::before{
+  content:'';position:absolute;inset:0;z-index:-1;opacity:0;
+  transition:opacity .55s var(--ease-viscoso);
+  background:radial-gradient(150px circle at var(--lx,50%) var(--ly,50%),
+    color-mix(in srgb, var(--ghiaccio) 58%, transparent) 0%,
+    color-mix(in srgb, var(--ghiaccio) 26%, transparent) 38%,
+    transparent 72%);
+}
+.btn-primaria:hover::before{opacity:1}
+.btn-primaria{background:var(--funzione);color:var(--abisso)}
+.btn-silenziosa{background:transparent;color:var(--funzione);padding-left:0;padding-right:0;border-radius:4px;overflow:visible}
+.btn-silenziosa:hover{text-decoration:underline;text-underline-offset:5px}
+
+/* ── SEZIONI: sfondo continuo, filetti sottili e spazio, MAI bande di colore ── */
+section{padding:clamp(72px,9vw,110px) 0;border-top:1px solid var(--bordo)}
+.hero+section{border-top:none}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:16px}
+.sez-titolo{font-family:var(--font-display);font-weight:500;font-size:clamp(26px,3vw,38px);letter-spacing:-.008em;margin-bottom:14px}
+.sez-intro{color:var(--mezzo);max-width:58ch;margin-bottom:clamp(36px,5vw,56px)}
+
+/* card: la cover buca verso l'abisso, come il reticolo */
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px}
+.cs-card{
+  position:relative;display:block;border-radius:26px 16px 24px 18px;overflow:hidden;text-decoration:none;color:var(--testo);
+  background:var(--superficie);border:1px solid var(--bordo);
+  transition:transform var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso);
+}
+.cs-card:hover{transform:translateY(-4px);border-color:var(--bordo-forte)}
+/* la luce del reticolo entra nella card e segue il puntatore, come nella hero */
+.cs-card .luce{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;
+  transition:opacity var(--durata-micro) var(--ease-viscoso);
+  background:radial-gradient(280px circle at var(--lx,72%) var(--ly,22%), color-mix(in srgb, var(--ghiaccio) 14%, transparent) 0%, transparent 70%)}
+.cs-card:hover .luce{opacity:1}
+.cs-cover{height:185px;position:relative;overflow:hidden}
+.cs-cover .trama{position:absolute;inset:0;transition:transform 700ms var(--ease-viscoso)}
+.cs-card:hover .trama{transform:scale(1.05)}
+.cover-1 .trama{background:
+  radial-gradient(150px 120px at 74% 20%, var(--abisso) 32%, transparent 33%),
+  radial-gradient(90px 74px at 22% 78%, var(--abisso) 30%, transparent 31%),
+  radial-gradient(130% 140% at 30% 30%, color-mix(in srgb, var(--ghiaccio) 38%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 12%, var(--abisso)) 62%, var(--superficie) 100%);}
+.cover-2 .trama{background:
+  radial-gradient(120px 100px at 26% 26%, var(--abisso) 31%, transparent 32%),
+  radial-gradient(80px 66px at 78% 72%, var(--abisso) 30%, transparent 31%),
+  radial-gradient(130% 140% at 70% 60%, color-mix(in srgb, var(--ghiaccio) 34%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 11%, var(--abisso)) 62%, var(--superficie) 100%);}
+.cover-3 .trama{background:
+  radial-gradient(110px 92px at 68% 76%, var(--abisso) 31%, transparent 32%),
+  radial-gradient(76px 62px at 24% 24%, var(--abisso) 30%, transparent 31%),
+  radial-gradient(130% 140% at 50% 20%, color-mix(in srgb, var(--ghiaccio) 36%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 12%, var(--abisso)) 62%, var(--superficie) 100%);}
+.cs-body{padding:24px;position:relative;z-index:2}
+.cs-meta{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px}
+.cs-meta .gate{color:var(--funzione)}
+.cs-body h3{font-family:var(--font-display);font-weight:500;font-size:21px;line-height:1.28;margin-bottom:8px}
+.cs-body p{font-size:15px;color:var(--mezzo)}
+.cs-cover .indice{
+  position:absolute;right:16px;bottom:8px;z-index:1;
+  font-family:var(--font-display);font-weight:500;font-size:80px;line-height:1;
+  color:color-mix(in srgb, var(--ghiaccio) 30%, transparent);
+  pointer-events:none;
+}
+.cs-azione{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--bordo);
+  font-size:14px;font-weight:500;color:var(--funzione);
+}
+.cs-azione .dove{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
+.cs-azione .vai{display:inline-block;transition:transform var(--durata-micro) var(--ease-viscoso)}
+.cs-card:hover .cs-azione .vai{transform:translateX(4px)}
+
+/* principio: voce display su filetto, niente corsivi */
+.principio{position:relative;max-width:880px;margin:0 auto;padding:6px 0 6px 28px}
+.principio::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--bordo-forte);transform-origin:top;transition:transform .9s var(--ease-viscoso)}
+.reveal-on .principio::before{transform:scaleY(0)}
+.reveal-on .principio.lit::before{transform:scaleY(1)}
+@media (prefers-reduced-motion: reduce){.reveal-on .principio::before{transform:scaleY(1);transition:none}}
+.principio .p-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:16px}
+.principio blockquote{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,3vw,36px);line-height:1.4;letter-spacing:-.005em}
+
+/* R&R */
+.rr{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,5vw,64px);align-items:center}
+@media(max-width:820px){.rr{grid-template-columns:1fr}}
+.rr-testo p{color:var(--mezzo);max-width:52ch;margin-bottom:28px}
+.rr-testo p strong{color:var(--testo);font-weight:500}
+.rr-visual{
+  height:280px;border-radius:18px;position:relative;overflow:hidden;border:1px solid var(--bordo);
+  background:
+    radial-gradient(170px 140px at 76% 24%, var(--abisso) 34%, transparent 35%),
+    radial-gradient(110px 90px at 18% 82%, var(--abisso) 32%, transparent 33%),
+    radial-gradient(130% 150% at 34% 40%, color-mix(in srgb, var(--ghiaccio) 32%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 10%, var(--abisso)) 64%, var(--superficie) 100%);
+}
+.rr-visual .marchio{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-weight:500;font-size:clamp(22px,2.4vw,30px);color:var(--testo);
+}
+
+/* ── CHI C'E DIETRO: il filo rosso, sezione pinnata sotto la hero. Lo scroll pilota la fascia di fuoco ── */
+/* --crescita: quanto cresce la cella a fuoco. Unica fonte di verita: il JS la legge per calcolare gli ingombri a scala piena.
+   Dove c'e meno spazio la cella cresce meno, cosi a scala piena resta dentro il viewport e sotto il titolo.
+   Il JS rilegge la variabile a ogni resize: gli ingombri del filo si adeguano da soli */
+.filo{position:relative;height:680vh;padding:0;--crescita:.6}
+@media (max-width:1200px),(max-height:840px){.filo{--crescita:.4}}
+@media (max-height:700px){.filo{--crescita:.28}}
+.filo .stage{position:sticky;top:0;height:100vh;overflow:hidden;--praw:0}
+/* scrim: le celle scompaiono in modo elegante uscendo in alto (dietro il titolo) ed entrando dal basso */
+.filo .stage::before,.filo .stage::after{content:'';position:absolute;left:0;right:0;z-index:2;pointer-events:none}
+.filo .stage::before{top:0;height:34vh;background:linear-gradient(var(--abisso) 32%, transparent)}
+.filo .stage::after{bottom:0;height:22vh;background:linear-gradient(transparent, var(--abisso))}
+.filo .titolo{position:absolute;top:8vh;left:0;right:0;text-align:center;z-index:3;
+  font-family:var(--font-display);font-weight:500;font-size:clamp(26px,3.4vw,44px);letter-spacing:-.012em;padding:0 24px;text-wrap:balance}
+.filo .titolo .eyebrow{display:block;font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:14px;font-weight:400}
+.filo .colonna{position:absolute;left:0;right:0;top:0;margin:0 auto;max-width:640px;text-align:center;transform:translateY(var(--ty,0px));will-change:transform}
+/* il filo e spezzato: un segmento per stazione, che parte dal bordo della cella precedente (misurato a scala piena)
+   e arriva al nodo della successiva. Nessun tratto corre dietro una cella, quindi non la attraversa mai.
+   viewBox in pixel reali: la curvatura disegnata e quella che si vede */
+.filo .thread{position:absolute;left:50%;top:0;transform:translateX(-50%);width:150px;height:100%;overflow:visible;z-index:0}
+.filo .thread path{fill:none;stroke:var(--ghiaccio);stroke-width:2;stroke-linecap:round;
+  filter:drop-shadow(0 0 6px color-mix(in srgb,var(--ghiaccio) 60%,transparent));
+  stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--f,0))}
+.filo .tappe{list-style:none;position:relative;z-index:1;margin:0;padding:0}
+.filo .tappa{position:relative;padding-top:34px;margin:0 auto clamp(150px,20vh,220px);--focus:0;--vis:0;--on:0}
+/* il nodo e il punto d'arrivo del filo: il JS lo posiziona sopra il bordo della cella misurato a scala piena,
+   cosi non le finisce mai dentro quando cresce */
+.filo .nodo{position:absolute;top:var(--nodo-y,0px);left:50%;transform:translateX(-50%) scale(calc(.7 + var(--on)*.3 + var(--focus)*.35));
+  width:13px;height:13px;border-radius:50%;z-index:2;
+  background:color-mix(in srgb, var(--ghiaccio) calc(var(--on)*100%), transparent);
+  border:1.5px solid color-mix(in srgb, var(--ghiaccio) calc(28% + max(var(--on),var(--focus))*72%), transparent);
+  box-shadow:0 0 calc(var(--focus)*20px) color-mix(in srgb, var(--ghiaccio) 75%, transparent)}
+/* la cella del reticolo: bordo e superficie che si accendono col fuoco */
+/* crescita con transform:scale (non font-size): non rifluisce il layout, la cella resta ancorata al centro.
+   Larghezza base contenuta perche a scala piena (x1.6) deve stare nel viewport.
+   Due variabili distinte: --focus tiene la scala (piano largo, uscita lenta), --vis toglie l'opacita prima
+   e piu in fretta. Cosi la cella resta grande piu a lungo ma sparisce netta, senza incrociare il filo */
+.filo .cella{position:relative;z-index:1;display:inline-block;max-width:min(56vw,430px);padding:20px clamp(24px,3vw,36px) 22px;
+  border-radius:38px 22px 34px 24px;transform-origin:center;transform:scale(calc(1 + var(--focus)*var(--crescita)));
+  background:color-mix(in srgb, var(--ghiaccio) calc(5% + var(--focus)*4%), var(--abisso));
+  border:1px solid color-mix(in srgb, var(--ghiaccio) calc(12% + var(--focus)*42%), transparent);
+  box-shadow:0 26px 70px -34px color-mix(in srgb, var(--ghiaccio) calc(var(--focus)*45%), transparent);
+  opacity:var(--vis)}
+.filo .anno{display:block;font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mezzo);margin-bottom:10px}
+.filo .voce{display:block;font-family:var(--font-display);font-weight:500;line-height:1.08;letter-spacing:-.012em;
+  font-size:clamp(22px,2.6vw,32px);overflow-wrap:break-word;   /* una parola lunga non deve mai uscire dalla cella */
+  color:color-mix(in srgb, var(--testo) calc((.42 + max(var(--on)*.5,var(--focus))*.58)*100%), var(--abisso))}
+.filo .desc{display:block;margin:12px auto 0;max-width:34ch;font-family:var(--font-body);line-height:1.42;color:var(--mezzo);
+  font-size:clamp(14px,1.5vw,16px);opacity:var(--focus);transform:translateY(calc((1 - var(--focus))*-4px))}
+.filo .ritratto-wrap{display:flex;justify-content:center;padding-top:26px;position:relative;--focus:0;--vis:0;--on:0}
+/* il ritratto: elemento puramente fotografico, naturale, che si stacca dal concept.
+   Nessun trattamento, forma pulita, entra con una semplice dissolvenza. E l'ultima stazione: il filo ci arriva, non lo taglia */
+.filo .ritratto{position:relative;width:min(74%,340px);aspect-ratio:4/5;
+  border-radius:20px;overflow:hidden;border:1px solid var(--bordo);background:var(--superficie);
+  opacity:var(--vis);transform:scale(calc(.94 + var(--focus)*.06));
+  box-shadow:0 34px 80px -40px rgba(0,0,0,.65)}
+.filo .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+/* su viewport basse il ritratto va limitato: a 640px di altezza la chiusura gli finiva sopra */
+@media (max-height:820px){.filo .ritratto{width:min(74%,300px,32vh)}}
+.filo .chiusura{position:absolute;left:0;right:0;bottom:7vh;z-index:3;text-align:center;padding:0 24px;
+  --c:clamp(0,(var(--praw) - 0.86)/0.14,1);opacity:var(--c);transform:translateY(calc((1 - var(--c))*14px));pointer-events:none}
+.filo .chiusura p{color:var(--mezzo);max-width:52ch;margin:0 auto 18px}
+.filo .chiusura p strong{color:var(--testo);font-weight:500}
+.filo .chiusura p{pointer-events:auto}
+.filo .chiusura .btn{pointer-events:auto}
+/* statico: touch / reduced-motion / no-JS. La sezione diventa un blocco normale, tutto rivelato */
+@media (max-width:760px){
+  /* in modalita statica la cella non deve piu crescere in scala: puo prendersi la larghezza vera.
+     Il blocco resta centrato sotto il filo, ma il testo torna sull'asse sinistro come nel resto del sito */
+  .filo.statico .cella{max-width:86vw;text-align:left;padding:20px 22px 22px}
+  .filo.statico .desc{margin:12px 0 0;max-width:none}
+  .filo.statico .voce{font-size:clamp(20px,5.4vw,26px)}
+}
+.filo.statico{height:auto}
+.filo.statico .stage{position:static;height:auto;overflow:visible;padding:clamp(64px,9vw,110px) 0}
+.filo.statico .titolo{position:static;margin-bottom:36px}
+.filo.statico .colonna{position:static;transform:none}
+.filo.statico .thread{display:none}
+.filo.statico .tappa,.filo.statico .ritratto-wrap{--on:1;--focus:.35;--vis:1}
+.filo.statico .tappa{margin-bottom:36px}
+.filo.statico .nodo{top:0}
+.filo.statico .desc{opacity:1;transform:none}
+.filo.statico .chiusura{position:static;opacity:1;transform:none;margin-top:36px}
+.filo.statico .ritratto{margin:0 auto;transform:none}
+.filo.statico .cella{opacity:1;transform:none}
+.filo.statico .stage::before,.filo.statico .stage::after{display:none}
+
+/* contatto */
+.contatto h2{font-family:var(--font-display);font-weight:500;font-size:clamp(38px,5.4vw,68px);letter-spacing:-.014em;margin-bottom:14px}
+.contatto .invito{color:var(--mezzo);max-width:52ch;margin-bottom:clamp(34px,5vw,48px)}
+/* la mail non va mai a capo: si dimensiona sulla colonna che la contiene, non sul viewport.
+   La stringa e larga ~13,5 volte il corpo, quindi 7cqw la fa stare dentro con margine.
+   Il clamp in vw resta come ripiego dove i container query non ci sono */
+.contatto-testo{container-type:inline-size}
+.mail-grande{
+  display:inline-block;font-family:var(--font-display);font-weight:500;
+  font-size:clamp(20px,3.2vw,50px);
+  font-size:min(7cqw,50px);
+  letter-spacing:-.01em;white-space:nowrap;
+  color:var(--testo);text-decoration:none;
+  border-bottom:3px solid var(--funzione);padding-bottom:8px;
+  transition:color var(--durata-micro) var(--ease-viscoso);
+}
+.mail-grande:hover{color:var(--funzione)}
+.contatto-meta{margin-top:32px;display:flex;flex-wrap:wrap;gap:10px 26px;font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo)}
+.contatto-meta a{color:var(--funzione);text-decoration:none}
+.contatto-meta a:hover{text-decoration:underline;text-underline-offset:4px}
+
+.contatto-layout{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(32px,5vw,64px);align-items:center}
+@media(max-width:820px){.contatto-layout{grid-template-columns:1fr}}
+.contatto-foto{
+  aspect-ratio:4/3;border-radius:16px;overflow:hidden;
+  border:1px solid var(--bordo);background:var(--superficie);
+}
+.contatto-foto img{width:100%;height:100%;object-fit:cover;object-position:50% 16%;display:block}
+.rr-gate{margin:0 0 16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
+
+/* footer: tre livelli distinti invece di righe accatastate.
+   identita (micro-metadata) > la riga sul work in progress (prosa) > il copyright, staccato da un filetto */
+footer{border-top:1px solid var(--bordo);padding:52px 0 40px}
+footer .identita{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);line-height:2}
+footer .identita strong{color:var(--testo);font-weight:400}
+footer .wip{text-transform:none;letter-spacing:0;font-size:14px;line-height:1.6;margin-top:22px;max-width:42ch;color:var(--mezzo)}
+footer .chiudi{
+  margin-top:34px;padding-top:20px;border-top:1px solid var(--bordo);
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);
+}
+
+/* ── MOTION: vocabolario di gesti. Ogni tipo di elemento ha il suo, tutti sulla stessa easing e famiglia di tempi ── */
+.m{transition:opacity var(--d,560ms) var(--ease-viscoso), transform var(--d,560ms) var(--ease-viscoso)}
+.reveal-on .m{opacity:0;transform:var(--from,translateY(14px))}
+.reveal-on .m.in{opacity:1;transform:none}
+.m-eyebrow{--from:translateX(-14px);--d:660ms}
+.m-title{--from:translateY(26px);--d:1050ms}
+.m-text{--from:translateY(16px);--d:840ms}
+.m-li{--from:translateY(12px);--d:720ms}
+.m-figure{--from:translateY(18px) scale(.955);--d:1150ms}
+.m-quote{--from:translateY(20px);--d:1000ms}
+@media (prefers-reduced-motion: reduce){.reveal-on .m{opacity:1;transform:none;transition:none}}
+
+/* ── CURSORE: la lampada sulla struttura. Cambia forma secondo l'oggetto sotto ── */
+.cursor-on, .cursor-on *{cursor:none}
+#cursore{
+  position:fixed;left:0;top:0;z-index:9999;pointer-events:none;opacity:0;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--funzione);
+  box-shadow:0 0 6px 0 color-mix(in srgb, var(--funzione) 24%, transparent);
+  transition:width .28s var(--ease-viscoso), height .28s var(--ease-viscoso),
+    border-radius .28s var(--ease-viscoso), background .28s var(--ease-viscoso),
+    border-color .28s var(--ease-viscoso), opacity .3s var(--ease-viscoso);
+  will-change:transform;
+}
+#cursore.is-int{
+  width:38px;height:38px;background:transparent;
+  border:1.5px solid var(--funzione);border-radius:50%;
+  box-shadow:0 0 10px 0 color-mix(in srgb, var(--funzione) 16%, transparent);
+}
+#cursore.is-text{
+  width:2px;height:26px;border-radius:1px;background:var(--ghiaccio);
+  box-shadow:0 0 4px color-mix(in srgb, var(--ghiaccio) 35%, transparent);
+  animation:curblink 1.1s steps(1) infinite;
+}
+@keyframes curblink{0%,49%{opacity:1}50%,99%{opacity:.2}100%{opacity:1}}
+
+/* ── LINK EDITORIALE: sottolineatura che si disegna al passaggio ── */
+p a:not(.btn), li a:not(.btn){
+  text-decoration:none;
+  background-image:linear-gradient(var(--funzione),var(--funzione));
+  background-size:0% 1px;background-position:0 100%;background-repeat:no-repeat;
+  transition:background-size .32s var(--ease-viscoso);
+}
+p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
+</style>
+</head>
+<body>
+
+<!-- Sprite iconografica: SOLO Lucide, stroke 2, currentColor. L'icona dichiara la funzione. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-freccia" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-giu" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+  <symbol id="i-esterno" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+</svg>
+
+<a class="salta" href="#lavori">Salta al contenuto</a>
+
+<nav class="principale sovrapposta" aria-label="Principale">
+  <a class="logo" href="#inizio">Simone Ariotti</a>
+  <ul>
+    <li><a href="#lavori">Case study</a></li>
+    <li><a href="#rr">Rotte e Racconti</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="#contatti">Contatti</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO: la riga per tutti nel titolo, il concept nella firma ═══ -->
+<header class="hero" id="inizio">
+  <canvas id="reticolo" aria-hidden="true"></canvas>
+  <div class="hero-scrim" aria-hidden="true"></div>
+  <div class="hero-testo">
+    <p class="eyebrow">Digital Product Designer</p>
+    <h1>Progetto sistemi che reggono la crescita.</h1>
+    <p class="firma"><strong>Faccio in modo che prodotti digitali complessi restino coerenti, usabili e accessibili</strong> anche quando diventano grandi. Design system, esperienze con AI, piattaforme enterprise.</p>
+    <a class="btn btn-primaria" data-luce href="#lavori">Guarda come lavoro <svg class="icona freccia-giu" aria-hidden="true"><use href="#i-giu"/></svg></a>
+  </div>
+  <div class="hero-basso">
+    <span class="hint">Muovi il cursore per la luce, il click deforma la struttura</span>
+  </div>
+</header>
+
+<!-- ═══ CHI C'E DIETRO: il filo rosso, sotto la hero ═══ -->
+<section class="filo" id="about" aria-label="Chi c'e dietro">
+  <div class="stage">
+    <p class="titolo"><span class="eyebrow">Chi c'e dietro</span>Il filo rosso l'ho visto solo dopo.</p>
+    <div class="colonna">
+      <!-- i segmenti li costruisce il JS sulle posizioni misurate delle stazioni: uno per ogni arrivo -->
+      <svg class="thread" viewBox="0 0 150 1000" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <ul class="tappe">
+        <li class="tappa"><span class="nodo"></span><span class="cella"><span class="anno">2016–2019</span><span class="voce">Scienze della Comunicazione</span><span class="desc">Dire le cose senza dirle: immagini, simboli, layout.</span></span></li>
+        <li class="tappa"><span class="nodo"></span><span class="cella"><span class="anno">2019–2022</span><span class="voce">Comunicazione, ICT e media</span><span class="desc">Dove ho incontrato l'interazione uomo-macchina e la UX.</span></span></li>
+        <li class="tappa"><span class="nodo"></span><span class="cella"><span class="anno">2020–2021</span><span class="voce">Insegnamento</span><span class="desc">Maestro alla primaria: spiegare concetti complessi con parole semplici. È l'esercizio che mi ha cambiato il modo di progettare.</span></span></li>
+        <li class="tappa"><span class="nodo"></span><span class="cella"><span class="anno">2021–2023</span><span class="voce">Software house e QA</span><span class="desc">L'ingresso nell'IT: leggere i prodotti digitali da dentro, dove si rompono.</span></span></li>
+        <li class="tappa"><span class="nodo"></span><span class="cella"><span class="anno">2023–oggi</span><span class="voce">Design di prodotto</span><span class="desc">Atomic design: atomi solidi e coerenti prima, molecole e organismi complessi poi. La complessità si monta, non si improvvisa.</span></span></li>
+      </ul>
+      <div class="ritratto-wrap">
+        <div class="ritratto">
+          <img class="foto" src="assets/simone.webp" width="1000" height="1000" loading="lazy" alt="Simone Ariotti">
+        </div>
+      </div>
+    </div>
+    <div class="chiusura">
+      <p>Da fuori sembra un percorso sparso. Da dentro <strong>puntava tutto nello stesso posto</strong>: i sistemi, non le schermate.</p>
+      <a class="btn btn-silenziosa" href="about.html">Leggi la storia intera <svg class="icona freccia" aria-hidden="true"><use href="#i-freccia"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CASE STUDY ═══ -->
+<section id="lavori">
+  <div class="wrap">
+    <p class="eyebrow">Case study</p>
+    <h2 class="sez-titolo">Tre lavori scelti, un metodo.</h2>
+    <p class="sez-intro">Ogni progetto qui dentro racconta come ragiono, non solo cosa ho prodotto.</p>
+    <div class="cs-grid">
+      <a class="cs-card cover-1" data-luce href="case-study-01.html">
+        <div class="luce" aria-hidden="true"></div>
+        <div class="cs-cover"><div class="trama"></div><span class="indice" aria-hidden="true">01</span></div>
+        <div class="cs-body">
+          <p class="cs-meta"><span>Design System</span><span>Askme</span></p>
+          <h3>Da zero a un sistema che anche l'AI sa leggere</h3>
+          <p>Tre anni di design system multi-prodotto, e la strategia per il passo successivo.</p>
+          <div class="cs-azione"><span class="dove">Caso completo</span><span style="display:inline-flex;align-items:center;gap:8px">Leggi <svg class="icona vai" aria-hidden="true"><use href="#i-freccia"/></svg></span></div>
+        </div>
+      </a>
+      <a class="cs-card cover-2" data-luce href="case-study-02.html">
+        <div class="luce" aria-hidden="true"></div>
+        <div class="cs-cover"><div class="trama"></div><span class="indice" aria-hidden="true">02</span></div>
+        <div class="cs-body">
+          <p class="cs-meta"><span>Sistema agentico</span><span>Askme</span></p>
+          <h3>Un'AI che opera, non solo che risponde</h3>
+          <p>Un sistema di componenti che trasforma la conversazione in lavoro dentro Askme.</p>
+          <div class="cs-azione"><span class="dove">Caso completo</span><span style="display:inline-flex;align-items:center;gap:8px">Leggi <svg class="icona vai" aria-hidden="true"><use href="#i-freccia"/></svg></span></div>
+        </div>
+      </a>
+      <a class="cs-card cover-3" data-luce href="#contatti" title="Caso in arrivo">
+        <div class="luce" aria-hidden="true"></div>
+        <div class="cs-cover"><div class="trama"></div><span class="indice" aria-hidden="true">03</span></div>
+        <div class="cs-body">
+          <p class="cs-meta"><span>Conversation design</span><span class="gate">◈ In arrivo</span></p>
+          <h3>Un chatbot che usa l'AI solo quando serve</h3>
+          <p>L'80% del flusso non tocca mai un LLM. Di proposito. E conviene a tutti.</p>
+          <div class="cs-azione"><span class="dove">In arrivo</span><span style="display:inline-flex;align-items:center;gap:8px">A breve online <svg class="icona vai" aria-hidden="true"><use href="#i-freccia"/></svg></span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRINCIPIO ═══ -->
+<section>
+  <div class="wrap">
+    <div class="principio">
+      <p class="p-label">Principio emerso</p>
+      <blockquote>Rules before artifacts: valida i vincoli prima di produrre l'output. Il rework che previeni è invisibile, ed è proprio per questo che è sottovalutato.</blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ROTTE E RACCONTI ═══ -->
+<section id="rr">
+  <div class="wrap rr">
+    <div class="rr-testo">
+      <p class="eyebrow">Fuori dal lavoro · Progetto personale</p>
+      <h2 class="sez-titolo">Rotte e Racconti</h2>
+      <p>Un progetto editoriale di viaggio costruito da zero con mio fratello: lui percorre gli itinerari e li documenta, io ho costruito tutto il resto: <strong>identità, sito, sistema editoriale, strategia</strong>. È quello che succede quando progetto qualcosa di mio, senza committente.</p>
+      <p class="rr-gate"><span class="gate">◈ Sito in costruzione</span></p>
+      <a class="btn btn-silenziosa" href="#contatti">Ne parliamo <svg class="icona freccia" aria-hidden="true"><use href="#i-freccia"/></svg></a>
+    </div>
+    <div class="rr-visual" aria-hidden="true">
+      <span class="marchio">Rotte e Racconti</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTATTO ═══ -->
+<section class="contatto" id="contatti">
+  <div class="wrap contatto-layout">
+    <div class="contatto-testo">
+      <p class="eyebrow">Contatti</p>
+      <h2>Parliamone.</h2>
+      <p class="invito">Che tu abbia un progetto, una posizione o solo una curiosità: scrivimi, rispondo davvero.</p>
+      <a class="mail-grande" href="mailto:simone.ariotti97@gmail.com">simone.ariotti97@gmail.com</a>
+      <div class="contatto-meta">
+        <a href="https://www.linkedin.com/in/simone-ariotti-4a980519a/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px">LinkedIn <svg class="icona" style="width:15px;height:15px" aria-hidden="true"><use href="#i-esterno"/></svg></a>
+        <a href="https://ixdf.org/members/simone-ariotti?r=simone-ariotti" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px">IxDF <svg class="icona" style="width:15px;height:15px" aria-hidden="true"><use href="#i-esterno"/></svg></a>
+      </div>
+    </div>
+    <div class="contatto-foto"><img src="assets/simone.webp" width="1000" height="1000" loading="lazy" alt="Ritratto di Simone Ariotti"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="identita"><strong>Simone Ariotti</strong> · Digital Product Designer<br>
+    IxDF Local Leader Turin</p>
+    <p class="wip">Questo sito è vivo: cambia, cresce, non è mai finito. Come chi lo scrive. E va bene così.</p>
+    <div class="chiudi">
+      <span>© <span data-anno>2026</span> Simone Ariotti</span>
+      <span>Costruito su una struttura che regge</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ═══ Materia RETICOLO nella hero: adattamento del concept v2 a pagina scorrevole ═══
+   - canvas confinato alla hero, coordinate relative al suo rect
+   - touch-action pan-y pinch-zoom: lo scroll e lo zoom di sistema restano vivi
+   - IntersectionObserver: il render si ferma quando la hero esce dallo schermo
+   - prefers-reduced-motion: un solo frame statico */
+(function(){
+  const canvas=document.getElementById('reticolo');
+  const gl=canvas.getContext('webgl',{antialias:false,alpha:false});
+  if(!gl){canvas.style.background='radial-gradient(circle at 62% 38%, #171D3E 0%, #080B18 72%)';return;}
+
+  const ridotto=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DPR=Math.min(window.devicePixelRatio||1,1.0);
+
+  const vsrc=`attribute vec2 a; void main(){ gl_Position=vec4(a,0.0,1.0); }`;
+  const fsrc=`
+    precision highp float;
+    uniform vec2 uRes; uniform float uT; uniform vec2 uMouse; uniform vec2 uClick;
+    uniform float uForce; uniform float uPulse;
+
+    float gy(vec3 p){ return dot(sin(p), cos(p.yzx)); }
+
+    float smax(float a,float b,float k){
+      float h=clamp(0.5-0.5*(b-a)/k,0.0,1.0);
+      return mix(b,a,h)+k*h*(1.0-h);
+    }
+
+    const vec3 SN=vec3(0.2995,0.2196,0.9285);
+    vec3 CK;
+
+    float map(vec3 p){
+      float a=uT*0.02;
+      float c=cos(a), s=sin(a);
+      vec3 q=p; q.xz=mat2(c,-s,s,c)*q.xz;
+      float g=gy(q*2.2);
+      float dg=(0.35 - g)*0.22;
+      float slab=abs(dot(p,SN))-1.15;
+      if(uPulse>0.001){
+        float rc=length(p-CK);
+        dg-=uPulse*0.16*sin(9.0*rc-uT*7.0)*exp(-rc*rc*0.30);
+      }
+      return smax(dg, slab*0.8, 0.25);
+    }
+
+    vec3 normale(vec3 p){
+      vec2 e=vec2(0.005,-0.005);
+      return normalize( e.xyy*map(p+e.xyy)+e.yyx*map(p+e.yyx)+e.yxy*map(p+e.yxy)+e.xxx*map(p+e.xxx) );
+    }
+
+    void main(){
+      vec2 uv=(gl_FragCoord.xy-0.5*uRes)/min(uRes.x,uRes.y);
+      vec2 mUV=(uMouse-0.5*uRes)/min(uRes.x,uRes.y);
+      vec2 cUV=(uClick-0.5*uRes)/min(uRes.x,uRes.y);
+
+      vec3 ro=vec3(2.6,1.9,6.5);
+      vec3 ww=normalize(-ro);
+      vec3 uu=normalize(cross(vec3(0.0,1.0,0.0),ww));
+      vec3 vv=cross(ww,uu);
+      vec3 rd=normalize(uv.x*uu + uv.y*vv + 1.55*ww);
+
+      vec3 rdc=normalize(cUV.x*uu + cUV.y*vv + 1.55*ww);
+      CK=ro+rdc*5.2;
+
+      vec3 abisso=vec3(0.031,0.043,0.094);
+      vec3 fondale=vec3(0.075,0.095,0.190);
+      vec3 bg=mix(abisso, fondale, smoothstep(1.15,0.0,length(uv-vec2(0.15,0.05)))*0.8);
+      bg+=vec3(0.10,0.12,0.24)*smoothstep(0.95,0.0,length(uv-vec2(0.05,0.12)));
+
+      float dn=dot(rd,SN), don=dot(ro,SN);
+      float wslab=1.55;
+      float tA=(-wslab-don)/dn, tB=(wslab-don)/dn;
+      float t0=max(min(tA,tB),0.0), t1=max(tA,tB);
+
+      float t=t0+0.12*fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453);
+      float d; vec3 pos; bool hit=false;
+      if(t1>0.0){
+        for(int i=0;i<80;i++){
+          pos=ro+rd*t;
+          d=map(pos);
+          if(d<0.002*max(t,0.8)){hit=true;break;}
+          t+=d*0.85;
+          if(t>t1 || t>16.0) break;
+        }
+      }
+
+      vec3 col=bg;
+      if(hit){
+        vec3 n=normale(pos);
+
+        vec3 dn3=vec3(gy(pos*55.0), gy(pos*55.0+vec3(2.7,1.3,4.1)), gy(pos*55.0+vec3(5.2,3.9,1.7)));
+        n=normalize(n+0.07*dn3);
+
+        float ao=0.0, sca=1.0;
+        for(int i=1;i<=4;i++){
+          float h=0.09*float(i);
+          ao+=(h-map(pos+n*h))*sca;
+          sca*=0.6;
+        }
+        ao=clamp(1.0-ao*3.2,0.0,1.0);
+
+        vec3 key=normalize(vec3(0.45,0.72,0.55));
+        float dif=clamp(dot(n,key),0.0,1.0)*0.40+0.22;
+
+        vec3 rdm=normalize(mUV.x*uu + mUV.y*vv + 1.55*ww);
+        vec3 lp=ro+rdm*4.8;
+        vec3 ld=lp-pos; float ldist=length(ld); ld/=max(ldist,0.001);
+        float mdif=clamp(dot(n,ld),0.0,1.0)*(3.2/(1.0+ldist*ldist*0.9))*uForce;
+
+        float rim=pow(1.0-abs(dot(n,-rd)),2.2);
+
+        float th=0.0;
+        for(int i=1;i<=5;i++){ th+=clamp(-map(pos-SN*0.12*float(i)),0.0,0.25); }
+        float sss=exp(-th*7.0);
+
+        float pr=0.6*gy(pos*52.0)+0.4*gy(pos*93.0);
+        float pore=smoothstep(0.60,1.10,pr);
+        float micro=1.0-0.15*pore;
+
+        vec3 ghiaccio=vec3(0.769,0.808,0.961);
+        vec3 ombra=vec3(0.360,0.385,0.660);
+        vec3 bianco=vec3(0.895,0.915,1.0);
+
+        col=mix(ombra,ghiaccio,dif)*ao*micro;
+        col+=bianco*mdif*0.80;
+        col+=ghiaccio*rim*0.30;
+        col+=mix(ghiaccio,bianco,0.5)*sss*0.60;
+
+        float fog=exp(-max(t-6.0,0.0)*0.30);
+        col=mix(bg,col,fog);
+      }
+
+      col=col/(1.0+0.22*col);
+      col*=1.16;
+      col*=mix(0.88,1.0,smoothstep(1.5,0.4,length(uv)));
+
+      gl_FragColor=vec4(col,1.0);
+    }`;
+
+  function compile(ty,src){const s=gl.createShader(ty);gl.shaderSource(s,src);gl.compileShader(s);
+    if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(s));return null;}return s;}
+  const vs=compile(gl.VERTEX_SHADER,vsrc),fs=compile(gl.FRAGMENT_SHADER,fsrc);
+  if(!vs||!fs) return;
+  const prog=gl.createProgram();gl.attachShader(prog,vs);gl.attachShader(prog,fs);gl.linkProgram(prog);gl.useProgram(prog);
+  const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const locA=gl.getAttribLocation(prog,'a');gl.enableVertexAttribArray(locA);gl.vertexAttribPointer(locA,2,gl.FLOAT,false,0,0);
+  const uRes=gl.getUniformLocation(prog,'uRes'),uT=gl.getUniformLocation(prog,'uT'),
+        uMouse=gl.getUniformLocation(prog,'uMouse'),uClick=gl.getUniformLocation(prog,'uClick'),
+        uForce=gl.getUniformLocation(prog,'uForce'),uPulse=gl.getUniformLocation(prog,'uPulse');
+
+  let W,H;
+  function resize(){
+    const r=canvas.getBoundingClientRect();
+    W=canvas.width=Math.floor(r.width*DPR);
+    H=canvas.height=Math.floor(r.height*DPR);
+    gl.viewport(0,0,W,H);
+    gl.uniform2f(uRes,W,H);
+  }
+  window.addEventListener('resize',()=>{resize(); if(ridotto) draw(10);});
+  resize();
+
+  let mx=W*0.62,my=H*0.5,tx=mx,ty=my,cx=W*0.5,cy=H*0.5,force=0,tforce=0,pulseStart=-10,clock=0;
+
+  function toCanvas(e){
+    const r=canvas.getBoundingClientRect();
+    return [ (e.clientX-r.left)*DPR, (r.height-(e.clientY-r.top))*DPR ];
+  }
+
+  if(!ridotto){
+    canvas.addEventListener('pointermove',e=>{
+      const [x,y]=toCanvas(e);
+      tx=x; ty=y;
+      if(e.pointerType!=='touch'||e.buttons>0) tforce=1;
+    },{passive:true});
+    canvas.addEventListener('pointerdown',e=>{
+      const [x,y]=toCanvas(e);
+      tx=mx=x; ty=my=y;
+      cx=x; cy=y; tforce=1; pulseStart=clock;
+    },{passive:true});
+    const rilascia=e=>{ if(e.pointerType==='touch') tforce=0; };
+    canvas.addEventListener('pointerup',rilascia,{passive:true});
+    canvas.addEventListener('pointercancel',rilascia,{passive:true});
+    canvas.addEventListener('pointerleave',()=>{ tforce=0; });
+  }
+
+  function draw(t){
+    gl.uniform1f(uT,t);
+    gl.uniform2f(uMouse,mx,my);
+    gl.uniform2f(uClick,cx,cy);
+    gl.uniform1f(uForce,force);
+    const age=t-pulseStart;
+    gl.uniform1f(uPulse, age>0.0&&age<2.0 ? (1.0-age/2.0) : 0.0);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  }
+
+  if(ridotto){ force=0; draw(10); return; }
+
+  /* il render vive solo quando la hero e visibile */
+  let visibile=true;
+  new IntersectionObserver(en=>{ visibile=en[0].isIntersecting; },{threshold:0.02})
+    .observe(canvas);
+
+  let start=performance.now();
+  function loop(now){
+    clock=(now-start)/1000;
+    if(visibile){
+      mx+=(tx-mx)*0.07; my+=(ty-my)*0.07;
+      force+=(tforce-force)*0.05;
+      draw(clock);
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* la luce del reticolo segue il puntatore su card e bottoni (solo pointer fine) */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('[data-luce]').forEach(el=>{
+    el.addEventListener('pointermove',e=>{
+      const r=el.getBoundingClientRect();
+      el.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%');
+      el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
+    },{passive:true});
+  });
+})();
+
+/* motion: ogni sezione entra come composizione di gesti tipizzati, in cascata */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.documentElement.classList.add('reveal-on');
+  const groups=document.querySelectorAll('.hero-testo, #lavori .wrap, .principio, .rr-testo, .contatto-layout > div');
+  function roleOf(el){
+    if(el.matches('.eyebrow,.p-label,.p-fonte,.meta')) return 'm-eyebrow';
+    if(el.matches('h1,h2,h3')) return 'm-title';
+    if(el.matches('blockquote,.evidenza')) return 'm-quote';
+    return 'm-text';
+  }
+  function unitsOf(g){
+    const out=[];
+    Array.from(g.children).forEach(c=>{
+      if(c.matches('ul,ol')) c.querySelectorAll(':scope > li').forEach(li=>out.push([li,'m-li']));
+      else if(c.matches('.figure')) c.querySelectorAll(':scope > figure').forEach(f=>out.push([f,'m-figure']));
+      else if(c.matches('.cs-grid')) c.querySelectorAll(':scope > *').forEach(k=>out.push([k,'m-figure']));
+      else out.push([c,roleOf(c)]);
+    });
+    return out;
+  }
+  const io=new IntersectionObserver((entries,obs)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      (e.target.__units||[]).forEach(([el,role],i)=>{
+        const d=Math.min(i*140,720);
+        el.style.transitionDelay=d+'ms';
+        requestAnimationFrame(()=>el.classList.add('in'));
+        setTimeout(()=>{ el.style.transitionDelay=''; el.classList.remove('m',role,'in'); },d+1400);
+      });
+      if(e.target.matches('.principio')) e.target.classList.add('lit');
+      obs.unobserve(e.target);
+    });
+  },{threshold:0.1, rootMargin:'0px 0px -6% 0px'});
+  groups.forEach(g=>{
+    const units=unitsOf(g);
+    units.forEach(([el,role])=>el.classList.add('m',role));
+    g.__units=units;
+    io.observe(g);
+  });
+})();
+
+/* cursore-lampada: stato per oggetto, solo puntatore fine, statico con reduced-motion */
+(function(){
+  if(!window.matchMedia('(pointer:fine)').matches) return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cur=document.createElement('div');
+  cur.id='cursore'; cur.setAttribute('aria-hidden','true');
+  document.body.appendChild(cur);
+  document.documentElement.classList.add('cursor-on');
+  let tx=innerWidth/2, ty=innerHeight/2, cx=tx, cy=ty;
+  const intSel='a,button,.btn,.cs-card,[data-luce],input,textarea,label,[role="button"]';
+  const txtSel='h1,h2,h3,h4,h5,p,li,blockquote,figcaption';
+  addEventListener('pointermove',e=>{ tx=e.clientX; ty=e.clientY; cur.style.opacity=1; },{passive:true});
+  addEventListener('pointerover',e=>{
+    const t=e.target;
+    if(t.closest && t.closest(intSel)){ cur.classList.add('is-int'); cur.classList.remove('is-text'); }
+    else if(t.closest && t.closest(txtSel)){ cur.classList.add('is-text'); cur.classList.remove('is-int'); }
+    else { cur.classList.remove('is-int','is-text'); }
+  },{passive:true});
+  document.addEventListener('mouseleave',()=>{ cur.style.opacity=0; });
+  (function loop(){
+    cx+=(tx-cx)*0.3; cy+=(ty-cy)*0.3;
+    cur.style.transform='translate('+cx+'px,'+cy+'px) translate(-50%,-50%)';
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* magnetismo: i bottoni si muovono verso il cursore */
+(function(){
+  if(!window.matchMedia('(pointer:fine)').matches) return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.btn').forEach(el=>{
+    el.addEventListener('pointermove',e=>{
+      const r=el.getBoundingClientRect();
+      const mx=Math.max(-2,Math.min(2,(e.clientX-(r.left+r.width/2))*0.04));
+      const my=Math.max(-2,Math.min(2,(e.clientY-(r.top+r.height/2))*0.045));
+      el.style.transform='translate('+mx+'px,'+my+'px)';
+      el.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%');
+      el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
+    });
+    el.addEventListener('pointerleave',()=>{ el.style.transform=''; });
+  });
+})();
+
+/* ═══ Sezione "Chi c'e dietro": la colonna trasla, una fascia di fuoco al centro ingrandisce ═══
+   Solo puntatore fine + motion ok; altrimenti versione statica. Zero reflow: transform/opacity/dashoffset.
+   Il filo e spezzato in segmenti fra una stazione e l'altra: si disegnano man mano che scendono sotto la
+   linea di fuoco, quindi il tracciato e sempre sincronizzato con le celle e non passa mai dietro nessuna. */
+(function(){
+  const filo=document.querySelector('.filo');
+  if(!filo) return;
+  const stage=filo.querySelector('.stage');
+  const colonna=filo.querySelector('.colonna');
+  const svg=filo.querySelector('.thread');
+  const wrap=filo.querySelector('.ritratto-wrap');
+  const chiusura=filo.querySelector('.chiusura');
+  /* la sezione pinnata chiede spazio: sotto quella soglia, o su touch o reduced-motion, diventa un blocco statico.
+     La condizione va rivalutata a ogni resize, non solo al caricamento: restringere la finestra deve degradare */
+  const spazio=window.matchMedia('(min-width:900px) and (min-height:620px) and (pointer:fine)');
+  const fermo=window.matchMedia('(prefers-reduced-motion: reduce)');
+  let attivo=null;
+
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const morbido=t=>t*t*(3-2*t);
+  /* fascia di fuoco, in frazioni di viewport. PIANO: tratto a scala piena (la cella "sosta").
+     USCITA: dove la scala torna a 1. SPARIZIONE: dove l'opacita va a 0, piu corta apposta. */
+  const FOCAL=0.44, PIANO=0.085, USCITA=0.24, SPARIZIONE=0.15;
+  const NODO_R=6.5, NODO_STACCO=15, SEG_STACCO=11, ENTRATA=88, W=150;
+
+  /* host = elemento che porta le variabili, box = la superficie che scala (serve la misura a riposo) */
+  const stazioni=[...filo.querySelectorAll('.tappa')].map(t=>({host:t,box:t.querySelector('.cella'),cresce:true}));
+  stazioni.push({host:wrap,box:wrap.querySelector('.ritratto'),cresce:false});
+  /* un nodo anche sul ritratto: il filo deve arrivare a qualcosa, non finire nel vuoto */
+  const nodoFinale=document.createElement('span'); nodoFinale.className='nodo'; wrap.prepend(nodoFinale);
+  const NS='http://www.w3.org/2000/svg';
+  const segmenti=stazioni.map(()=>{
+    const p=document.createElementNS(NS,'path'); p.setAttribute('pathLength','1'); svg.appendChild(p); return p;
+  });
+
+  let ty0=0, ty1=0, tyOra=0;
+  function misura(){
+    /* posizione di ogni stazione relativa alla colonna via rettangoli: immune alla traslazione
+       corrente e a qualunque offsetParent (l'uso di offsetTop dava misure sbagliate).
+       Le celle vengono lette senza la loro scala: gli ingombri devono essere quelli a riposo. */
+    const vh=innerHeight, focal=vh*FOCAL;
+    const crescita=parseFloat(getComputedStyle(filo).getPropertyValue('--crescita'))||0;
+    stazioni.forEach(s=>{ s.box.style.transform='none'; });
+    const cTop=colonna.getBoundingClientRect().top, H=colonna.offsetHeight;
+    stazioni.forEach(s=>{
+      const b=s.box.getBoundingClientRect(), h=s.host.getBoundingClientRect();
+      const scala=s.cresce?1+crescita:1;
+      s.cy=b.top-cTop+b.height/2;
+      s.alto=s.cy-b.height*scala/2;               /* bordi della cella a scala piena: il filo si ferma qui fuori */
+      s.basso=s.cy+b.height*scala/2;
+      s.nodoY=s.alto-NODO_STACCO;
+      s.hostTop=h.top-cTop;
+    });
+    stazioni.forEach(s=>{
+      s.box.style.transform='';
+      s.host.style.setProperty('--nodo-y',(s.nodoY-NODO_R-s.hostTop).toFixed(1)+'px');
+    });
+    /* un segmento per stazione: dal bordo basso della precedente al nodo di questa */
+    const cx=W/2;
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    stazioni.forEach((s,i)=>{
+      const y1=i===0?s.nodoY-ENTRATA:stazioni[i-1].basso+SEG_STACCO;
+      const y2=s.nodoY-NODO_R-1;
+      s.y1=y1; s.len=Math.max(y2-y1,1);
+      const a=Math.min(26,s.len*0.38)*(i%2?-1:1);  /* ampiezza alternata: il filo serpeggia, le tangenti restano verticali */
+      segmenti[i].setAttribute('d','M'+cx+' '+y1.toFixed(1)+' C '+(cx+a).toFixed(1)+' '+(y1+s.len*0.34).toFixed(1)+
+        ', '+(cx-a).toFixed(1)+' '+(y2-s.len*0.34).toFixed(1)+', '+cx+' '+y2.toFixed(1));
+    });
+    ty0=focal-stazioni[0].cy;
+    ty1=focal-stazioni[stazioni.length-1].cy;
+  }
+  let ticking=false;
+  function calc(){
+    ticking=false;
+    if(!attivo) return;
+    const vh=innerHeight, focal=vh*FOCAL;
+    const r=filo.getBoundingClientRect();
+    if(r.bottom<0 || r.top>vh) return;            /* fuori vista: niente lavoro */
+    /* tutte le letture prima di tutte le scritture: cTop0 e la colonna senza traslazione */
+    const cTop0=colonna.getBoundingClientRect().top-tyOra;
+    const total=filo.offsetHeight-vh;
+    const p=total>0?clamp(-r.top,0,total)/total:1;
+    const pEff=clamp(p/0.82,0,1);                  /* la colonna finisce a p=0.82: il ritratto sosta al centro */
+    tyOra=ty0+pEff*(ty1-ty0);
+    const cTop=cTop0+tyOra;
+    stage.style.setProperty('--praw',p.toFixed(4));
+    /* la chiusura e selezionabile e cliccabile solo quando e davvero visibile:
+       a opacita 0 restava un blocco invisibile che intercettava il puntatore */
+    if(chiusura) chiusura.style.pointerEvents = p>0.87 ? 'auto' : 'none';
+    colonna.style.setProperty('--ty',tyOra.toFixed(1)+'px');
+    stazioni.forEach((s,i)=>{
+      const c=cTop+s.cy, d=Math.abs(c-focal)/vh;
+      let focus=1-morbido(clamp((d-PIANO)/(USCITA-PIANO),0,1));
+      let vis=1-morbido(clamp((d-PIANO)/(SPARIZIONE-PIANO),0,1));
+      const on=clamp((focal-c)/(vh*0.14)+0.5,0,1);
+      /* il ritratto e l'ultima stazione: da p=0.78 in poi resta in campo per regola, non per misura.
+         Il finale della sezione lo vuole accanto alla chiusura, e non deve dipendere dal fatto
+         che le altezze misurate siano ancora valide. */
+      if(i===stazioni.length-1){
+        const coda=morbido(clamp((p-0.78)/0.06,0,1));
+        vis=Math.max(vis,coda); focus=Math.max(focus,coda);
+      }
+      s.host.style.setProperty('--focus',focus.toFixed(3));
+      s.host.style.setProperty('--vis',vis.toFixed(3));
+      s.host.style.setProperty('--on',Math.max(vis,on).toFixed(3));
+      /* il segmento si disegna fino alla linea di fuoco: nasce dalla cella sopra e arriva al nodo sotto */
+      segmenti[i].style.setProperty('--f',clamp((focal-(cTop+s.y1))/s.len,0,1).toFixed(3));
+    });
+  }
+  function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(calc); } }
+  function modo(){
+    const ok=spazio.matches && !fermo.matches;
+    if(ok===attivo) return false;
+    attivo=ok;
+    filo.classList.toggle('statico',!ok);
+    /* uscendo dalla modalita dinamica ripulisco le variabili: la versione statica deve partire pulita */
+    if(!ok) stazioni.forEach(s=>['--focus','--vis','--on','--nodo-y'].forEach(v=>s.host.style.removeProperty(v)));
+    return true;
+  }
+  function init(){ modo(); if(attivo){ misura(); calc(); } }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',()=>{ modo(); if(attivo){ misura(); onScroll(); } },{passive:true});
+  spazio.addEventListener('change',init);
+  fermo.addEventListener('change',init);
+  addEventListener('load',init);
+  /* i font cambiano le altezze delle celle: rimisuro quando sono pronti */
+  if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(()=>{ if(attivo){ misura(); calc(); } }); }
+  /* qualunque cosa cambi l'altezza della colonna (font che arrivano tardi, testi che riflowano)
+     invalida le posizioni memorizzate: le rimisuro invece di fidarmi di quelle del caricamento */
+  if(window.ResizeObserver){
+    let pend=false;
+    new ResizeObserver(()=>{
+      if(pend||!attivo) return; pend=true;
+      requestAnimationFrame(()=>{ pend=false; if(attivo){ misura(); calc(); } });
+    }).observe(colonna);
+  }
+  init();
+})();
+</script>
+<script>
+/* anno del copyright: scritto dal browser, cosi il sito non invecchia da solo */
+document.querySelectorAll('[data-anno]').forEach(e=>{e.textContent=new Date().getFullYear();});
+/* la barra prende corpo appena si lascia la cima: sempre visibile, mai invadente sulla hero */
+(function(){
+  const nav=document.querySelector('nav.principale');
+  if(!nav) return;
+  let atteso=false;
+  function stato(){ atteso=false; nav.classList.toggle('ancorata', scrollY>24); }
+  addEventListener('scroll',()=>{ if(!atteso){ atteso=true; requestAnimationFrame(stato); } },{passive:true});
+  stato();
+})();
+</script>
+</body>
+</html>
