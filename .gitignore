@@ -16,3 +16,9 @@ CLAUDE.md
 
 # --- Documenti di lavoro (piani, censimenti): materiale locale ---
 _*.md
+
+# --- CV e allegati: non vanno online per errore ---
+# Il CV contiene contatti personali. Se un giorno lo vuoi scaricabile dal sito,
+# togli questa riga e aggiungi un link esplicito in una pagina.
+files/
+files.zip

@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Askme Design System: da zero a AI-ready · Simone Ariotti</title>
-<meta name="description" content="Costruire da zero il design system di una suite B2B con tre prodotti, e renderlo leggibile anche a un'AI: token, componenti e regole prima degli artefatti.">
-<link rel="canonical" href="https://simoneariotti.github.io/portfolio/case-study-01.html">
+<title>Askme Design System: from zero to AI-ready · Simone Ariotti</title>
+<meta name="description" content="Building the design system of a three-product B2B suite from scratch, and making it readable by an AI: tokens, components and rules before artifacts.">
+<link rel="canonical" href="https://simoneariotti.github.io/portfolio/en/case-study-01.html">
 <link rel="alternate" hreflang="it" href="https://simoneariotti.github.io/portfolio/case-study-01.html">
 <link rel="alternate" hreflang="en" href="https://simoneariotti.github.io/portfolio/en/case-study-01.html">
 <link rel="alternate" hreflang="x-default" href="https://simoneariotti.github.io/portfolio/case-study-01.html">
 <meta name="author" content="Simone Ariotti">
 <meta name="theme-color" content="#080B18">
 
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Simone Ariotti">
-<meta property="og:locale" content="it_IT">
-<meta property="og:url" content="https://simoneariotti.github.io/portfolio/case-study-01.html">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://simoneariotti.github.io/portfolio/en/case-study-01.html">
 <meta property="og:title" content="Askme Design System: da zero a AI-ready · Simone Ariotti">
-<meta property="og:description" content="Costruire da zero il design system di una suite B2B con tre prodotti, e renderlo leggibile anche a un'AI: token, componenti e regole prima degli artefatti.">
+<meta property="og:description" content="Building the design system of a three-product B2B suite from scratch, and making it readable by an AI: tokens, components and rules before artifacts.">
 <meta property="og:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Struttura reticolare viola-ghiaccio su fondo indaco, con la scritta: Progetto sistemi che reggono la crescita.">
+<meta property="og:image:alt" content="A violet-ice lattice structure on a deep indigo field, with the line: I design systems that hold up as they grow.">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Askme Design System: da zero a AI-ready · Simone Ariotti">
-<meta name="twitter:description" content="Costruire da zero il design system di una suite B2B con tre prodotti, e renderlo leggibile anche a un'AI: token, componenti e regole prima degli artefatti.">
+<meta name="twitter:description" content="Building the design system of a three-product B2B suite from scratch, and making it readable by an AI: tokens, components and rules before artifacts.">
 <meta name="twitter:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
 <style>
 /* Font ospitati qui, nessuna terza parte. Solo i pesi che il sito usa davvero,
@@ -39,27 +39,27 @@
    Licenze in assets/font/, ITF Free Font License per i due Fontshare. */
 @font-face{
   font-family:'Clash Display';font-style:normal;font-weight:500;font-display:swap;
-  src:url('assets/font/clash-display-500.woff2') format('woff2');
+  src:url('../assets/font/clash-display-500.woff2') format('woff2');
 }
 @font-face{
   font-family:'General Sans';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/general-sans-400.woff2') format('woff2');
+  src:url('../assets/font/general-sans-400.woff2') format('woff2');
 }
 @font-face{
   font-family:'General Sans';font-style:normal;font-weight:500;font-display:swap;
-  src:url('assets/font/general-sans-500.woff2') format('woff2');
+  src:url('../assets/font/general-sans-500.woff2') format('woff2');
 }
 /* Space Mono ospitato qui, non su un CDN esterno: senza terze parti
    nessun IP dei visitatori esce dal sito. SIL Open Font License 1.1,
    licenza in assets/font/LICENSE-space-mono.txt */
 @font-face{
   font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/space-mono-400-latin.woff2') format('woff2');
+  src:url('../assets/font/space-mono-400-latin.woff2') format('woff2');
   unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 @font-face{
   font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/space-mono-400-latin-ext.woff2') format('woff2');
+  src:url('../assets/font/space-mono-400-latin-ext.woff2') format('woff2');
   unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
 }
 
@@ -149,7 +149,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--funzione);outline-o
    quindi non si alza a occhio. ── */
 .materia{
   position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:url('assets/materia.webp') center center / cover no-repeat;
+  background:url('../assets/materia.webp') center center / cover no-repeat;
   opacity:var(--materia);
 }
 @media (max-width:760px){.materia{opacity:calc(var(--materia) * .8)}}
@@ -337,85 +337,85 @@ footer .chiudi{
 </svg>
 
 <div class="materia" aria-hidden="true"></div>
-<nav class="principale" aria-label="Principale">
+<nav class="principale" aria-label="Main">
   <a class="logo" href="index.html"><svg class="icona" style="width:18px;height:18px" aria-hidden="true"><use href="#i-indietro"/></svg>Simone Ariotti</a>
   <ul>
-    <li><a href="index.html#lavori" aria-current="page">Case study</a></li>
+    <li><a href="index.html#lavori" aria-current="page">Case studies</a></li>
     <li><a href="index.html#rr">Rotte e Racconti</a></li>
     <li><a href="about.html">About</a></li>
-    <li><a href="index.html#contatti">Contatti</a></li>
-    <li class="lingua"><span class="attiva" aria-current="true">IT</span><span class="sep" aria-hidden="true">/</span><a href="en/case-study-01.html" hreflang="en" lang="en" title="Read in English">EN</a></li>
+    <li><a href="index.html#contatti">Contact</a></li>
+    <li class="lingua"><a href="../case-study-01.html" hreflang="it" lang="it" title="Leggi in italiano">IT</a><span class="sep" aria-hidden="true">/</span><span class="attiva" aria-current="true">EN</span></li>
   </ul>
 </nav>
 
 <!-- ═══ HERO DI PAGINA ═══ -->
 <header class="cs-hero">
   <div class="wrap-prosa">
-    <p class="meta"><span>CS 01</span><span>Design System</span><span>Askme</span><span>Dal 2023, in corso</span></p>
-    <h1>Askme Design System: da zero a AI-ready</h1>
-    <p class="piano">Tre anni di sistema costruito da zero per una suite enterprise, e la strategia per renderlo leggibile dall'intelligenza artificiale.</p>
+    <p class="meta"><span>CS 01</span><span>Design System</span><span>Askme</span><span>Since 2023, ongoing</span></p>
+    <h1>Askme Design System: from zero to AI-ready</h1>
+    <p class="piano">Three years of a system built from scratch for an enterprise suite, and the strategy to make it readable by artificial intelligence.</p>
   </div>
 </header>
 
 <!-- ═══ 01 CONTESTO ═══ -->
 <section class="blocco">
   <div class="wrap-prosa">
-    <p class="eyebrow">01 · Contesto</p>
-    <h2>Tre prodotti, un designer, nessun sistema.</h2>
-    <p><a href="https://askme.it" target="_blank" rel="noopener">Askme</a> è una suite B2B enterprise per l'automazione dei processi aziendali: service management, firma elettronica con valore legale e AI conversazionale nativa, adottata da organizzazioni in ambito finance, industria, sanità e pubblica amministrazione. Quando sono entrato come product designer, i tre moduli erano cresciuti in modo indipendente: nessun componente condiviso, nessun linguaggio comune, nessun design system.</p>
-    <p>L'ho costruito da zero e ne ho la responsabilità da tre anni: variabili, componenti condivisi, pattern cross-modulo e le linee guida di branding che ci stanno sopra. Questo case study copre due archi: la costruzione del sistema, e il lavoro in corso per renderlo leggibile dall'AI.</p>
+    <p class="eyebrow">01 · Context</p>
+    <h2>Three products, one designer, no system.</h2>
+    <p><a href="https://askme.it" target="_blank" rel="noopener">Askme</a> is a B2B enterprise suite for business process automation: service management, legally binding e-signature and native conversational AI, adopted by organisations in finance, manufacturing, healthcare and public administration. When I joined as product designer, the three modules had grown independently: no shared components, no common language, no design system.</p>
+    <p>I built it from scratch and have owned it for three years: variables, shared components, cross-module patterns and the branding guidelines that sit on top. This case study covers two arcs: building the system, and the work in progress to make it readable by AI.</p>
   </div>
 </section>
 
 <!-- ═══ 02 IL PROBLEMA ═══ -->
 <section class="blocco">
   <div class="wrap-prosa">
-    <p class="eyebrow">02 · Il problema</p>
-    <h2>La divergenza, poi la divergenza alla velocità dell'AI.</h2>
-    <p>Tre prodotti, tre storie, un brand. Ogni nuova funzionalità reinventava pattern che esistevano già da qualche altra parte nella suite. La coerenza reggeva a livello di singola feature, si incrinava a livello di modulo, si rompeva del tutto tra un modulo e l'altro.</p>
-    <p>Poi è arrivato un secondo problema, più veloce: lo sviluppo assistito dall'AI permetteva ai team di rilasciare nuove interfacce senza passare dal design. L'output era usabile, ma ogni schermata generata usava pattern propri, duplicando componenti già esistenti. Divergenza alla velocità dell'AI.</p>
+    <p class="eyebrow">02 · The problem</p>
+    <h2>Divergence, then divergence at the speed of AI.</h2>
+    <p>Three products, three histories, one brand. Every new feature reinvented patterns that already existed somewhere else in the suite. Consistency held at the level of a single feature, cracked at module level, and broke completely between one module and another.</p>
+    <p>Then a second problem arrived, a faster one: AI-assisted development let teams ship new interfaces without going through design. The output was usable, but every generated screen used its own patterns, duplicating components that already existed. Divergence at the speed of AI.</p>
   </div>
 </section>
 
 <!-- ═══ 03 IL RAGIONAMENTO ═══ -->
 <section class="blocco">
   <div class="wrap-prosa">
-    <p class="eyebrow">03 · Il ragionamento</p>
-    <h2>Pattern che sopravvivono a futuri non ancora disegnati.</h2>
+    <p class="eyebrow">03 · The reasoning</p>
+    <h2>Patterns that survive futures nobody has drawn yet.</h2>
 
-    <h3>Costruire il sistema, i primi tre anni</h3>
-    <p>La libreria di componenti di Askme è nata da zero. Ogni pezzo rispondeva a un bisogno immediato, ma era pensato già con la forma del sistema che sarebbe cresciuto intorno. È un lavoro fitto all'inizio, che più avanti fa risparmiare: aggiungere una funzionalità raramente significava riscrivere quelle di prima.</p>
-    <p class="secondario">Dal file upload alla navigazione cross-modulo, dai controlli di form alle firme di Sign: una libreria intera, ancora in produzione oggi. Due esempi la raccontano meglio di un elenco.</p>
+    <h3>Building the system: the first three years</h3>
+    <p>The Askme component library started from nothing. Every piece answered an immediate need, but was already shaped by the system that would grow around it. It is dense work up front that pays back later: adding a feature rarely meant rewriting the ones before it.</p>
+    <p class="secondario">From file upload to cross-module navigation, from form controls to Sign signatures: a whole library, still in production today. Two examples tell it better than a list.</p>
     <ul>
-      <li><strong>Contenitori adattabili.</strong> Container, dialog ed expansion panel costruiti come archetipi: accolgono dati, immagini, card complesse, input, qualsiasi cosa. Non un componente per ogni caso, ma una forma sola che regge anche casi non ancora specificati. Stessi contenitori, contenuti sempre diversi.</li>
-      <li><strong>Una tabella che toglie rumore.</strong> Le tabelle in Askme sono ovunque. Quella custom, con filtri avanzati e viste salvabili, lascia a ogni utente o al suo manager la vista che serve: più focus sulle proprie attività, meno rumore, sempre nello stesso pattern riconoscibile. Su mobile degrada in card usabili, lasciando fuori di proposito le funzioni più complesse.</li>
-      <li><strong>Un ponte tra design e sviluppo.</strong> Un design system regge solo se le due parti parlano la stessa lingua. Una libreria unica condivisa, un naming che coincide, decisioni prese insieme agli sviluppatori invece che calate dall'alto: gran parte del valore di un sistema vive proprio in questa cerniera.</li>
+      <li><strong>Adaptable containers.</strong> Containers, dialogs and expansion panels built as archetypes: they hold data, images, complex cards, inputs, anything. Not one component per case, but a single form that holds cases nobody has specified yet. Same containers, always different contents.</li>
+      <li><strong>A table that removes noise.</strong> Tables are everywhere in Askme. The custom one, with advanced filters and saved views, gives every user or their manager the view they need: more focus on their own work, less noise, always the same recognisable pattern. On mobile it degrades into usable cards, deliberately leaving the more complex functions out.</li>
+      <li><strong>A bridge between design and engineering.</strong> A design system only holds if both sides speak the same language. One shared library, naming that matches, decisions made together with the developers rather than handed down: much of a system's value lives in exactly that hinge.</li>
     </ul>
 
-    <h3>Renderlo leggibile dall'AI, il lavoro in corso</h3>
-    <p class="evidenza">La stessa spinta AI che alimenta la divergenza è ciò che rende necessario un sistema che l'AI sappia leggere.</p>
-    <p>Se ognuno usa la propria AI con i propri pattern, la divergenza si moltiplica. Se l'AI legge il design system, la stessa velocità diventa convergenza. La strategia che ho proposto e sto eseguendo:</p>
+    <h3>Making it readable by AI: the work in progress</h3>
+    <p class="evidenza">The same AI push that fuels the divergence is what makes a system AI can read necessary.</p>
+    <p>If everyone uses their own AI with their own patterns, divergence multiplies. If the AI reads the design system, that same speed becomes convergence. The strategy I proposed and am now executing:</p>
     <ul>
-      <li><strong>Portabilità prima del lock-in.</strong> Fondamenti convertiti allo standard W3C DTCG per i token: leggibili da qualsiasi strumento, non intrappolati in un singolo vendor.</li>
-      <li><strong>Due layer, due proprietari.</strong> Un layer semantico (del design, indipendente dallo strumento) separato rigorosamente da un layer di code-binding (dello sviluppo). Non si mescolano mai.</li>
-      <li><strong>Una pipeline automatizzata dei token.</strong> Dallo strumento di design a un repository versionato fino al codice generato, con pull request automatiche. Una sola fonte di verità invece di due che divergono lentamente.</li>
-      <li><strong>Componenti spiegati a una macchina.</strong> Naming coincidente con la libreria di codice, descrizioni semantiche, implementazioni di riferimento: così l'AI sceglie il componente esistente giusto invece di inventarne un sosia.</li>
-      <li><strong>Un confine esplicito tra core ed estensione.</strong> Ciò che ogni modulo condivide e ciò che è locale a uno solo, dichiarato e non implicito.</li>
+      <li><strong>Portability before lock-in.</strong> Foundations converted to the W3C DTCG standard for tokens: readable by any tool, not trapped in a single vendor.</li>
+      <li><strong>Two layers, two owners.</strong> A semantic layer (design's, tool-independent) kept strictly separate from a code-binding layer (engineering's). They never mix.</li>
+      <li><strong>An automated token pipeline.</strong> From the design tool to a versioned repository through to generated code, with automatic pull requests. One source of truth instead of two that slowly drift apart.</li>
+      <li><strong>Components explained to a machine.</strong> Naming that matches the code library, semantic descriptions, reference implementations: so the AI picks the right existing component instead of inventing a lookalike.</li>
+      <li><strong>An explicit boundary between core and extension.</strong> What every module shares and what belongs to one alone, declared rather than implied.</li>
     </ul>
-    <p>La strategia si chiude con un pilota falsificabile: dato il solo design system, un'AI riesce a comporre un modulo nuovo e coerente? Criteri di successo espliciti, con la libertà dichiarata di restituire un onesto «non ancora». Presentarlo come esperimento invece che come promessa è ciò che rende la proposta credibile.</p>
+    <p>The strategy closes with a falsifiable pilot: given only the design system, can an AI compose a new, consistent module? Explicit success criteria, with the stated freedom to return an honest “not yet”. Presenting it as an experiment rather than a promise is what makes the proposal credible.</p>
   </div>
 </section>
 
 <!-- ═══ 04 LAVORO SELEZIONATO ═══ -->
 <section class="blocco">
   <div class="wrap-prosa">
-    <p class="eyebrow">04 · Lavoro selezionato</p>
-    <h2>I pattern, non le interfacce.</h2>
+    <p class="eyebrow">04 · Selected work</p>
+    <h2>The patterns, not the interfaces.</h2>
     <div class="figure">
       <figure class="figura">
         <svg viewBox="0 0 480 214" role="img" aria-labelledby="d1t d1d" xmlns="http://www.w3.org/2000/svg">
-          <title id="d1t">Archetipo del contenitore adattabile</title>
-          <desc id="d1d">Una sola forma di contenitore che accoglie contenuti diversi: dati, immagine, card, input. La stessa struttura sopravvive a casi non ancora specificati.</desc>
+          <title id="d1t">Adaptable container archetype</title>
+          <desc id="d1d">A single container form that holds different content: data, image, card, input. The same structure survives cases that have not been specified yet.</desc>
           <style>
             .fr{fill:var(--superficie);stroke:var(--bordo-forte);stroke-width:1.2}
             .gl{stroke:var(--mezzo);stroke-width:1.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
@@ -423,21 +423,21 @@ footer .chiudi{
             .tagk{fill:var(--funzione)}
             .cap{font-family:var(--font-body);font-size:10.5px;fill:var(--mezzo)}
           </style>
-          <text x="12" y="24" class="tag">ARCHETIPO ADATTABILE</text>
-          <text x="468" y="24" text-anchor="end" class="tag tagk">STESSO CONTENITORE</text>
+          <text x="12" y="24" class="tag">ADAPTABLE ARCHETYPE</text>
+          <text x="468" y="24" text-anchor="end" class="tag tagk">SAME CONTAINER</text>
           <!-- frame 1: dati -->
           <rect class="fr" x="12" y="48" width="100" height="100" rx="16"/>
           <line class="gl" x1="28" y1="74" x2="96" y2="74"/>
           <line class="gl" x1="28" y1="90" x2="96" y2="90"/>
           <line class="gl" x1="28" y1="106" x2="86" y2="106"/>
           <line class="gl" x1="28" y1="122" x2="70" y2="122"/>
-          <text x="62" y="170" text-anchor="middle" class="tag">DATI</text>
+          <text x="62" y="170" text-anchor="middle" class="tag">DATA</text>
           <!-- frame 2: immagine -->
           <rect class="fr" x="132" y="48" width="100" height="100" rx="16"/>
           <rect class="gl" x="148" y="66" width="68" height="62" rx="8"/>
           <circle class="gl" cx="167" cy="85" r="6"/>
           <path class="gl" d="M150,126 L172,100 L188,116 L206,94 L214,110"/>
-          <text x="182" y="170" text-anchor="middle" class="tag">IMMAGINE</text>
+          <text x="182" y="170" text-anchor="middle" class="tag">IMAGE</text>
           <!-- frame 3: card -->
           <rect class="fr" x="252" y="48" width="100" height="100" rx="16"/>
           <rect class="gl" x="268" y="66" width="68" height="62" rx="10"/>
@@ -453,14 +453,14 @@ footer .chiudi{
           <line class="gl" x1="398" y1="90" x2="398" y2="104"/>
           <line class="gl" x1="406" y1="97" x2="448" y2="97"/>
           <text x="422" y="170" text-anchor="middle" class="tag">INPUT</text>
-          <text x="12" y="198" class="cap">Una forma sola, contenuti sempre diversi: sopravvive a casi non ancora specificati.</text>
+          <text x="12" y="198" class="cap">One form, always different contents: it survives cases nobody has specified yet.</text>
         </svg>
-        <figcaption>L'archetipo del contenitore: una forma sola, contenuti sempre diversi</figcaption>
+        <figcaption>The container archetype: one form, always different contents</figcaption>
       </figure>
       <figure class="figura">
         <svg viewBox="0 0 480 214" role="img" aria-labelledby="d2t d2d" xmlns="http://www.w3.org/2000/svg">
-          <title id="d2t">La pipeline dei token</title>
-          <desc id="d2d">Dallo strumento di design, dove i token seguono lo standard W3C DTCG, a un repository versionato che e la sola fonte di verita, fino al codice generato, con pull request automatiche.</desc>
+          <title id="d2t">The token pipeline</title>
+          <desc id="d2d">From the design tool, where tokens follow the W3C DTCG standard, to a versioned repository that is the single source of truth, through to generated code, with automatic pull requests.</desc>
           <style>
             .n2{fill:var(--superficie);stroke:var(--bordo-forte);stroke-width:1}
             .key2{fill:color-mix(in srgb,var(--funzione) 12%,var(--superficie));stroke:var(--funzione);stroke-width:1.4}
@@ -471,37 +471,37 @@ footer .chiudi{
             .flow{stroke:var(--ghiaccio);stroke-width:1.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
             .arlab{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.6px;fill:var(--mezzo)}
           </style>
-          <text x="20" y="26" class="tag2">PIPELINE DEI TOKEN</text>
+          <text x="20" y="26" class="tag2">TOKEN PIPELINE</text>
           <rect class="n2" x="20" y="54" width="124" height="72" rx="14"/>
-          <text x="82" y="86" text-anchor="middle" class="tt">Strumento</text>
-          <text x="82" y="101" text-anchor="middle" class="tt">di design</text>
+          <text x="82" y="86" text-anchor="middle" class="tt">Design</text>
+          <text x="82" y="101" text-anchor="middle" class="tt">tool</text>
           <text x="82" y="117" text-anchor="middle" class="ss">token · W3C DTCG</text>
           <path class="flow" d="M150,90 h22 m-6,-4 l6,4 l-6,4"/>
           <rect class="key2" x="178" y="54" width="124" height="72" rx="14"/>
-          <text x="240" y="86" text-anchor="middle" class="tt">Repository</text>
-          <text x="240" y="101" text-anchor="middle" class="tt">versionato</text>
-          <text x="240" y="117" text-anchor="middle" class="ss ssk">una sola fonte di verità</text>
+          <text x="240" y="86" text-anchor="middle" class="tt">Versioned</text>
+          <text x="240" y="101" text-anchor="middle" class="tt">repository</text>
+          <text x="240" y="117" text-anchor="middle" class="ss ssk">single source of truth</text>
           <path class="flow" d="M308,90 h22 m-6,-4 l6,4 l-6,4"/>
           <rect class="n2" x="336" y="54" width="124" height="72" rx="14"/>
-          <text x="398" y="86" text-anchor="middle" class="tt">Codice</text>
-          <text x="398" y="101" text-anchor="middle" class="tt">generato</text>
-          <text x="398" y="117" text-anchor="middle" class="ss">libreria di codice</text>
-          <text x="319" y="150" text-anchor="middle" class="arlab">PULL REQUEST AUTOMATICHE</text>
-          <text x="20" y="192" class="ss">Due layer separati: semantico e code-binding, mai mescolati.</text>
+          <text x="398" y="86" text-anchor="middle" class="tt">Generated</text>
+          <text x="398" y="101" text-anchor="middle" class="tt">code</text>
+          <text x="398" y="117" text-anchor="middle" class="ss">code library</text>
+          <text x="319" y="150" text-anchor="middle" class="arlab">AUTOMATIC PULL REQUESTS</text>
+          <text x="20" y="192" class="ss">Two separate layers: semantic and code-binding, never mixed.</text>
         </svg>
-        <figcaption>La pipeline dei token: design, repository versionato, codice generato</figcaption>
+        <figcaption>The token pipeline: design, versioned repository, generated code</figcaption>
       </figure>
     </div>
-    <p class="secondario">Gli approfondimenti visivi arrivano come diagrammi rifatti in forma astratta: pattern e strutture, non interfacce reali del prodotto.</p>
+    <p class="secondario">The visual deep-dives come as diagrams redrawn in abstract form: patterns and structures, not real product interfaces.</p>
   </div>
 </section>
 
 <!-- ═══ 05 RISULTATO E PRINCIPI ═══ -->
 <section class="blocco">
   <div class="wrap-prosa">
-    <p class="eyebrow">05 · Risultato e principi</p>
-    <h2>Un linguaggio solo, e la strategia in esecuzione.</h2>
-    <p>Tre prodotti oggi condividono un solo linguaggio di design, una libreria di componenti unica tra design e codice, e linee guida di branding integrate nel sistema invece che appoggiate accanto. La strategia AI-ready è stata scritta come un documento unico per due pubblici insieme, proposta per chi decide e guida di riferimento per chi esegue, ed è ora in esecuzione.</p>
+    <p class="eyebrow">05 · Outcome and principles</p>
+    <h2>One language, and the strategy in execution.</h2>
+    <p>Three products now share a single design language, one component library across design and code, and branding guidelines built into the system rather than parked beside it. The AI-ready strategy was written as a single document for two audiences at once, a proposal for the people who decide and a reference guide for the people who execute, and is now being executed.</p>
   </div>
 </section>
 
@@ -509,9 +509,9 @@ footer .chiudi{
 <section class="banda-principio">
   <div class="wrap">
     <div class="principio">
-      <p class="p-label">Principio emerso</p>
-      <blockquote>Il valore di un design system non è l'ordine: è la velocità tra un'idea e la sua struttura coerente. Tutto il resto è mezzo.</blockquote>
-      <p class="p-fonte">Da CS 01 · Design System</p>
+      <p class="p-label">A principle that emerged</p>
+      <blockquote>The value of a design system is not order: it is the speed between an idea and its coherent structure. Everything else is a means.</blockquote>
+      <p class="p-fonte">From CS 01 · Design System</p>
     </div>
   </div>
 </section>
@@ -520,17 +520,17 @@ footer .chiudi{
 <section class="coda">
   <div class="wrap griglia">
     <div>
-      <p class="eyebrow">Continua a leggere</p>
-      <a class="cs-card" data-luce href="case-study-02.html" title="Leggi il case study">
+      <p class="eyebrow">Keep reading</p>
+      <a class="cs-card" data-luce href="case-study-02.html" title="Read the case study">
         <div class="luce" aria-hidden="true"></div>
         <div class="cs-cover" aria-hidden="true"></div>
         <div class="cs-body">
-          <p class="cs-meta"><span>CS 02</span><span>Sistema agentico</span><span>Askme</span></p>
-          <h3>Askme Agent: dalla conversazione all'azione</h3>
+          <p class="cs-meta"><span>CS 02</span><span>Agentic system</span><span>Askme</span></p>
+          <h3>Askme Agent: from conversation to action</h3>
         </div>
       </a>
     </div>
-    <p class="oppure">Oppure <a href="index.html#contatti">scrivimi direttamente</a>:<br>rispondo davvero.</p>
+    <p class="oppure">Or <a href="index.html#contatti">write to me directly</a>:<br>I actually reply.</p>
   </div>
 </section>
 
@@ -538,10 +538,10 @@ footer .chiudi{
   <div class="wrap">
     <p class="identita"><strong>Simone Ariotti</strong> · Digital Product Designer<br>
     IxDF Local Leader Turin</p>
-    <p class="wip">Questo sito è vivo: cambia, cresce, non è mai finito. Come chi lo scrive. E va bene così.</p>
+    <p class="wip">This site is alive: it changes, it grows, it is never finished. Like the person writing it. And that is fine.</p>
     <div class="chiudi">
       <span>© <span data-anno>2026</span> Simone Ariotti</span>
-      <span>Costruito su una struttura che regge</span>
+      <span>Built on a structure that holds</span>
     </div>
   </div>
 </footer>
