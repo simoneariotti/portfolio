@@ -22,3 +22,10 @@ _*.md
 # togli questa riga e aggiungi un link esplicito in una pagina.
 files/
 files.zip
+
+# --- Metriche interne: NON devono finire online ---
+# Contiene KPI di clienti presi dal materiale commerciale, diagnostica interna del
+# design system, id del file Figma e difetti di brand governance. Il file non inizia
+# per underscore, quindi la regola _*.md non lo copriva: senza questa riga il primo
+# `git add -A` lo avrebbe pubblicato.
+Askme_Metriche_Business_e_DesignSystem.md

@@ -269,6 +269,77 @@ section.blocco{padding:clamp(48px,6vw,72px) 0;border-top:1px solid var(--bordo)}
 }
 
 /* ── FIGURE: diagrammi astratti, pattern e strutture non interfacce reali ── */
+/* ── QUADRO DI MISURA e LETTURE ────────────────────────────────────────────
+   Non sono card: sono una struttura appesa. Un filetto orizzontale comune, e
+   da ogni giunzione scende un montante con il suo nodo, la stessa grammatica
+   del filetto verticale del blocco "Principio emerso". Entrambi i blocchi sono
+   liste: il sistema di motion le riconosce gia' come ul>li e le fa entrare in
+   cascata, quindi non serve una riga di JS in piu'.
+   Nessuna barra di riempimento sulle letture: quattro indicatori su cinque
+   migliorano salendo e uno scendendo, quindi una barra unica mentirebbe. */
+/* ── APPROFONDIMENTO: <details> nativo, zero JS ────────────────────────────
+   Il segno "piu'" e' due filetti da 1px, non un'icona presa altrove: aprendo,
+   il tratto verticale si ritrae e resta l'orizzontale. Stessa materia del
+   reticolo. <details>/<summary> danno gratis tastiera, ruolo e stato
+   annunciato, e senza CSS il contenuto resta comunque leggibile.
+   Qui --funzione e' legittimo: e' un comando, non decorazione. */
+.approfondimento{border-top:1px solid var(--bordo);border-bottom:1px solid var(--bordo);
+  margin:24px 0 28px;max-width:var(--misura-prosa)}
+.approfondimento>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;
+  padding:15px 2px;color:var(--ghiaccio);font-size:15.5px;
+  transition:color var(--durata-micro) var(--ease-viscoso)}
+.approfondimento>summary::-webkit-details-marker{display:none}
+.approfondimento>summary:hover{color:var(--testo)}
+.approfondimento>summary:focus-visible{outline:2px solid var(--funzione);outline-offset:4px;color:var(--testo)}
+.approfondimento .segno{position:relative;flex:0 0 11px;width:11px;height:11px}
+.approfondimento .segno::before,.approfondimento .segno::after{content:'';position:absolute;
+  background:var(--funzione);transition:transform .34s var(--ease-viscoso),opacity .34s var(--ease-viscoso)}
+.approfondimento .segno::before{left:0;top:5px;width:11px;height:1px}
+.approfondimento .segno::after{left:5px;top:0;width:1px;height:11px}
+.approfondimento[open] .segno::after{transform:scaleY(0);opacity:0}
+/* il corpo rientra sotto l'etichetta, non sotto il segno: la colonna del segno
+   resta un canale vuoto e l'approfondimento si legge come un oggetto solo */
+.approfondimento .corpo{padding:10px 0 4px 25px}
+.approfondimento .corpo p{margin:0 0 14px;font-size:15px;line-height:1.62;color:var(--ghiaccio);max-width:none}
+.approfondimento .corpo p:last-child{margin-bottom:0}
+@media(max-width:600px){.approfondimento .corpo{padding-left:0}}
+.approfondimento[open] .corpo{animation:apre .42s var(--ease-viscoso) both}
+@keyframes apre{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .approfondimento .segno::before,.approfondimento .segno::after{transition:none}
+  .approfondimento[open] .corpo{animation:none}
+}
+
+.quadro{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:0 26px;margin:34px 0 14px;max-width:var(--misura-prosa)}
+/* il filetto sta sulla cella, non sul contenitore: cosi' ogni riga della griglia
+   ha il suo, e i nodi non restano appesi nel vuoto quando le colonne vanno a capo */
+.quadro .misura{position:relative;padding:26px 0 20px;border-top:1px solid var(--bordo-forte)}
+.quadro .misura::before{content:'';position:absolute;left:0;top:0;width:1px;height:17px;background:var(--bordo-forte)}
+.quadro .misura::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
+  background:var(--ghiaccio);transform:rotate(45deg)}
+.quadro .val{display:block;font-family:var(--font-display);font-weight:500;
+  font-size:clamp(30px,4.2vw,44px);line-height:1;letter-spacing:-.022em;color:var(--testo)}
+.quadro .eti{display:block;margin-top:10px;font-size:14.5px;line-height:1.45;color:var(--ghiaccio)}
+
+.letture{list-style:none;padding:0;margin:30px 0 26px;max-width:var(--misura-prosa);border-top:1px solid var(--bordo)}
+.letture li{position:relative;display:grid;grid-template-columns:minmax(34px,auto) 1fr;
+  gap:5px 22px;align-items:baseline;padding:19px 0 18px;border-bottom:1px solid var(--bordo)}
+/* stessa giunzione del quadro: il nodo da solo galleggiava e sembrava un apostrofo,
+   con il montante che scende diventa una struttura appesa al filetto */
+.letture li::before{content:'';position:absolute;left:0;top:0;width:1px;height:15px;background:var(--bordo-forte)}
+.letture li::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
+  background:var(--ghiaccio);transform:rotate(45deg)}
+/* l'ordinale, non il valore: i valori misurati riguardano il prodotto di qualcun
+   altro e restano fuori dal sito. Space Mono solo qui, che e' micro-metadata. */
+.letture .ord{font-family:var(--font-mono);font-weight:400;font-size:12px;letter-spacing:.1em;color:var(--mezzo)}
+.letture .nome{font-family:var(--font-display);font-weight:500;font-size:clamp(17px,1.5vw,20px);line-height:1.35;letter-spacing:-.004em;color:var(--testo)}
+.letture .dice{grid-column:2;font-size:14.5px;line-height:1.55;color:var(--ghiaccio)}
+@media(max-width:600px){
+  .letture li{grid-template-columns:1fr;gap:7px}
+  .letture .dice{grid-column:1}
+}
+
 .figure{display:flex;flex-direction:column;gap:28px;max-width:600px;margin:8px 0 20px}
 .figura{
   position:relative;border:1px solid var(--bordo);border-radius:22px 14px 20px 16px;overflow:hidden;
@@ -362,8 +433,14 @@ footer .chiudi{
   <div class="wrap-prosa">
     <p class="eyebrow">01 · Contesto</p>
     <h2>Tre prodotti, un designer, nessun sistema.</h2>
-    <p><a href="https://askme.it" target="_blank" rel="noopener">Askme</a> è una suite B2B enterprise per l'automazione dei processi aziendali: service management, firma elettronica con valore legale e AI conversazionale nativa, adottata da organizzazioni in ambito finance, industria, sanità e pubblica amministrazione. Quando sono entrato come product designer, i tre moduli erano cresciuti in modo indipendente: nessun componente condiviso, nessun linguaggio comune, nessun design system.</p>
-    <p>L'ho costruito da zero e ne ho la responsabilità da tre anni: variabili, componenti condivisi, pattern cross-modulo e le linee guida di branding che ci stanno sopra. Questo case study copre due archi: la costruzione del sistema, e il lavoro in corso per renderlo leggibile dall'AI.</p>
+    <p>Sono entrato come product designer in una suite dove i tre moduli erano cresciuti in modo indipendente: nessun componente condiviso, nessun linguaggio comune, nessun design system. L'ho costruito da zero, e ne ho la responsabilità da tre anni: variabili, componenti condivisi, pattern cross-modulo e le linee guida di branding che ci stanno sopra.</p>
+    <details class="approfondimento">
+      <summary><span class="segno" aria-hidden="true"></span>Cos'è Askme</summary>
+      <div class="corpo">
+        <p><a href="https://askme.it" target="_blank" rel="noopener">Askme</a> è una piattaforma B2B enterprise per l'automazione dei processi aziendali: service management, firma elettronica con valore legale e AI conversazionale nativa. Oltre cento clienti enterprise in ambito finance, industria, energia, sanità, università e pubblica amministrazione, e più di dieci milioni di processi automatizzati.</p>
+      </div>
+    </details>
+    <p>Questo case study copre due archi: la costruzione del sistema, e il lavoro in corso per renderlo leggibile dall'AI. Il fine però non è l'ordine. Askme oggi non è tre prodotti affiancati: è una piattaforma di automazione dei processi, dove il modulo è l'unità con cui si risponde al mercato. Il design system serve a far nascere quel modulo in fretta e già coerente, invece di ricominciare ogni volta dalla forma.</p>
   </div>
 </section>
 
@@ -373,6 +450,7 @@ footer .chiudi{
     <p class="eyebrow">02 · Il problema</p>
     <h2>La divergenza, poi la divergenza alla velocità dell'AI.</h2>
     <p>Tre prodotti, tre storie, un brand. Ogni nuova funzionalità reinventava pattern che esistevano già da qualche altra parte nella suite. La coerenza reggeva a livello di singola feature, si incrinava a livello di modulo, si rompeva del tutto tra un modulo e l'altro.</p>
+    <p>Il prezzo non era estetico. Ogni modulo nuovo ripartiva dalla forma invece che dal problema: si ridiscuteva l'aspetto di un bottone mentre il mercato aspettava una funzionalità. Su una piattaforma che cresce aggiungendo moduli, la divergenza non si paga in bruttezza, si paga in tempo.</p>
     <p>Poi è arrivato un secondo problema, più veloce: lo sviluppo assistito dall'AI permetteva ai team di rilasciare nuove interfacce senza passare dal design. L'output era usabile, ma ogni schermata generata usava pattern propri, duplicando componenti già esistenti. Divergenza alla velocità dell'AI.</p>
   </div>
 </section>
@@ -391,26 +469,6 @@ footer .chiudi{
       <li><strong>Una tabella che toglie rumore.</strong> Le tabelle in Askme sono ovunque. Quella custom, con filtri avanzati e viste salvabili, lascia a ogni utente o al suo manager la vista che serve: più focus sulle proprie attività, meno rumore, sempre nello stesso pattern riconoscibile. Su mobile degrada in card usabili, lasciando fuori di proposito le funzioni più complesse.</li>
       <li><strong>Un ponte tra design e sviluppo.</strong> Un design system regge solo se le due parti parlano la stessa lingua. Una libreria unica condivisa, un naming che coincide, decisioni prese insieme agli sviluppatori invece che calate dall'alto: gran parte del valore di un sistema vive proprio in questa cerniera.</li>
     </ul>
-
-    <h3>Renderlo leggibile dall'AI, il lavoro in corso</h3>
-    <p class="evidenza">La stessa spinta AI che alimenta la divergenza è ciò che rende necessario un sistema che l'AI sappia leggere.</p>
-    <p>Se ognuno usa la propria AI con i propri pattern, la divergenza si moltiplica. Se l'AI legge il design system, la stessa velocità diventa convergenza. La strategia che ho proposto e sto eseguendo:</p>
-    <ul>
-      <li><strong>Portabilità prima del lock-in.</strong> Fondamenti convertiti allo standard W3C DTCG per i token: leggibili da qualsiasi strumento, non intrappolati in un singolo vendor.</li>
-      <li><strong>Due layer, due proprietari.</strong> Un layer semantico (del design, indipendente dallo strumento) separato rigorosamente da un layer di code-binding (dello sviluppo). Non si mescolano mai.</li>
-      <li><strong>Una pipeline automatizzata dei token.</strong> Dallo strumento di design a un repository versionato fino al codice generato, con pull request automatiche. Una sola fonte di verità invece di due che divergono lentamente.</li>
-      <li><strong>Componenti spiegati a una macchina.</strong> Naming coincidente con la libreria di codice, descrizioni semantiche, implementazioni di riferimento: così l'AI sceglie il componente esistente giusto invece di inventarne un sosia.</li>
-      <li><strong>Un confine esplicito tra core ed estensione.</strong> Ciò che ogni modulo condivide e ciò che è locale a uno solo, dichiarato e non implicito.</li>
-    </ul>
-    <p>La strategia si chiude con un pilota falsificabile: dato il solo design system, un'AI riesce a comporre un modulo nuovo e coerente? Criteri di successo espliciti, con la libertà dichiarata di restituire un onesto «non ancora». Presentarlo come esperimento invece che come promessa è ciò che rende la proposta credibile.</p>
-  </div>
-</section>
-
-<!-- ═══ 04 LAVORO SELEZIONATO ═══ -->
-<section class="blocco">
-  <div class="wrap-prosa">
-    <p class="eyebrow">04 · Lavoro selezionato</p>
-    <h2>I pattern, non le interfacce.</h2>
     <div class="figure">
       <figure class="figura">
         <svg viewBox="0 0 480 214" role="img" aria-labelledby="d1t d1d" xmlns="http://www.w3.org/2000/svg">
@@ -457,6 +515,20 @@ footer .chiudi{
         </svg>
         <figcaption>L'archetipo del contenitore: una forma sola, contenuti sempre diversi</figcaption>
       </figure>
+    </div>
+
+    <h3>Renderlo leggibile dall'AI, il lavoro in corso</h3>
+    <p class="evidenza">La stessa spinta AI che alimenta la divergenza è ciò che rende necessario un sistema che l'AI sappia leggere.</p>
+    <p>Il sistema che avevo costruito era coerente per un occhio umano e illeggibile per una macchina. I componenti erano nati per funzionare sullo schermo: struttura di varianti e property decisa caso per caso, nomi che non coincidevano con quelli del codice, insiemi duplicati rimasti in circolo. Il progetto AI-ready ha reso quel debito esigibile tutto insieme, e oggi sto rifacendo la struttura interna di componenti che consideravo chiusi: non l'interfaccia, che regge, ma il modo in cui sono costruiti dentro.</p>
+    <p>Se ognuno usa la propria AI con i propri pattern, la divergenza si moltiplica. Se l'AI legge il design system, la stessa velocità diventa convergenza. La strategia che ho proposto e sto eseguendo:</p>
+    <ul>
+      <li><strong>Portabilità prima del lock-in.</strong> Fondamenti convertiti allo standard W3C DTCG per i token: leggibili da qualsiasi strumento, non intrappolati in un singolo vendor.</li>
+      <li><strong>Due layer, due proprietari.</strong> Un layer semantico (del design, indipendente dallo strumento) separato rigorosamente da un layer di code-binding (dello sviluppo). Non si mescolano mai.</li>
+      <li><strong>Una pipeline automatizzata dei token.</strong> Dallo strumento di design a un repository versionato fino al codice generato, con pull request automatiche. Una sola fonte di verità invece di due che divergono lentamente.</li>
+      <li><strong>Componenti spiegati a una macchina.</strong> Naming coincidente con la libreria di codice, descrizioni semantiche, implementazioni di riferimento: così l'AI sceglie il componente esistente giusto invece di inventarne un sosia.</li>
+      <li><strong>Un confine esplicito tra core ed estensione.</strong> Ciò che ogni modulo condivide e ciò che è locale a uno solo, dichiarato e non implicito.</li>
+    </ul>
+    <div class="figure">
       <figure class="figura">
         <svg viewBox="0 0 480 214" role="img" aria-labelledby="d2t d2d" xmlns="http://www.w3.org/2000/svg">
           <title id="d2t">La pipeline dei token</title>
@@ -492,16 +564,43 @@ footer .chiudi{
         <figcaption>La pipeline dei token: design, repository versionato, codice generato</figcaption>
       </figure>
     </div>
+    <p>La strategia si chiude con un pilota falsificabile: dato il solo design system, un'AI riesce a comporre un modulo nuovo e coerente? Criteri di successo espliciti, con la libertà dichiarata di restituire un onesto «non ancora». Presentarlo come esperimento invece che come promessa è ciò che rende la proposta credibile.</p>
     <p class="secondario">Gli approfondimenti visivi arrivano come diagrammi rifatti in forma astratta: pattern e strutture, non interfacce reali del prodotto.</p>
   </div>
 </section>
 
-<!-- ═══ 05 RISULTATO E PRINCIPI ═══ -->
+<!-- ═══ 04 RISULTATO ═══ -->
 <section class="blocco">
   <div class="wrap-prosa">
-    <p class="eyebrow">05 · Risultato e principi</p>
-    <h2>Un linguaggio solo, e la strategia in esecuzione.</h2>
-    <p>Tre prodotti oggi condividono un solo linguaggio di design, una libreria di componenti unica tra design e codice, e linee guida di branding integrate nel sistema invece che appoggiate accanto. La strategia AI-ready è stata scritta come un documento unico per due pubblici insieme, proposta per chi decide e guida di riferimento per chi esegue, ed è ora in esecuzione.</p>
+    <p class="eyebrow">04 · Risultato</p>
+    <h2>Un linguaggio solo, e moduli nuovi che partono già coerenti.</h2>
+    <p>I moduli oggi condividono un solo linguaggio di design, una libreria di componenti unica tra design e codice, e linee guida di branding integrate nel sistema invece che appoggiate accanto. La strategia AI-ready è stata scritta come un documento unico per due pubblici insieme, proposta per chi decide e guida di riferimento per chi esegue, ed è ora in esecuzione.</p>
+    <p>Il punto di arrivo non è la coerenza in sé: è che un modulo nuovo possa nascere in fretta senza rimettere in discussione la forma. È esattamente quello che il pilota mette alla prova, ed è il motivo per cui la domanda che gli si fa è se un modulo coerente riesca a comporsi dal solo design system.</p>
+  </div>
+</section>
+
+<!-- ═══ 05 LA MISURA ═══ -->
+<section class="blocco">
+  <div class="wrap-prosa">
+    <p class="eyebrow">05 · La misura</p>
+    <h2>Finché non lo misuri, un sistema si difende a opinioni.</h2>
+    <p>Per tre anni ho governato il design system a giudizio: sapevo dove faceva male, non di quanto. Ad agosto 2026 l'ho misurato, dal file di design fino al codice che ne viene generato, con il metodo dichiarato accanto a ogni numero.</p>
+    <ul class="quadro">
+      <li class="misura"><span class="val">125</span><span class="eti">elementi di libreria, di cui circa settanta insiemi di varianti</span></li>
+      <li class="misura"><span class="val">223</span><span class="eti">icone, tutte sulla stessa griglia da 24</span></li>
+      <li class="misura"><span class="val">9.174</span><span class="eti">istanze risolte al componente sorgente, zero fallimenti</span></li>
+      <li class="misura"><span class="val">46</span><span class="eti">pagine di progetto attraversate una per una</span></li>
+    </ul>
+    <p class="sez-nota">Ogni istanza è risolta all'identificatore del componente sorgente, mai al nome: nel file cinque componenti si chiamano File e due insiemi diversi si chiamano Buttons. Contare per nome dà un numero plausibile e sbagliato.</p>
+    <p>Il perimetro però dice solo cosa c'è. La domanda utile è un'altra: il sistema viene davvero usato, e quanto di lui sopravvive al codice? Cinque indicatori.</p>
+    <ul class="letture">
+      <li><span class="ord">01</span><span class="nome">Adozione del componente canonico</span><span class="dice">Quante istanze usano il componente ufficiale invece di un suo predecessore rimasto in circolo.</span></li>
+      <li><span class="ord">02</span><span class="nome">Istanze ridipinte a mano</span><span class="dice">Quanto il sistema viene aggirato invece che esteso.</span></li>
+      <li><span class="ord">03</span><span class="nome">Componenti con una specifica</span><span class="dice">Quanti sono documentati abbastanza da poter essere usati da qualcun altro, o da una macchina.</span></li>
+      <li><span class="ord">04</span><span class="nome">Istanze appese a librerie esterne</span><span class="dice">Quanta parte del sistema si muove quando si muove qualcun altro.</span></li>
+      <li><span class="ord">05</span><span class="nome">Stati che arrivano al codice</span><span class="dice">Quante delle property dichiarate nel design sopravvivono alla generazione del codice.</span></li>
+    </ul>
+    <p>Misurarli è stata la parte scomoda. Un sistema senza numeri si difende con l'entusiasmo, e finché nessuno li guarda hanno ragione tutti. Adesso hanno una data, e diventano una linea di partenza: con due rilasci al mese la seconda misura esiste nel giro di poche settimane, e da lì ogni indicatore ha una direzione invece che un'opinione. Dove il sistema sta peggio, e cosa ho scelto di alzare per primo, lo racconto volentieri di persona: sono numeri che riguardano il prodotto di qualcun altro.</p>
   </div>
 </section>
 
@@ -510,7 +609,7 @@ footer .chiudi{
   <div class="wrap">
     <div class="principio">
       <p class="p-label">Principio emerso</p>
-      <blockquote>Il valore di un design system non è l'ordine: è la velocità tra un'idea e la sua struttura coerente. Tutto il resto è mezzo.</blockquote>
+      <blockquote>La coerenza di un sistema non è quella che disegni: è quella che sopravvive a chi lo usa e al codice che ne viene generato.</blockquote>
       <p class="p-fonte">Da CS 01 · Design System</p>
     </div>
   </div>

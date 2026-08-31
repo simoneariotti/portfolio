@@ -269,6 +269,77 @@ section.blocco{padding:clamp(48px,6vw,72px) 0;border-top:1px solid var(--bordo)}
 }
 
 /* ── FIGURE: diagrammi astratti, pattern e strutture non interfacce reali ── */
+/* ── QUADRO DI MISURA e LETTURE ────────────────────────────────────────────
+   Non sono card: sono una struttura appesa. Un filetto orizzontale comune, e
+   da ogni giunzione scende un montante con il suo nodo, la stessa grammatica
+   del filetto verticale del blocco "Principio emerso". Entrambi i blocchi sono
+   liste: il sistema di motion le riconosce gia' come ul>li e le fa entrare in
+   cascata, quindi non serve una riga di JS in piu'.
+   Nessuna barra di riempimento sulle letture: quattro indicatori su cinque
+   migliorano salendo e uno scendendo, quindi una barra unica mentirebbe. */
+/* ── APPROFONDIMENTO: <details> nativo, zero JS ────────────────────────────
+   Il segno "piu'" e' due filetti da 1px, non un'icona presa altrove: aprendo,
+   il tratto verticale si ritrae e resta l'orizzontale. Stessa materia del
+   reticolo. <details>/<summary> danno gratis tastiera, ruolo e stato
+   annunciato, e senza CSS il contenuto resta comunque leggibile.
+   Qui --funzione e' legittimo: e' un comando, non decorazione. */
+.approfondimento{border-top:1px solid var(--bordo);border-bottom:1px solid var(--bordo);
+  margin:24px 0 28px;max-width:var(--misura-prosa)}
+.approfondimento>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;
+  padding:15px 2px;color:var(--ghiaccio);font-size:15.5px;
+  transition:color var(--durata-micro) var(--ease-viscoso)}
+.approfondimento>summary::-webkit-details-marker{display:none}
+.approfondimento>summary:hover{color:var(--testo)}
+.approfondimento>summary:focus-visible{outline:2px solid var(--funzione);outline-offset:4px;color:var(--testo)}
+.approfondimento .segno{position:relative;flex:0 0 11px;width:11px;height:11px}
+.approfondimento .segno::before,.approfondimento .segno::after{content:'';position:absolute;
+  background:var(--funzione);transition:transform .34s var(--ease-viscoso),opacity .34s var(--ease-viscoso)}
+.approfondimento .segno::before{left:0;top:5px;width:11px;height:1px}
+.approfondimento .segno::after{left:5px;top:0;width:1px;height:11px}
+.approfondimento[open] .segno::after{transform:scaleY(0);opacity:0}
+/* il corpo rientra sotto l'etichetta, non sotto il segno: la colonna del segno
+   resta un canale vuoto e l'approfondimento si legge come un oggetto solo */
+.approfondimento .corpo{padding:10px 0 4px 25px}
+.approfondimento .corpo p{margin:0 0 14px;font-size:15px;line-height:1.62;color:var(--ghiaccio);max-width:none}
+.approfondimento .corpo p:last-child{margin-bottom:0}
+@media(max-width:600px){.approfondimento .corpo{padding-left:0}}
+.approfondimento[open] .corpo{animation:apre .42s var(--ease-viscoso) both}
+@keyframes apre{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .approfondimento .segno::before,.approfondimento .segno::after{transition:none}
+  .approfondimento[open] .corpo{animation:none}
+}
+
+.quadro{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:0 26px;margin:34px 0 14px;max-width:var(--misura-prosa)}
+/* il filetto sta sulla cella, non sul contenitore: cosi' ogni riga della griglia
+   ha il suo, e i nodi non restano appesi nel vuoto quando le colonne vanno a capo */
+.quadro .misura{position:relative;padding:26px 0 20px;border-top:1px solid var(--bordo-forte)}
+.quadro .misura::before{content:'';position:absolute;left:0;top:0;width:1px;height:17px;background:var(--bordo-forte)}
+.quadro .misura::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
+  background:var(--ghiaccio);transform:rotate(45deg)}
+.quadro .val{display:block;font-family:var(--font-display);font-weight:500;
+  font-size:clamp(30px,4.2vw,44px);line-height:1;letter-spacing:-.022em;color:var(--testo)}
+.quadro .eti{display:block;margin-top:10px;font-size:14.5px;line-height:1.45;color:var(--ghiaccio)}
+
+.letture{list-style:none;padding:0;margin:30px 0 26px;max-width:var(--misura-prosa);border-top:1px solid var(--bordo)}
+.letture li{position:relative;display:grid;grid-template-columns:minmax(34px,auto) 1fr;
+  gap:5px 22px;align-items:baseline;padding:19px 0 18px;border-bottom:1px solid var(--bordo)}
+/* stessa giunzione del quadro: il nodo da solo galleggiava e sembrava un apostrofo,
+   con il montante che scende diventa una struttura appesa al filetto */
+.letture li::before{content:'';position:absolute;left:0;top:0;width:1px;height:15px;background:var(--bordo-forte)}
+.letture li::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
+  background:var(--ghiaccio);transform:rotate(45deg)}
+/* l'ordinale, non il valore: i valori misurati riguardano il prodotto di qualcun
+   altro e restano fuori dal sito. Space Mono solo qui, che e' micro-metadata. */
+.letture .ord{font-family:var(--font-mono);font-weight:400;font-size:12px;letter-spacing:.1em;color:var(--mezzo)}
+.letture .nome{font-family:var(--font-display);font-weight:500;font-size:clamp(17px,1.5vw,20px);line-height:1.35;letter-spacing:-.004em;color:var(--testo)}
+.letture .dice{grid-column:2;font-size:14.5px;line-height:1.55;color:var(--ghiaccio)}
+@media(max-width:600px){
+  .letture li{grid-template-columns:1fr;gap:7px}
+  .letture .dice{grid-column:1}
+}
+
 .figure{display:flex;flex-direction:column;gap:28px;max-width:600px;margin:8px 0 20px}
 .figura{
   position:relative;border:1px solid var(--bordo);border-radius:22px 14px 20px 16px;overflow:hidden;
@@ -362,8 +433,14 @@ footer .chiudi{
   <div class="wrap-prosa">
     <p class="eyebrow">01 · Context</p>
     <h2>Three products, one designer, no system.</h2>
-    <p><a href="https://askme.it" target="_blank" rel="noopener">Askme</a> is a B2B enterprise suite for business process automation: service management, legally binding e-signature and native conversational AI, adopted by organisations in finance, manufacturing, healthcare and public administration. When I joined as product designer, the three modules had grown independently: no shared components, no common language, no design system.</p>
-    <p>I built it from scratch and have owned it for three years: variables, shared components, cross-module patterns and the branding guidelines that sit on top. This case study covers two arcs: building the system, and the work in progress to make it readable by AI.</p>
+    <p>I joined as product designer in a suite whose three modules had grown independently: no shared components, no common language, no design system. I built it from scratch, and have owned it for three years: variables, shared components, cross-module patterns and the branding guidelines that sit on top.</p>
+    <details class="approfondimento">
+      <summary><span class="segno" aria-hidden="true"></span>What Askme is</summary>
+      <div class="corpo">
+        <p><a href="https://askme.it" target="_blank" rel="noopener">Askme</a> is a B2B enterprise platform for business process automation: service management, legally binding e-signature and native conversational AI. Over a hundred enterprise clients across finance, manufacturing, energy, healthcare, higher education and public administration, and more than ten million automated processes.</p>
+      </div>
+    </details>
+    <p>This case study covers two arcs: building the system, and the work in progress to make it readable by AI. The goal, though, is not order. Askme today is not three products side by side: it is a business process automation platform, where the module is the unit it answers the market with. The design system exists to let a new module be born quickly and already consistent, instead of starting over from the shape every time.</p>
   </div>
 </section>
 
@@ -373,6 +450,7 @@ footer .chiudi{
     <p class="eyebrow">02 · The problem</p>
     <h2>Divergence, then divergence at the speed of AI.</h2>
     <p>Three products, three histories, one brand. Every new feature reinvented patterns that already existed somewhere else in the suite. Consistency held at the level of a single feature, cracked at module level, and broke completely between one module and another.</p>
+    <p>The price was not an aesthetic one. Every new module restarted from the shape instead of from the problem: the look of a button went back up for discussion while the market waited for a feature. On a platform that grows by adding modules, divergence is not paid in ugliness. It is paid in time.</p>
     <p>Then a second problem arrived, a faster one: AI-assisted development let teams ship new interfaces without going through design. The output was usable, but every generated screen used its own patterns, duplicating components that already existed. Divergence at the speed of AI.</p>
   </div>
 </section>
@@ -391,26 +469,6 @@ footer .chiudi{
       <li><strong>A table that removes noise.</strong> Tables are everywhere in Askme. The custom one, with advanced filters and saved views, gives every user or their manager the view they need: more focus on their own work, less noise, always the same recognisable pattern. On mobile it degrades into usable cards, deliberately leaving the more complex functions out.</li>
       <li><strong>A bridge between design and engineering.</strong> A design system only holds if both sides speak the same language. One shared library, naming that matches, decisions made together with the developers rather than handed down: much of a system's value lives in exactly that hinge.</li>
     </ul>
-
-    <h3>Making it readable by AI: the work in progress</h3>
-    <p class="evidenza">The same AI push that fuels the divergence is what makes a system AI can read necessary.</p>
-    <p>If everyone uses their own AI with their own patterns, divergence multiplies. If the AI reads the design system, that same speed becomes convergence. The strategy I proposed and am now executing:</p>
-    <ul>
-      <li><strong>Portability before lock-in.</strong> Foundations converted to the W3C DTCG standard for tokens: readable by any tool, not trapped in a single vendor.</li>
-      <li><strong>Two layers, two owners.</strong> A semantic layer (design's, tool-independent) kept strictly separate from a code-binding layer (engineering's). They never mix.</li>
-      <li><strong>An automated token pipeline.</strong> From the design tool to a versioned repository through to generated code, with automatic pull requests. One source of truth instead of two that slowly drift apart.</li>
-      <li><strong>Components explained to a machine.</strong> Naming that matches the code library, semantic descriptions, reference implementations: so the AI picks the right existing component instead of inventing a lookalike.</li>
-      <li><strong>An explicit boundary between core and extension.</strong> What every module shares and what belongs to one alone, declared rather than implied.</li>
-    </ul>
-    <p>The strategy closes with a falsifiable pilot: given only the design system, can an AI compose a new, consistent module? Explicit success criteria, with the stated freedom to return an honest “not yet”. Presenting it as an experiment rather than a promise is what makes the proposal credible.</p>
-  </div>
-</section>
-
-<!-- ═══ 04 LAVORO SELEZIONATO ═══ -->
-<section class="blocco">
-  <div class="wrap-prosa">
-    <p class="eyebrow">04 · Selected work</p>
-    <h2>The patterns, not the interfaces.</h2>
     <div class="figure">
       <figure class="figura">
         <svg viewBox="0 0 480 214" role="img" aria-labelledby="d1t d1d" xmlns="http://www.w3.org/2000/svg">
@@ -457,6 +515,20 @@ footer .chiudi{
         </svg>
         <figcaption>The container archetype: one form, always different contents</figcaption>
       </figure>
+    </div>
+
+    <h3>Making it readable by AI: the work in progress</h3>
+    <p class="evidenza">The same AI push that fuels the divergence is what makes a system AI can read necessary.</p>
+    <p>The system I had built was consistent to a human eye and unreadable to a machine. The components were born to work on screen: variant and property structure decided case by case, names that did not match the ones in code, duplicate sets still in circulation. The AI-ready project made that debt payable all at once, and today I am rebuilding the internal structure of components I considered finished: not the interface, which holds, but the way they are built inside.</p>
+    <p>If everyone uses their own AI with their own patterns, divergence multiplies. If the AI reads the design system, that same speed becomes convergence. The strategy I proposed and am now executing:</p>
+    <ul>
+      <li><strong>Portability before lock-in.</strong> Foundations converted to the W3C DTCG standard for tokens: readable by any tool, not trapped in a single vendor.</li>
+      <li><strong>Two layers, two owners.</strong> A semantic layer (design's, tool-independent) kept strictly separate from a code-binding layer (engineering's). They never mix.</li>
+      <li><strong>An automated token pipeline.</strong> From the design tool to a versioned repository through to generated code, with automatic pull requests. One source of truth instead of two that slowly drift apart.</li>
+      <li><strong>Components explained to a machine.</strong> Naming that matches the code library, semantic descriptions, reference implementations: so the AI picks the right existing component instead of inventing a lookalike.</li>
+      <li><strong>An explicit boundary between core and extension.</strong> What every module shares and what belongs to one alone, declared rather than implied.</li>
+    </ul>
+    <div class="figure">
       <figure class="figura">
         <svg viewBox="0 0 480 214" role="img" aria-labelledby="d2t d2d" xmlns="http://www.w3.org/2000/svg">
           <title id="d2t">The token pipeline</title>
@@ -492,16 +564,43 @@ footer .chiudi{
         <figcaption>The token pipeline: design, versioned repository, generated code</figcaption>
       </figure>
     </div>
+    <p>The strategy closes with a falsifiable pilot: given only the design system, can an AI compose a new, consistent module? Explicit success criteria, with the stated freedom to return an honest “not yet”. Presenting it as an experiment rather than a promise is what makes the proposal credible.</p>
     <p class="secondario">The visual deep-dives come as diagrams redrawn in abstract form: patterns and structures, not real product interfaces.</p>
   </div>
 </section>
 
-<!-- ═══ 05 RISULTATO E PRINCIPI ═══ -->
+<!-- ═══ 04 RISULTATO ═══ -->
 <section class="blocco">
   <div class="wrap-prosa">
-    <p class="eyebrow">05 · Outcome and principles</p>
-    <h2>One language, and the strategy in execution.</h2>
-    <p>Three products now share a single design language, one component library across design and code, and branding guidelines built into the system rather than parked beside it. The AI-ready strategy was written as a single document for two audiences at once, a proposal for the people who decide and a reference guide for the people who execute, and is now being executed.</p>
+    <p class="eyebrow">04 · Outcome</p>
+    <h2>One language, and new modules that start out consistent.</h2>
+    <p>The modules today share one design language, a single component library across design and code, and branding guidelines built into the system instead of propped up beside it. The AI-ready strategy was written as one document for two audiences at once, a proposal for whoever decides and a reference guide for whoever executes, and it is now being carried out.</p>
+    <p>The destination is not consistency for its own sake: it is that a new module can be born quickly without putting the shape back up for discussion. That is exactly what the pilot tests, and it is why the question it is asked is whether a coherent module can be composed from the design system alone.</p>
+  </div>
+</section>
+
+<!-- ═══ 05 LA MISURA ═══ -->
+<section class="blocco">
+  <div class="wrap-prosa">
+    <p class="eyebrow">05 · The measurement</p>
+    <h2>Until you measure it, a system is defended with opinions.</h2>
+    <p>For three years I governed the design system by judgement: I knew where it hurt, not by how much. In August 2026 I measured it, from the design file through to the code generated from it, with the method stated next to every number.</p>
+    <ul class="quadro">
+      <li class="misura"><span class="val">125</span><span class="eti">library elements, around seventy of them variant sets</span></li>
+      <li class="misura"><span class="val">223</span><span class="eti">icons, all on the same 24 grid</span></li>
+      <li class="misura"><span class="val">9,174</span><span class="eti">instances resolved to their source component, zero failures</span></li>
+      <li class="misura"><span class="val">46</span><span class="eti">design pages walked through one by one</span></li>
+    </ul>
+    <p class="sez-nota">Every instance is resolved to the identifier of its source component, never to its name: in the file five components are called File and two different sets are called Buttons. Counting by name gives a plausible, wrong number.</p>
+    <p>The perimeter only says what is there. The useful question is a different one: is the system actually used, and how much of it survives into the code? Five indicators.</p>
+    <ul class="letture">
+      <li><span class="ord">01</span><span class="nome">Canonical component adoption</span><span class="dice">How many instances use the official component instead of a predecessor still in circulation.</span></li>
+      <li><span class="ord">02</span><span class="nome">Instances repainted by hand</span><span class="dice">How much the system gets worked around instead of extended.</span></li>
+      <li><span class="ord">03</span><span class="nome">Components with a specification</span><span class="dice">How many are documented well enough to be used by someone else, or by a machine.</span></li>
+      <li><span class="ord">04</span><span class="nome">Instances hanging off external libraries</span><span class="dice">How much of the system moves when someone else moves.</span></li>
+      <li><span class="ord">05</span><span class="nome">States that reach the code</span><span class="dice">How many of the properties declared in design survive code generation.</span></li>
+    </ul>
+    <p>Measuring them was the uncomfortable part. A system with no numbers is defended with enthusiasm, and as long as nobody looks, everyone is right. Now they carry a date, and they become a starting line: with two releases a month the second reading exists within weeks, and from there every indicator has a direction instead of an opinion. Where the system is weakest, and what I chose to raise first, I am glad to go through in person: these are numbers about someone else's product.</p>
   </div>
 </section>
 
@@ -510,7 +609,7 @@ footer .chiudi{
   <div class="wrap">
     <div class="principio">
       <p class="p-label">A principle that emerged</p>
-      <blockquote>The value of a design system is not order: it is the speed between an idea and its coherent structure. Everything else is a means.</blockquote>
+      <blockquote>The consistency of a system is not the one you draw: it is the one that survives the people who use it and the code generated from it.</blockquote>
       <p class="p-fonte">From CS 01 · Design System</p>
     </div>
   </div>
