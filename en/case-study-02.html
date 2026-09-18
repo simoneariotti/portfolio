@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Askme Agent: from conversation to action · Simone Ariotti</title>
+<title>Askme AI: from conversation to action · Simone Ariotti</title>
 <meta name="description" content="Designing an agent that operates, not just answers: from conversation to actionable object inside an enterprise platform. An evolving case.">
 <link rel="canonical" href="https://simoneariotti.github.io/portfolio/en/case-study-02.html">
 <link rel="alternate" hreflang="it" href="https://simoneariotti.github.io/portfolio/case-study-02.html">
@@ -20,7 +20,7 @@
 <meta property="og:site_name" content="Simone Ariotti">
 <meta property="og:locale" content="en_GB">
 <meta property="og:url" content="https://simoneariotti.github.io/portfolio/en/case-study-02.html">
-<meta property="og:title" content="Askme Agent: dalla conversazione all'azione · Simone Ariotti">
+<meta property="og:title" content="Askme AI: dalla conversazione all'azione · Simone Ariotti">
 <meta property="og:description" content="Designing an agent that operates, not just answers: from conversation to actionable object inside an enterprise platform. An evolving case.">
 <meta property="og:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
@@ -28,7 +28,7 @@
 <meta property="og:image:alt" content="A violet-ice lattice structure on a deep indigo field, with the line: I design systems that hold up as they grow.">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Askme Agent: dalla conversazione all'azione · Simone Ariotti">
+<meta name="twitter:title" content="Askme AI: dalla conversazione all'azione · Simone Ariotti">
 <meta name="twitter:description" content="Designing an agent that operates, not just answers: from conversation to actionable object inside an enterprise platform. An evolving case.">
 <meta name="twitter:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
 <style>
@@ -351,9 +351,9 @@ footer .chiudi{
 <!-- ═══ HERO DI PAGINA ═══ -->
 <header class="cs-hero">
   <div class="wrap-prosa">
-    <p class="meta"><span>CS 02</span><span>Agentic system</span><span>Askme</span><span>Since 2026, ongoing</span></p>
-    <h1>Askme Agent: from conversation to action</h1>
-    <p class="piano">Askme's native AI agent, built from scratch. Not a chatbot that answers: a component system that makes AI operational inside processes, beside the user.</p>
+    <p class="meta"><span>CS 02</span><span>Agentic system</span><span>Askme AI</span><span>Since 2026, ongoing</span></p>
+    <h1>Askme AI: from conversation to action</h1>
+    <p class="piano">The suite's native agent, designed from scratch. Not a chatbot that answers: a system of components that makes AI operational inside the processes, next to the user.</p>
   </div>
 </header>
 
@@ -363,7 +363,9 @@ footer .chiudi{
     <p class="eyebrow">01 · Context</p>
     <h2>An AI alongside, not an AI apart.</h2>
     <p>The vision was to bring artificial intelligence inside the modules of <a href="https://askme.it" target="_blank" rel="noopener">Askme</a>: an agent always alongside and in context, speeding up the operations users have to perform on the objects in the suite anyway. Before, there was no agent: there were AI features, but no operational agent working next to people.</p>
+    <p>The Askme AI agent, known inside the suite simply as the Agent, was built to live inside the modules rather than beside them.</p>
     <p>I designed it from scratch, and it is the part of my work I am proudest of: no rework, virgin ground, the freedom to give shape to a new paradigm while keeping the posts of the real constraints firmly in the ground.</p>
+    <p>From scratch does not mean alone: the paradigm is mine, the limits came from a constant back and forth with the people who build it. The two corrected each other throughout the project.</p>
   </div>
 </section>
 
@@ -397,7 +399,7 @@ footer .chiudi{
 <!-- ═══ 04 LAVORO SELEZIONATO ═══ -->
 <section class="blocco">
   <div class="wrap-prosa">
-    <p class="eyebrow">04 · Selected work</p>
+    <p class="eyebrow">04 · The shape of the decision</p>
     <h2>The structure, not the chat.</h2>
     <div class="figure">
       <figure class="figura">
@@ -487,8 +489,9 @@ footer .chiudi{
   <div class="wrap-prosa">
     <p class="eyebrow">05 · Outcome and principles</p>
     <h2>Less time to operate, AI inside the work.</h2>
-    <p>The agent is evolving continuously, but the direction of the results is already clear: less time spent on operations on Askme objects, because actions that previously meant opening screens, searching, filling in and confirming now happen in the flow of the conversation. For the user that means operational ease, with the integrated knowledge base a request away, inside a system that speaks the language of the product they already use.</p>
-    <p>It is work in progress: every iteration refines its behaviour, its voice and its limits. It is exactly the kind of problem, giving shape to a paradigm while building it, where design counts most.</p>
+    <p>The agent is designed and in progressive rollout, and the direction of the project is settled: the actions that today require opening screens, searching, filling in and confirming are to be brought back inside the flow of the conversation, on the objects the user is already looking at. For the user that means operational ease, with the knowledge base a request away, inside a system that speaks the language of the product they already use. Each iteration refines its behaviour, voice and limits.</p>
+    <p>What is missing is the measurement. An agent that operates is judged on one thing only: how many steps it removes from an operation the user would perform anyway. That is the number I want, and I do not have it yet, because the agent is too young for a comparison to mean anything. Saying it is faster without having counted would be exactly what I refuse to do on the design system.</p>
+    <p>It is exactly the kind of problem, giving shape to a paradigm while building it, where design counts for most.</p>
   </div>
 </section>
 
@@ -546,6 +549,25 @@ footer .chiudi{
   });
 })();
 
+/* ancore al caricamento: con scroll-behavior:smooth sulla radice il salto iniziale
+   diventa un'animazione lunga che il browser puo' annullare, e la pagina resta in cima.
+   Lo stato sicuro e' arrivarci subito: si disattiva il morbido per l'istante del salto,
+   si ripete dopo che il layout si e' assestato (font, altezze calcolate), e si riattiva. */
+(function(){
+  if(!location.hash) return;
+  var radice=document.documentElement;
+  function vai(){
+    var t=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if(!t) return;
+    var prima=radice.style.scrollBehavior;
+    radice.style.scrollBehavior='auto';
+    t.scrollIntoView();
+    requestAnimationFrame(function(){ radice.style.scrollBehavior=prima; });
+  }
+  if(history.scrollRestoration) history.scrollRestoration='manual';
+  addEventListener('load', function(){ vai(); setTimeout(vai,150); setTimeout(vai,600); });
+})();
+
 /* motion: ogni sezione entra come composizione di gesti tipizzati, in cascata. Degrada a statico con reduced-motion */
 (function(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -579,7 +601,12 @@ footer .chiudi{
       obs.unobserve(e.target);
     });
   },{threshold:0.1, rootMargin:'0px 0px -6% 0px'});
+  /* Un gruppo gia' dentro l'area visibile all'avvio non si nasconde affatto:
+     l'osservatore notifica solo i cambiamenti, quindi se la pagina non si muove piu'
+     quel testo resterebbe invisibile per sempre. Lo stato di partenza sicuro e' visibile. */
+  const soglia=innerHeight*0.92;
   groups.forEach(g=>{
+    if(g.getBoundingClientRect().top < soglia) return;
     const units=unitsOf(g);
     units.forEach(([el,role])=>el.classList.add('m',role));
     g.__units=units;

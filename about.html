@@ -609,6 +609,25 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
 </footer>
 
 <script>
+/* ancore al caricamento: con scroll-behavior:smooth sulla radice il salto iniziale
+   diventa un'animazione lunga che il browser puo' annullare, e la pagina resta in cima.
+   Lo stato sicuro e' arrivarci subito: si disattiva il morbido per l'istante del salto,
+   si ripete dopo che il layout si e' assestato (font, altezze calcolate), e si riattiva. */
+(function(){
+  if(!location.hash) return;
+  var radice=document.documentElement;
+  function vai(){
+    var t=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if(!t) return;
+    var prima=radice.style.scrollBehavior;
+    radice.style.scrollBehavior='auto';
+    t.scrollIntoView();
+    requestAnimationFrame(function(){ radice.style.scrollBehavior=prima; });
+  }
+  if(history.scrollRestoration) history.scrollRestoration='manual';
+  addEventListener('load', function(){ vai(); setTimeout(vai,150); setTimeout(vai,600); });
+})();
+
 /* motion: ogni sezione entra come composizione di gesti tipizzati, in cascata */
 (function(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -641,7 +660,12 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
       obs.unobserve(e.target);
     });
   },{threshold:0.1, rootMargin:'0px 0px -6% 0px'});
+  /* Un gruppo gia' dentro l'area visibile all'avvio non si nasconde affatto:
+     l'osservatore notifica solo i cambiamenti, quindi se la pagina non si muove piu'
+     quel testo resterebbe invisibile per sempre. Lo stato di partenza sicuro e' visibile. */
+  const soglia=innerHeight*0.92;
   groups.forEach(g=>{
+    if(g.getBoundingClientRect().top < soglia) return;
     const units=unitsOf(g);
     units.forEach(([el,role])=>el.classList.add('m',role));
     g.__units=units;

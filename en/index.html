@@ -497,6 +497,10 @@ section{padding:clamp(72px,9vw,110px) 0;border-top:1px solid var(--bordo)}
   border:1px solid var(--bordo);background:var(--superficie);
 }
 .contatto-foto img{width:100%;height:100%;object-fit:cover;object-position:50% 16%;display:block}
+.rr-vai{margin:18px 0 0;font-size:15px}
+.rr-vai a{color:var(--mezzo)}
+.rr-vai a:hover,.rr-vai a:focus-visible{color:var(--funzione)}
+.rr-visual{display:block;text-decoration:none}
 .rr-gate{margin:0 0 16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
 
 /* footer: tre livelli distinti invece di righe accatastate.
@@ -586,7 +590,7 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
   <canvas id="reticolo" aria-hidden="true"></canvas>
   <div class="hero-scrim" aria-hidden="true"></div>
   <div class="hero-testo">
-    <p class="eyebrow">Digital Product Designer</p>
+    <p class="eyebrow">Digital Product Designer · IxDF Local Leader, Turin</p>
     <h1>I design systems that hold up as they grow.</h1>
     <p class="firma"><strong>I keep complex digital products coherent, usable and accessible</strong> as they scale. Design systems, AI experiences, enterprise platforms.</p>
     <a class="btn btn-primaria" data-luce href="#lavori">See how I work <svg class="icona freccia-giu" aria-hidden="true"><use href="#i-giu"/></svg></a>
@@ -596,7 +600,58 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
   </div>
 </header>
 
-<!-- ═══ CHI C'E DIETRO: il filo rosso, sotto la hero ═══ -->
+<!-- ═══ CASE STUDY ═══ -->
+<section id="lavori">
+  <div class="wrap">
+    <p class="eyebrow">Case studies</p>
+    <h2 class="sez-titolo">Three selected projects, one method.</h2>
+    <p class="sez-intro">Each one shows how I think, not just what I shipped.</p>
+    <div class="cs-grid">
+      <a class="cs-card cover-1" data-luce href="case-study-01.html">
+        <div class="luce" aria-hidden="true"></div>
+        <div class="cs-cover"><div class="trama"></div><span class="indice" aria-hidden="true">01</span></div>
+        <div class="cs-body">
+          <p class="cs-meta"><span>Design System</span><span>Askme</span></p>
+          <h3>From nothing to a system that AI can read</h3>
+          <p>Three years of a multi-module system, so the next one starts out consistent.</p>
+          <div class="cs-azione"><span class="dove">Full case</span><span style="display:inline-flex;align-items:center;gap:8px">Read <svg class="icona vai" aria-hidden="true"><use href="#i-freccia"/></svg></span></div>
+        </div>
+      </a>
+      <a class="cs-card cover-2" data-luce href="case-study-02.html">
+        <div class="luce" aria-hidden="true"></div>
+        <div class="cs-cover"><div class="trama"></div><span class="indice" aria-hidden="true">02</span></div>
+        <div class="cs-body">
+          <p class="cs-meta"><span>Agentic system</span><span>Askme AI</span></p>
+          <h3>An AI that acts, not just answers</h3>
+          <p>A component system that turns conversation into work inside Askme.</p>
+          <div class="cs-azione"><span class="dove">Full case</span><span style="display:inline-flex;align-items:center;gap:8px">Read <svg class="icona vai" aria-hidden="true"><use href="#i-freccia"/></svg></span></div>
+        </div>
+      </a>
+      <a class="cs-card cover-3" data-luce href="#contatti" title="Case study being written">
+        <div class="luce" aria-hidden="true"></div>
+        <div class="cs-cover"><div class="trama"></div><span class="indice" aria-hidden="true">03</span></div>
+        <div class="cs-body">
+          <p class="cs-meta"><span>Conversation design</span><span class="gate">◈ Being written</span></p>
+          <h3>A chatbot that uses AI only where it earns its place</h3>
+          <p>80% of the flow never touches an LLM. On purpose. And everyone gains from it.</p>
+          <div class="cs-azione"><span class="dove">Being written</span><span style="display:inline-flex;align-items:center;gap:8px">Let us talk <svg class="icona vai" aria-hidden="true"><use href="#i-freccia"/></svg></span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRINCIPIO ═══ -->
+<section>
+  <div class="wrap">
+    <div class="principio">
+      <p class="p-label">A principle that emerged</p>
+      <blockquote>Rules before artifacts: validate the constraints before producing the output. The rework you prevent is invisible, and that is exactly why it gets undervalued.</blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CHI C'E DIETRO: il filo rosso. Sta dopo i case study: le prove vengono prima del racconto ═══ -->
 <section class="filo" id="about" aria-label="Who is behind this">
   <div class="stage">
     <p class="titolo"><span class="eyebrow">Who is behind this</span>I only saw the thread in hindsight.</p>
@@ -623,57 +678,6 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
   </div>
 </section>
 
-<!-- ═══ CASE STUDY ═══ -->
-<section id="lavori">
-  <div class="wrap">
-    <p class="eyebrow">Case studies</p>
-    <h2 class="sez-titolo">Three selected projects, one method.</h2>
-    <p class="sez-intro">Each one shows how I think, not just what I shipped.</p>
-    <div class="cs-grid">
-      <a class="cs-card cover-1" data-luce href="case-study-01.html">
-        <div class="luce" aria-hidden="true"></div>
-        <div class="cs-cover"><div class="trama"></div><span class="indice" aria-hidden="true">01</span></div>
-        <div class="cs-body">
-          <p class="cs-meta"><span>Design System</span><span>Askme</span></p>
-          <h3>From nothing to a system that AI can read</h3>
-          <p>Three years of a multi-module system, so the next one starts out consistent.</p>
-          <div class="cs-azione"><span class="dove">Full case</span><span style="display:inline-flex;align-items:center;gap:8px">Read <svg class="icona vai" aria-hidden="true"><use href="#i-freccia"/></svg></span></div>
-        </div>
-      </a>
-      <a class="cs-card cover-2" data-luce href="case-study-02.html">
-        <div class="luce" aria-hidden="true"></div>
-        <div class="cs-cover"><div class="trama"></div><span class="indice" aria-hidden="true">02</span></div>
-        <div class="cs-body">
-          <p class="cs-meta"><span>Agentic system</span><span>Askme</span></p>
-          <h3>An AI that acts, not just answers</h3>
-          <p>A component system that turns conversation into work inside Askme.</p>
-          <div class="cs-azione"><span class="dove">Full case</span><span style="display:inline-flex;align-items:center;gap:8px">Read <svg class="icona vai" aria-hidden="true"><use href="#i-freccia"/></svg></span></div>
-        </div>
-      </a>
-      <a class="cs-card cover-3" data-luce href="#contatti" title="Case study coming soon">
-        <div class="luce" aria-hidden="true"></div>
-        <div class="cs-cover"><div class="trama"></div><span class="indice" aria-hidden="true">03</span></div>
-        <div class="cs-body">
-          <p class="cs-meta"><span>Conversation design</span><span class="gate">◈ Coming soon</span></p>
-          <h3>A chatbot that uses AI only where it earns its place</h3>
-          <p>80% of the flow never touches an LLM. On purpose. And everyone gains from it.</p>
-          <div class="cs-azione"><span class="dove">Coming soon</span><span style="display:inline-flex;align-items:center;gap:8px">Online shortly <svg class="icona vai" aria-hidden="true"><use href="#i-freccia"/></svg></span></div>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ PRINCIPIO ═══ -->
-<section>
-  <div class="wrap">
-    <div class="principio">
-      <p class="p-label">A principle that emerged</p>
-      <blockquote>Rules before artifacts: validate the constraints before producing the output. The rework you prevent is invisible, and that is exactly why it gets undervalued.</blockquote>
-    </div>
-  </div>
-</section>
-
 <!-- ═══ ROTTE E RACCONTI ═══ -->
 <section id="rr">
   <div class="wrap rr">
@@ -681,12 +685,13 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
       <p class="eyebrow">Outside work · Personal project</p>
       <h2 class="sez-titolo">Rotte e Racconti</h2>
       <p>A travel publishing project built from scratch with my brother: he walks the routes and documents them, I built everything else — <strong>identity, site, editorial system, strategy</strong>. This is what happens when I design something of my own, with no client.</p>
-      <p class="rr-gate"><span class="gate">◈ Site under construction</span></p>
-      <a class="btn btn-silenziosa" href="#contatti">Let us talk <svg class="icona freccia" aria-hidden="true"><use href="#i-freccia"/></svg></a>
+      <p class="rr-gate"><span class="gate">◈ Live, six diaries published</span></p>
+      <a class="btn btn-silenziosa" href="../rotte-e-racconti.html">Read the case study (in Italian) <svg class="icona freccia" aria-hidden="true"><use href="#i-freccia"/></svg></a>
+      <p class="rr-vai"><a href="https://rotte-e-racconti.simone-ariotti97.workers.dev/" target="_blank" rel="noopener">Visit the site</a></p>
     </div>
-    <div class="rr-visual" aria-hidden="true">
-      <span class="marchio">Rotte e Racconti</span>
-    </div>
+    <a class="rr-visual" href="https://rotte-e-racconti.simone-ariotti97.workers.dev/" target="_blank" rel="noopener" aria-label="Open the Rotte e Racconti website">
+      <span class="marchio" aria-hidden="true">Rotte e Racconti</span>
+    </a>
   </div>
 </section>
 
@@ -946,6 +951,25 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
   });
 })();
 
+/* ancore al caricamento: con scroll-behavior:smooth sulla radice il salto iniziale
+   diventa un'animazione lunga che il browser puo' annullare, e la pagina resta in cima.
+   Lo stato sicuro e' arrivarci subito: si disattiva il morbido per l'istante del salto,
+   si ripete dopo che il layout si e' assestato (font, altezze calcolate), e si riattiva. */
+(function(){
+  if(!location.hash) return;
+  var radice=document.documentElement;
+  function vai(){
+    var t=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if(!t) return;
+    var prima=radice.style.scrollBehavior;
+    radice.style.scrollBehavior='auto';
+    t.scrollIntoView();
+    requestAnimationFrame(function(){ radice.style.scrollBehavior=prima; });
+  }
+  if(history.scrollRestoration) history.scrollRestoration='manual';
+  addEventListener('load', function(){ vai(); setTimeout(vai,150); setTimeout(vai,600); });
+})();
+
 /* motion: ogni sezione entra come composizione di gesti tipizzati, in cascata */
 (function(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -980,7 +1004,12 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
       obs.unobserve(e.target);
     });
   },{threshold:0.1, rootMargin:'0px 0px -6% 0px'});
+  /* Un gruppo gia' dentro l'area visibile all'avvio non si nasconde affatto:
+     l'osservatore notifica solo i cambiamenti, quindi se la pagina non si muove piu'
+     quel testo resterebbe invisibile per sempre. Lo stato di partenza sicuro e' visibile. */
+  const soglia=innerHeight*0.92;
   groups.forEach(g=>{
+    if(g.getBoundingClientRect().top < soglia) return;
     const units=unitsOf(g);
     units.forEach(([el,role])=>el.classList.add('m',role));
     g.__units=units;

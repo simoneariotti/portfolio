@@ -437,7 +437,7 @@ footer .chiudi{
     <details class="approfondimento">
       <summary><span class="segno" aria-hidden="true"></span>What Askme is</summary>
       <div class="corpo">
-        <p><a href="https://askme.it" target="_blank" rel="noopener">Askme</a> is a B2B enterprise platform for business process automation: service management, legally binding e-signature and native conversational AI. Over a hundred enterprise clients across finance, manufacturing, energy, healthcare, higher education and public administration, and more than ten million automated processes.</p>
+        <p><a href="https://askme.it" target="_blank" rel="noopener">Askme</a> is a B2B enterprise platform for business process automation: service management, legally binding electronic signature and native conversational AI. It is used by organisations in finance, industry, energy, healthcare, higher education and public administration.</p>
       </div>
     </details>
     <p>This case study covers two arcs: building the system, and the work in progress to make it readable by AI. The goal, though, is not order. Askme today is not three products side by side: it is a business process automation platform, where the module is the unit it answers the market with. The design system exists to let a new module be born quickly and already consistent, instead of starting over from the shape every time.</p>
@@ -467,8 +467,8 @@ footer .chiudi{
     <ul>
       <li><strong>Adaptable containers.</strong> Containers, dialogs and expansion panels built as archetypes: they hold data, images, complex cards, inputs, anything. Not one component per case, but a single form that holds cases nobody has specified yet. Same containers, always different contents.</li>
       <li><strong>A table that removes noise.</strong> Tables are everywhere in Askme. The custom one, with advanced filters and saved views, gives every user or their manager the view they need: more focus on their own work, less noise, always the same recognisable pattern. On mobile it degrades into usable cards, deliberately leaving the more complex functions out.</li>
-      <li><strong>A bridge between design and engineering.</strong> A design system only holds if both sides speak the same language. One shared library, naming that matches, decisions made together with the developers rather than handed down: much of a system's value lives in exactly that hinge.</li>
     </ul>
+    <p>Neither would have survived without the part you do not see: a single library shared with engineering, naming that matches on both sides, decisions taken together rather than handed down. A large share of a system's value lives in that hinge.</p>
     <div class="figure">
       <figure class="figura">
         <svg viewBox="0 0 480 214" role="img" aria-labelledby="d1t d1d" xmlns="http://www.w3.org/2000/svg">
@@ -561,7 +561,7 @@ footer .chiudi{
           <text x="319" y="150" text-anchor="middle" class="arlab">AUTOMATIC PULL REQUESTS</text>
           <text x="20" y="192" class="ss">Two separate layers: semantic and code-binding, never mixed.</text>
         </svg>
-        <figcaption>The token pipeline: design, versioned repository, generated code</figcaption>
+        <figcaption>The token pipeline: design, versioned repository, generated code. It is designed and approved, and the rollout is under way one link at a time: the diagram shows the destination, not today's state.</figcaption>
       </figure>
     </div>
     <p>The strategy closes with a falsifiable pilot: given only the design system, can an AI compose a new, consistent module? Explicit success criteria, with the stated freedom to return an honest “not yet”. Presenting it as an experiment rather than a promise is what makes the proposal credible.</p>
@@ -602,7 +602,7 @@ footer .chiudi{
       <li><span class="ord">04</span><span class="nome">Instances hanging off external libraries</span><span class="dice">How much of the system moves when someone else moves.</span></li>
       <li><span class="ord">05</span><span class="nome">States that reach the code</span><span class="dice">How many of the properties declared in design survive code generation.</span></li>
     </ul>
-    <p>Measuring them was the uncomfortable part. A system with no numbers is defended with enthusiasm, and as long as nobody looks, everyone is right. Now they carry a date, and they become a starting line: with two releases a month the second reading exists within weeks, and from there every indicator has a direction instead of an opinion. Where the system is weakest, and what I chose to raise first, I am glad to go through in person: these are numbers about someone else's product.</p>
+    <p>Measuring them was the uncomfortable part. A system without numbers defends itself with enthusiasm, and as long as nobody looks everyone is right. Now they have a date, and they become a starting line: from the next measurement onwards every indicator has a direction instead of an opinion. Where the system is weakest, and what I chose to raise first, I am happy to go through in person: those numbers belong to someone else's product.</p>
   </div>
 </section>
 
@@ -626,8 +626,8 @@ footer .chiudi{
         <div class="luce" aria-hidden="true"></div>
         <div class="cs-cover" aria-hidden="true"></div>
         <div class="cs-body">
-          <p class="cs-meta"><span>CS 02</span><span>Agentic system</span><span>Askme</span></p>
-          <h3>Askme Agent: from conversation to action</h3>
+          <p class="cs-meta"><span>CS 02</span><span>Agentic system</span><span>Askme AI</span></p>
+          <h3>Askme AI: from conversation to action</h3>
         </div>
       </a>
     </div>
@@ -658,6 +658,25 @@ footer .chiudi{
       el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
     },{passive:true});
   });
+})();
+
+/* ancore al caricamento: con scroll-behavior:smooth sulla radice il salto iniziale
+   diventa un'animazione lunga che il browser puo' annullare, e la pagina resta in cima.
+   Lo stato sicuro e' arrivarci subito: si disattiva il morbido per l'istante del salto,
+   si ripete dopo che il layout si e' assestato (font, altezze calcolate), e si riattiva. */
+(function(){
+  if(!location.hash) return;
+  var radice=document.documentElement;
+  function vai(){
+    var t=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if(!t) return;
+    var prima=radice.style.scrollBehavior;
+    radice.style.scrollBehavior='auto';
+    t.scrollIntoView();
+    requestAnimationFrame(function(){ radice.style.scrollBehavior=prima; });
+  }
+  if(history.scrollRestoration) history.scrollRestoration='manual';
+  addEventListener('load', function(){ vai(); setTimeout(vai,150); setTimeout(vai,600); });
 })();
 
 /* motion: ogni sezione entra come composizione di gesti tipizzati, in cascata. Degrada a statico con reduced-motion */
@@ -693,7 +712,12 @@ footer .chiudi{
       obs.unobserve(e.target);
     });
   },{threshold:0.1, rootMargin:'0px 0px -6% 0px'});
+  /* Un gruppo gia' dentro l'area visibile all'avvio non si nasconde affatto:
+     l'osservatore notifica solo i cambiamenti, quindi se la pagina non si muove piu'
+     quel testo resterebbe invisibile per sempre. Lo stato di partenza sicuro e' visibile. */
+  const soglia=innerHeight*0.92;
   groups.forEach(g=>{
+    if(g.getBoundingClientRect().top < soglia) return;
     const units=unitsOf(g);
     units.forEach(([el,role])=>el.classList.add('m',role));
     g.__units=units;
