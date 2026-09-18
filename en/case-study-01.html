@@ -310,6 +310,7 @@ section.blocco{padding:clamp(48px,6vw,72px) 0;border-top:1px solid var(--bordo)}
   .approfondimento[open] .corpo{animation:none}
 }
 
+.misura-quando{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mezzo);margin:0 0 14px}
 .quadro{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
   gap:0 26px;margin:34px 0 14px;max-width:var(--misura-prosa)}
 /* il filetto sta sulla cella, non sul contenitore: cosi' ogni riga della griglia
@@ -587,6 +588,7 @@ footer .chiudi{
     <p class="eyebrow">05 · The measurement</p>
     <h2>Until you measure it, a system is defended with opinions.</h2>
     <p>For three years I governed the design system by judgement: I knew where it hurt, not by how much. In August 2026 I measured it, from the design file through to the code generated from it, with the method stated next to every number.</p>
+    <p class="misura-quando">First measurement, August 2026</p>
     <ul class="quadro">
       <li class="misura"><span class="val">125</span><span class="eti">library elements, around seventy of them variant sets</span></li>
       <li class="misura"><span class="val">223</span><span class="eti">icons, all on the same 24 grid</span></li>
@@ -594,6 +596,15 @@ footer .chiudi{
       <li class="misura"><span class="val">46</span><span class="eti">design pages walked through one by one</span></li>
     </ul>
     <p class="sez-nota">Every instance is resolved to the identifier of its source component, never to its name: in the file five components are called File and two different sets are called Buttons. Counting by name gives a plausible, wrong number.</p>
+
+    <p class="misura-quando">Second measurement, September 2026</p>
+    <ul class="quadro">
+      <li class="misura"><span class="val">124</span><span class="eti">live components in the current scope</span></li>
+      <li class="misura"><span class="val">93</span><span class="eti">of those have a written specification: three out of four</span></li>
+      <li class="misura"><span class="val">221</span><span class="eti">icons, all on the same 24-pixel grid</span></li>
+    </ul>
+    <p class="sez-nota">Method: top-level components and variant sets on the pages the file itself declares as the system's scope; icons excluded from the count and measured separately.</p>
+    <p>The scope is not comparable with August's: the system has been cleaned up since, and forty-seven superseded elements have left the live count. This is the first interval between two measurements, and it is the reason the first one was worth taking.</p>
     <p>The perimeter only says what is there. The useful question is a different one: is the system actually used, and how much of it survives into the code? Five indicators.</p>
     <ul class="letture">
       <li><span class="ord">01</span><span class="nome">Canonical component adoption</span><span class="dice">How many instances use the official component instead of a predecessor still in circulation.</span></li>
@@ -602,7 +613,7 @@ footer .chiudi{
       <li><span class="ord">04</span><span class="nome">Instances hanging off external libraries</span><span class="dice">How much of the system moves when someone else moves.</span></li>
       <li><span class="ord">05</span><span class="nome">States that reach the code</span><span class="dice">How many of the properties declared in design survive code generation.</span></li>
     </ul>
-    <p>Measuring them was the uncomfortable part. A system without numbers defends itself with enthusiasm, and as long as nobody looks everyone is right. Now they have a date, and they become a starting line: from the next measurement onwards every indicator has a direction instead of an opinion. Where the system is weakest, and what I chose to raise first, I am happy to go through in person: those numbers belong to someone else's product.</p>
+    <p>Measuring them was the uncomfortable part. A system without numbers defends itself with enthusiasm, and as long as nobody looks everyone is right. Now they have a date, and the second measurement exists: from here on every indicator has a direction instead of an opinion. Where the system is weakest, and what I chose to raise first, I am happy to go through in person: those numbers belong to someone else's product.</p>
   </div>
 </section>
 

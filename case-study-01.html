@@ -310,6 +310,7 @@ section.blocco{padding:clamp(48px,6vw,72px) 0;border-top:1px solid var(--bordo)}
   .approfondimento[open] .corpo{animation:none}
 }
 
+.misura-quando{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mezzo);margin:0 0 14px}
 .quadro{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
   gap:0 26px;margin:34px 0 14px;max-width:var(--misura-prosa)}
 /* il filetto sta sulla cella, non sul contenitore: cosi' ogni riga della griglia
@@ -587,6 +588,7 @@ footer .chiudi{
     <p class="eyebrow">05 · La misura</p>
     <h2>Finché non lo misuri, un sistema si difende a opinioni.</h2>
     <p>Per tre anni ho governato il design system a giudizio: sapevo dove faceva male, non di quanto. Ad agosto 2026 l'ho misurato, dal file di design fino al codice che ne viene generato, con il metodo dichiarato accanto a ogni numero.</p>
+    <p class="misura-quando">Prima misura, agosto 2026</p>
     <ul class="quadro">
       <li class="misura"><span class="val">125</span><span class="eti">elementi di libreria, di cui circa settanta insiemi di varianti</span></li>
       <li class="misura"><span class="val">223</span><span class="eti">icone, tutte sulla stessa griglia da 24</span></li>
@@ -594,6 +596,15 @@ footer .chiudi{
       <li class="misura"><span class="val">46</span><span class="eti">pagine di progetto attraversate una per una</span></li>
     </ul>
     <p class="sez-nota">Ogni istanza è risolta all'identificatore del componente sorgente, mai al nome: nel file cinque componenti si chiamano File e due insiemi diversi si chiamano Buttons. Contare per nome dà un numero plausibile e sbagliato.</p>
+
+    <p class="misura-quando">Seconda misura, settembre 2026</p>
+    <ul class="quadro">
+      <li class="misura"><span class="val">124</span><span class="eti">componenti vivi nel perimetro corrente</span></li>
+      <li class="misura"><span class="val">93</span><span class="eti">di questi hanno una specifica scritta: tre su quattro</span></li>
+      <li class="misura"><span class="val">221</span><span class="eti">icone, tutte sulla stessa griglia da 24</span></li>
+    </ul>
+    <p class="sez-nota">Metodo: componenti e insiemi di varianti di primo livello sulle pagine che il file stesso dichiara come perimetro del sistema, icone escluse dal conto e misurate a parte.</p>
+    <p>Il perimetro non si confronta con quello di agosto: nel frattempo il sistema è stato ripulito, e quarantasette elementi superati sono usciti dal conto dei vivi. È il primo intervallo fra due misure, ed è la ragione per cui la prima serviva.</p>
     <p>Il perimetro però dice solo cosa c'è. La domanda utile è un'altra: il sistema viene davvero usato, e quanto di lui sopravvive al codice? Cinque indicatori.</p>
     <ul class="letture">
       <li><span class="ord">01</span><span class="nome">Adozione del componente canonico</span><span class="dice">Quante istanze usano il componente ufficiale invece di un suo predecessore rimasto in circolo.</span></li>
@@ -602,7 +613,7 @@ footer .chiudi{
       <li><span class="ord">04</span><span class="nome">Istanze appese a librerie esterne</span><span class="dice">Quanta parte del sistema si muove quando si muove qualcun altro.</span></li>
       <li><span class="ord">05</span><span class="nome">Stati che arrivano al codice</span><span class="dice">Quante delle property dichiarate nel design sopravvivono alla generazione del codice.</span></li>
     </ul>
-    <p>Misurarli è stata la parte scomoda. Un sistema senza numeri si difende con l'entusiasmo, e finché nessuno li guarda hanno ragione tutti. Adesso hanno una data, e diventano una linea di partenza: dalla misura successiva ogni indicatore ha una direzione invece che un'opinione. Dove il sistema sta peggio, e cosa ho scelto di alzare per primo, lo racconto volentieri di persona: sono numeri che riguardano il prodotto di qualcun altro.</p>
+    <p>Misurarli è stata la parte scomoda. Un sistema senza numeri si difende con l'entusiasmo, e finché nessuno li guarda hanno ragione tutti. Adesso hanno una data, e la seconda misura esiste: da qui in avanti ogni indicatore ha una direzione invece che un'opinione. Dove il sistema sta peggio, e cosa ho scelto di alzare per primo, lo racconto volentieri di persona: sono numeri che riguardano il prodotto di qualcun altro.</p>
   </div>
 </section>
 
