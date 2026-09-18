@@ -29,3 +29,9 @@ files.zip
 # per underscore, quindi la regola _*.md non lo copriva: senza questa riga il primo
 # `git add -A` lo avrebbe pubblicato.
 Askme_Metriche_Business_e_DesignSystem.md
+
+# --- Certificati e attestati personali: allegati di candidatura, non contenuto del sito ---
+# Gli originali stanno in _materiale-di-lavoro/, i PDF in files/. Questa riga e' una rete
+# di sicurezza se un download futuro finisce di nuovo nella radice del repo.
+certificate-*.jpg
+certificate-*.pdf
