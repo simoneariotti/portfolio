@@ -1,0 +1,374 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   RETICOLO · foglio di base, caricato da OGNI pagina
+   ──────────────────────────────────────────────────────────────────────────
+   Token, reset, tipografia, barra, bottoni, icone, cursore-lampada, motion,
+   footer, e i componenti che vivono su piu' di una famiglia di pagina.
+
+   REGOLA DI PORTATA: qui ci va solo cio' che vale ovunque. Una regola che
+   serve ai soli case study va in caso.css, non qui: se finisce qui arriva
+   anche dove non c'era (e' successo con .figure, che si e' applicato alle
+   tappe visive dell'about).
+   ORDINE: le regole sono ordinate in modo compatibile con l'ordine che
+   avevano dentro ogni pagina. Spostarne una piu' in alto puo' spegnere una
+   @media che la sovrascriveva: se ne sposti una, rifai la verifica.
+
+   I percorsi dei font sono relativi a questa cartella, non alla pagina:
+   valgono identici per le pagine italiane e per quelle in en/.
+   ══════════════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════════
+   RETICOLO · foglio condiviso del portfolio di Simone Ariotti
+   ──────────────────────────────────────────────────────────────────────────
+   Qui sta tutto cio' che vive su piu' di una pagina: token, reset, tipografia,
+   barra, componenti di prosa, componenti di caso, motion, cursore, footer.
+   Le regole che servono a una pagina sola stanno nel file di quella pagina
+   (home.css, about.css, cs-01.css, cs-02.css, rotte.css), caricato dopo.
+
+   REGOLA: un componente si modifica QUI, una volta. Se ti ritrovi a copiare
+   una regola in un file di pagina, e' il segnale che il componente va
+   generalizzato, non duplicato.
+
+   Lo storybook (_materiale-di-lavoro/storybook.html) carica questo stesso
+   file: se una modifica non si vede li', non si vede nemmeno sul sito.
+
+   I percorsi dei font sono relativi a questa cartella, non alla pagina:
+   cosi' valgono identici per le pagine italiane e per quelle in en/.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Font ospitati qui, nessuna terza parte. Solo i pesi che il sito usa davvero,
+   verificati misurando il font-weight calcolato di ogni elemento nel browser:
+   Clash Display solo 500, General Sans 400 e 500, Space Mono 400.
+   Aggiungerne uno = copiare il .woff2 e ripetere il blocco.
+   Licenze in font/, ITF Free Font License per i due Fontshare. */
+@font-face{
+  font-family:'Clash Display';font-style:normal;font-weight:500;font-display:swap;
+  src:url('font/clash-display-500.woff2') format('woff2');
+}
+@font-face{
+  font-family:'General Sans';font-style:normal;font-weight:400;font-display:swap;
+  src:url('font/general-sans-400.woff2') format('woff2');
+}
+@font-face{
+  font-family:'General Sans';font-style:normal;font-weight:500;font-display:swap;
+  src:url('font/general-sans-500.woff2') format('woff2');
+}
+/* Space Mono ospitato qui, non su un CDN esterno: senza terze parti
+   nessun IP dei visitatori esce dal sito. SIL Open Font License 1.1,
+   licenza in font/LICENSE-space-mono.txt */
+@font-face{
+  font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
+  src:url('font/space-mono-400-latin.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
+  src:url('font/space-mono-400-latin-ext.woff2') format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}/* Regole della sola pagina index.html. Tutto il resto sta in stile.css,
+   che viene caricato prima: qui dentro ci va solo cio' che non
+   esiste da nessun'altra parte. */
+:root{
+  /* ── Palette RETICOLO: un solo tema, scuro ── */
+  --abisso:#080B18;      /* fondo, indaco profondissimo, mai nero puro */
+  --ghiaccio:#C4CEF5;    /* la struttura, viola-ghiaccio */
+  --testo:#EAEDFA;
+  --mezzo:#7E86AD;       /* testo secondario, metadata */
+  --funzione:#A9B4F5;    /* accento funzionale: SOLO interattivo */
+
+  --superficie:color-mix(in srgb, var(--ghiaccio) 7%, var(--abisso));
+  --bordo:color-mix(in srgb, var(--testo) 14%, transparent);
+  --bordo-forte:color-mix(in srgb, var(--testo) 28%, transparent);
+
+  /* Fondo: un campo scuro unico e continuo per tutta la pagina, fisso mentre il
+     contenuto scorre. Solo gradienti, nessuna immagine. Due sorgenti fredde agli
+     angoli opposti, una terza piu' bassa a sinistra per non lasciare piatta la
+     meta' di mezzo, e una vignettatura che richiude i bordi sull'abisso.
+     Vincolo: nessun livello e' piu' chiaro di #141A3C, il valore gia' verificato
+     a 4,76:1 contro --mezzo. Il fondo puo' solo scurirsi, mai schiarirsi. */
+  --trama-fondo:
+    radial-gradient(125% 85% at 86% -12%, #141A3C 0%, rgba(20,26,60,0) 50%),
+    radial-gradient(115% 95% at -14% 114%, #0E1330 0%, rgba(14,19,48,0) 48%),
+    radial-gradient(78% 58% at 16% 32%, #10152F 0%, rgba(16,21,47,0) 62%),
+    radial-gradient(140% 120% at 50% 44%, rgba(2,3,9,0) 42%, rgba(2,3,9,.62) 100%),
+    var(--abisso);
+
+  --font-display:'Clash Display','Segoe UI',system-ui,sans-serif;
+  --font-body:'General Sans',system-ui,sans-serif;
+  --font-mono:'Space Mono',ui-monospace,monospace;
+
+  --ease-viscoso:cubic-bezier(0.22,1,0.36,1);
+  --durata-micro:220ms; --durata-orchestrata:800ms;
+  --misura-prosa:70ch;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+/* la barra resta in cima: gli ancoraggi devono fermarsi sotto, non sparirci dietro */
+:target,section[id],header[id],div[id]{scroll-margin-top:96px}
+@media(max-width:760px){:target,section[id],header[id],div[id]{scroll-margin-top:110px}}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:1ms!important}
+}
+a{color:var(--funzione)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--funzione);outline-offset:3px;border-radius:2px}
+
+/* ── SELEZIONE DEL TESTO ───────────────────────────────────────────────────
+   Selezionare e' un'azione della persona, non uno stato del documento: per la
+   regola d'oro l'accento qui e' legittimo, come sul focus. Sta all'82% invece
+   che pieno perche' selezionare un paragrafo intero a colore pieno, su una
+   pagina cosi' scura, fa lampeggiare mezza schermata.
+   ::selection accetta pochissime proprieta' (colore, sfondo, ombra del testo):
+   niente gradienti, niente bordi. Chi prova ad aggiungerli non vede nulla e
+   pensa di aver sbagliato selettore. ── */
+::selection{background:color-mix(in srgb, var(--funzione) 82%, transparent);color:var(--abisso);text-shadow:none}
+/* dentro le figure la selezione cadrebbe su una didascalia sopra un'immagine:
+   li' l'accento pieno e' troppo, basta un velo di ghiaccio */
+.figura ::selection,.figure ::selection{background:color-mix(in srgb, var(--ghiaccio) 30%, transparent);color:var(--testo)}
+body{background:var(--trama-fondo);background-attachment:fixed;color:var(--testo);font-family:var(--font-body);font-size:17px;line-height:1.7}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
+
+/* ── NAV ── */
+nav.principale{
+  position:sticky;top:0;z-index:40;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px clamp(20px,4.5vw,56px);
+  background:rgba(8,11,24,.985);
+  border-bottom:1px solid var(--bordo);
+  transition:background-color var(--durata-micro) var(--ease-viscoso),
+             border-color var(--durata-micro) var(--ease-viscoso),
+             padding var(--durata-micro) var(--ease-viscoso);
+}
+/* appena si lascia la cima la barra si stringe: resta consultabile senza rubare schermo */
+nav.principale.ancorata{padding-top:14px;padding-bottom:14px}
+.wrap-prosa{max-width:calc(var(--misura-prosa) + 2*clamp(20px,4.5vw,56px));margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
+/* sulla home galleggia sopra la hero: trasparente in cima, prende corpo quando si scende.
+   Fondo pieno e non sfocato: un blur permanente sopra il canvas si paga a ogni frame */
+nav.principale.sovrapposta{position:fixed;left:0;right:0;background:transparent;border-bottom-color:transparent}
+nav.principale.sovrapposta.ancorata{background:rgba(8,11,24,.985);border-bottom-color:var(--bordo)}
+
+/* ── BOTTONI (DS): parti del reticolo, raggio organico e luce che segue il puntatore ── */
+.icona{width:20px;height:20px;flex:0 0 auto;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
+
+/* ── MOTION: vocabolario di gesti. Ogni tipo di elemento ha il suo, tutti sulla stessa easing e famiglia di tempi ── */
+.m{transition:opacity var(--d,560ms) var(--ease-viscoso), transform var(--d,560ms) var(--ease-viscoso)}
+nav.principale ul{display:flex;gap:clamp(16px,2.6vw,32px);list-style:none}
+.reveal-on .m{opacity:0;transform:var(--from,translateY(14px))}
+.reveal-on .m.in{opacity:1;transform:none}
+nav.principale ul a:hover{color:var(--funzione)}
+nav.principale .logo{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:500;font-size:17px;color:var(--testo);text-decoration:none}
+.m-eyebrow{--from:translateX(-14px);--d:660ms}
+.m-title{--from:translateY(26px);--d:1050ms}
+nav.principale ul a{font-size:15px;font-weight:500;text-decoration:none;color:var(--mezzo);transition:color var(--durata-micro) var(--ease-viscoso)}
+.m-text{--from:translateY(16px);--d:840ms}
+/* Space Mono esiste solo in 400 e 700: ereditare il 500 della barra farebbe
+   sintetizzare al browser un finto grassetto. */
+nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{font-weight:400}
+.m-li{--from:translateY(12px);--d:720ms}
+.m-figure{--from:translateY(18px) scale(.955);--d:1150ms}
+.m-quote{--from:translateY(20px);--d:1000ms}
+/* Switch di lingua. Stesso modello della barra indice dell'about:
+   l'accento segnala dove sei, e uno stato attivo, non decorazione.
+   Sopra la hero la barra e trasparente e il fondo e la struttura animata:
+   li --mezzo scende a 2,5:1, quindi la lingua non attiva usa --ghiaccio. */
+nav.principale ul li.lingua{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em}
+@media (prefers-reduced-motion: reduce){.reveal-on .m{opacity:1;transform:none;transition:none}}
+nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{
+  /* area di tocco 24x24 minimo (WCAG 2.5.8): i margini negativi la allargano
+     senza spostare il resto della barra */
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;min-height:24px;margin:-4px -2px;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;
+  border-bottom:2px solid transparent;
+  transition:color var(--durata-micro) var(--ease-viscoso),border-color var(--durata-micro) var(--ease-viscoso);
+}
+
+/* ── CURSORE: la lampada sulla struttura. Cambia forma secondo l'oggetto sotto ── */
+.cursor-on, .cursor-on *{cursor:none}
+nav.principale ul li.lingua a{color:var(--ghiaccio);text-decoration:none}
+#cursore{
+  position:fixed;left:0;top:0;z-index:9999;pointer-events:none;opacity:0;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--funzione);
+  box-shadow:0 0 6px 0 color-mix(in srgb, var(--funzione) 24%, transparent);
+  transition:width .28s var(--ease-viscoso), height .28s var(--ease-viscoso),
+    border-radius .28s var(--ease-viscoso), background .28s var(--ease-viscoso),
+    border-color .28s var(--ease-viscoso), opacity .3s var(--ease-viscoso);
+  will-change:transform;
+}
+nav.principale ul li.lingua a:hover,nav.principale ul li.lingua a:focus-visible{color:var(--testo)}
+#cursore.is-int{
+  width:38px;height:38px;background:transparent;
+  border:1.5px solid var(--funzione);border-radius:50%;
+  box-shadow:0 0 10px 0 color-mix(in srgb, var(--funzione) 16%, transparent);
+}
+/* Deroga voluta rispetto alla barra indice, che colora anche il testo di --funzione:
+   qui la barra puo' stare sopra la hero, dove --funzione sul testo scende a 4,3:1.
+   L'accento resta sul filetto (elemento grafico, soglia 3:1), il testo va su --testo. */
+nav.principale ul li.lingua .attiva{color:var(--testo);border-bottom-color:var(--funzione)}
+#cursore.is-text{
+  width:2px;height:26px;border-radius:1px;background:var(--ghiaccio);
+  box-shadow:0 0 4px color-mix(in srgb, var(--ghiaccio) 35%, transparent);
+  animation:curblink 1.1s steps(1) infinite;
+}
+nav.principale ul li.lingua .sep{color:color-mix(in srgb, var(--ghiaccio) 40%, transparent)}
+@keyframes curblink{0%,49%{opacity:1}50%,99%{opacity:.2}100%{opacity:1}}
+@media (prefers-reduced-motion: reduce){nav.principale ul li.lingua a{transition:none}}
+
+/* ── LINK EDITORIALE: sottolineatura che si disegna al passaggio ── */
+p a:not(.btn), li a:not(.btn){
+  text-decoration:none;
+  background-image:linear-gradient(var(--funzione),var(--funzione));
+  background-size:0% 1px;background-position:0 100%;background-repeat:no-repeat;
+  transition:background-size .32s var(--ease-viscoso);
+}
+@media(max-width:760px){
+  nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{min-height:44px;margin:-4px -2px}
+}
+p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
+.sez-nota{color:var(--mezzo);font-size:14px;margin:-4px 0 30px}
+nav.principale ul a[aria-current="page"]{color:var(--testo)}
+@media(max-width:760px){
+  /* sotto i 760px le voci non stanno su una riga con il logo: il logo prende la sua riga,
+     le voci vanno a capo per conto loro e ricevono l'area tattile che a 15px non avevano */
+  nav.principale{flex-direction:column;align-items:flex-start;gap:2px;padding:18px clamp(20px,4.5vw,56px)}
+  nav.principale .logo{white-space:nowrap}
+  nav.principale ul{flex-wrap:wrap;gap:0 20px}
+  nav.principale ul a{font-size:13px;padding:9px 0;display:inline-block}
+  /* a due righe su schermo stretto la barra pesa: da ancorata si stringe ancora */
+  nav.principale.ancorata{padding-top:9px;padding-bottom:7px}
+  nav.principale.ancorata .logo{font-size:15px}
+}
+@media (prefers-reduced-motion: reduce){nav.principale{transition:none}}
+/* apertura di capitolo: numero, occhiello, titolo. Il numero riprende il linguaggio
+   delle card dei case study in home e dice al lettore che sta attraversando un percorso */
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:14px}
+.blocco p{margin-bottom:1.15em;max-width:var(--misura-prosa)}
+
+/* principio: voce display su filetto, niente corsivi */
+.principio{position:relative;max-width:880px;margin:0 auto;padding:6px 0 6px 28px}
+.principio::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--bordo-forte);transform-origin:top;transition:transform .9s var(--ease-viscoso)}
+.reveal-on .principio::before{transform:scaleY(0)}
+.reveal-on .principio.lit::before{transform:scaleY(1)}
+@media (prefers-reduced-motion: reduce){.reveal-on .principio::before{transform:scaleY(1);transition:none}}
+.cs-card:hover{transform:translateY(-4px);border-color:var(--bordo-forte)}
+.principio .p-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:16px}
+
+/* ── CODA ── */
+.coda{padding:clamp(60px,8vw,92px) 0;border-top:1px solid var(--bordo)}
+/* la luce del reticolo entra nella card e segue il puntatore, come nella hero */
+.cs-card .luce{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;
+  transition:opacity var(--durata-micro) var(--ease-viscoso);
+  background:radial-gradient(280px circle at var(--lx,72%) var(--ly,22%), color-mix(in srgb, var(--ghiaccio) 14%, transparent) 0%, transparent 70%)}
+.cs-card:hover .luce{opacity:1}
+.cs-meta .gate{color:var(--funzione)}
+
+/* footer: tre livelli distinti invece di righe accatastate.
+   identita (micro-metadata) > la riga sul work in progress (prosa) > il copyright, staccato da un filetto */
+footer{border-top:1px solid var(--bordo);padding:52px 0 40px}
+footer .identita{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);line-height:2}
+footer .identita strong{color:var(--testo);font-weight:400}
+footer .wip{text-transform:none;letter-spacing:0;font-size:14px;line-height:1.6;margin-top:22px;max-width:42ch;color:var(--mezzo)}
+footer .chiudi{
+  margin-top:34px;padding-top:20px;border-top:1px solid var(--bordo);
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   STATO: un nodo del reticolo, non un glifo di font
+   ──────────────────────────────────────────────────────────────────────────
+   Prima qui c'era il carattere U+25C8. Un glifo di font e' fuori sistema:
+   lo disegna il sistema operativo, cambia forma fra Windows, macOS e Android,
+   e non ha niente a che vedere con la grammatica della struttura appesa.
+   Il nodo e' lo stesso segno dei giunti di quadro, letture, carte e lastra:
+   5px ruotati di 45 gradi. Pieno = e' vivo. Vuoto = non ancora.
+   ══════════════════════════════════════════════════════════════════════════ */
+.gate{display:inline-flex;align-items:center;gap:9px}
+.gate::before{
+  content:'';flex:0 0 auto;box-sizing:border-box;
+  width:5px;height:5px;background:currentColor;transform:rotate(45deg);
+}
+/* lo stato atteso svuota il nodo invece di cambiargli forma:
+   stessa figura, un'altra densita' */
+.gate[data-stato="atteso"]::before{
+  width:6px;height:6px;background:none;border:1px solid currentColor;
+}
+
+/* ── INDICE: barra di ancore sotto l'intestazione.
+   La pagina e lunga 12 schermate su mobile: senza appigli si legge solo dall'inizio.
+   Le voci sono in fila e scorrono in orizzontale quando non ci stanno, cosi il componente
+   non cambia forma tra desktop e telefono. --h-nav lo scrive il JS: l'altezza della barra
+   principale cambia quando si ancora, e l'indice deve restarle attaccato sotto. ── */
+nav.indice{
+  /* -1px: l'indice si infila sotto la barra invece di appoggiarsi al pixel esatto.
+     Senza, un arrotondamento di due decimi lascia passare lo sfondo */
+  position:sticky;top:calc(var(--h-nav,78px) - 1px);z-index:30;
+  display:flex;align-items:stretch;
+  background:rgba(8,11,24,.985);
+  border-bottom:1px solid var(--bordo);
+}
+nav.indice ul{
+  display:flex;align-items:stretch;gap:clamp(16px,2.6vw,32px);
+  list-style:none;margin:0;padding:0 clamp(20px,4.5vw,56px);
+  overflow-x:auto;overscroll-behavior-x:contain;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+nav.indice ul::-webkit-scrollbar{display:none}
+nav.indice a{
+  display:block;white-space:nowrap;padding:13px 0 11px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--mezzo);text-decoration:none;
+  border-bottom:2px solid transparent;
+  transition:color var(--durata-micro) var(--ease-viscoso),border-color var(--durata-micro) var(--ease-viscoso);
+}
+nav.indice a:hover{color:var(--testo)}
+/* l'accento segnala dove sei: e uno stato attivo, non decorazione */
+nav.indice a[aria-current="true"]{color:var(--funzione);border-bottom-color:var(--funzione)}
+@media (prefers-reduced-motion: reduce){nav.indice a{transition:none}}
+/* ripiego senza JS: a schermo stretto la barra principale e su due righe */
+@media(max-width:760px){nav.indice{top:var(--h-nav,108px)}}
+/* (lo scroll-margin delle ancore sotto le due barre sta in caso.css e in
+   about.css: section[id] esiste anche nella home, dove la barra e' una sola) */
+
+/* ── SWITCH FRA I CASI: la colonna a destra della barra indice.
+   Sta fuori dallo scorrimento orizzontale delle voci: da telefono le sezioni
+   scorrono e lo switch resta fermo. E' la stessa idea dell'indice dell'about,
+   applicata fra pagine invece che dentro una pagina.
+   Porta solo i numeri: la barra ha gia' cinque etichette a sinistra, e tre
+   titoli in piu' diventano una seconda lista che compete con la prima. Il
+   numero e' gia' il nome del caso su questo sito (le copertine mostrano 01,
+   02, 03); il titolo per esteso resta nel title e per chi legge a voce.
+   Il caso non ancora scritto non e' un link: non esiste una pagina dove
+   mandare, e un link che non porta dove dice e' peggio di nessun link. ── */
+nav.indice ul{flex:1 1 auto;min-width:0}
+nav.indice .casi{
+  flex:0 0 auto;display:flex;align-items:center;gap:2px;
+  border-left:1px solid var(--bordo);
+  padding-left:clamp(14px,2.4vw,24px);padding-right:clamp(20px,4.5vw,56px);
+}
+/* --bordo-forte e' un colore da bordo: come testo su abisso sta a 2,1:1 e non
+   passa il minimo AA. L'etichetta non e' decorazione, dice cosa sono i numeri,
+   quindi prende --mezzo come tutto il resto della barra. La gerarchia la fa
+   la pagina corrente, che e' l'unica in --testo. */
+nav.indice .casi .eti{
+  margin-right:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--mezzo);
+}
+nav.indice .casi a,nav.indice .casi .voce{
+  display:flex;align-items:center;gap:7px;padding:13px 7px 11px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;
+  color:var(--mezzo);text-decoration:none;border-bottom:2px solid transparent;
+  transition:color var(--durata-micro) var(--ease-viscoso);
+}
+nav.indice .casi a:hover{color:var(--testo)}
+/* dove sei: la pagina corrente non e' un link, e' il punto piu' chiaro della riga */
+nav.indice .casi [aria-current]{color:var(--testo)}
+@media (prefers-reduced-motion: reduce){nav.indice .casi a{transition:none}}
+/* a schermo stretto cade l'etichetta, restano i numeri */
+@media(max-width:760px){nav.indice .casi .eti{display:none}nav.indice .casi{padding-left:12px}}
+
+/* Testo che serve solo a chi legge a voce: fuori dallo schermo ma nel flusso,
+   perche' display:none lo toglierebbe anche a loro. */
+.fuori-vista{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip-path:inset(50%);white-space:nowrap;border:0;
+}

@@ -1,0 +1,242 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   RETICOLO · il case study
+   ──────────────────────────────────────────────────────────────────────────
+   Caricato da case-study-01, case-study-02 e rotte-e-racconti, e da nessun
+   altro. Hero di pagina, blocchi di prosa, attacco, carte, quadro di misura,
+   letture, approfondimento, evidenza, figure, principio, coda.
+   I tre case study non hanno piu' CSS proprio: sono la stessa pagina con
+   contenuti diversi. Un caso nuovo (CS03) non aggiunge una riga di stile.
+   ══════════════════════════════════════════════════════════════════════════ */
+/* ── HERO DI PAGINA: sul fondo continuo, separato solo da spazio ── */
+.cs-hero{padding:clamp(64px,8vw,100px) 0 clamp(52px,7vw,80px)}
+.cs-hero .meta{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:14px;margin-bottom:26px}
+.cs-hero h1{font-family:var(--font-display);font-weight:500;font-size:clamp(32px,4.6vw,60px);line-height:1.08;letter-spacing:-.014em;max-width:20ch;margin-bottom:20px;text-wrap:balance}
+.cs-hero .piano{font-size:19px;color:var(--mezzo);max-width:52ch}
+
+/* ── PROSA ── */
+section.blocco{padding:clamp(48px,6vw,72px) 0;border-top:1px solid var(--bordo)}
+.blocco h2{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,2.8vw,34px);letter-spacing:-.006em;margin-bottom:22px}
+.blocco h3{font-family:var(--font-display);font-weight:500;font-size:21px;margin:36px 0 14px}
+.blocco p.secondario{color:var(--mezzo)}
+.blocco ul{margin:0 0 1.3em 0;padding:0;list-style:none;max-width:var(--misura-prosa)}
+.blocco ul li{position:relative;padding-left:26px;margin-bottom:14px}
+.blocco ul li::before{content:'';position:absolute;left:2px;top:.62em;width:10px;height:2px;background:var(--ghiaccio)}
+.blocco ul li strong{font-weight:500}
+.evidenza{
+  font-family:var(--font-display);font-weight:500;font-size:clamp(21px,2.4vw,29px);line-height:1.42;letter-spacing:-.004em;
+  color:var(--testo);max-width:var(--misura-prosa);
+  padding:6px 0 6px 26px;border-left:2px solid var(--bordo-forte);
+  margin:32px 0;
+}
+
+/* ── ATTACCO + CARTE ───────────────────────────────────────────────────────
+   Contesto e problema erano quattro paragrafi densi: chi scansiona non li
+   legge. Ora sono una riga di attacco, che dice la cosa sola da capire, e voci
+   corte che si scandiscono. La gerarchia la fanno tre livelli distinti:
+   attacco 19px su --testo, etichetta in mono su --mezzo, voce 15,5px su
+   --ghiaccio.
+   Non sono box generici: e' la stessa struttura appesa di .quadro e .letture,
+   un filetto comune in alto e su ogni cella un montante con il suo nodo, cioe'
+   la grammatica delle giunzioni del reticolo. Essendo ul>li, il sistema di
+   motion le riconosce gia' e le fa entrare in cascata: zero JS in piu'. ── */
+.blocco p.attacco{font-size:19px;line-height:1.55;color:var(--testo)}
+.blocco ul.carte{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));
+  gap:0 26px;margin:30px 0 26px;max-width:var(--misura-prosa)}
+.blocco ul.carte>li{position:relative;padding:24px 0 20px;margin:0;
+  border-top:1px solid var(--bordo-forte)}
+.blocco ul.carte>li::before{content:'';position:absolute;left:0;top:0;width:1px;height:17px;
+  background:var(--bordo-forte)}
+.blocco ul.carte>li::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
+  background:var(--ghiaccio);transform:rotate(45deg)}
+.carte .c-eti{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--mezzo);margin-bottom:10px}
+.carte .c-testo{display:block;font-size:15.5px;line-height:1.55;color:var(--ghiaccio)}
+@media(max-width:600px){.blocco ul.carte{grid-template-columns:1fr}}
+
+/* ── FIGURE: diagrammi astratti, pattern e strutture non interfacce reali ── */
+/* ── QUADRO DI MISURA e LETTURE ────────────────────────────────────────────
+   Non sono card: sono una struttura appesa. Un filetto orizzontale comune, e
+   da ogni giunzione scende un montante con il suo nodo, la stessa grammatica
+   del filetto verticale del blocco "Principio emerso". Entrambi i blocchi sono
+   liste: il sistema di motion le riconosce gia' come ul>li e le fa entrare in
+   cascata, quindi non serve una riga di JS in piu'.
+   Nessuna barra di riempimento sulle letture: quattro indicatori su cinque
+   migliorano salendo e uno scendendo, quindi una barra unica mentirebbe. */
+/* ── APPROFONDIMENTO: <details> nativo, zero JS ────────────────────────────
+   Il segno "piu'" e' due filetti da 1px, non un'icona presa altrove: aprendo,
+   il tratto verticale si ritrae e resta l'orizzontale. Stessa materia del
+   reticolo. <details>/<summary> danno gratis tastiera, ruolo e stato
+   annunciato, e senza CSS il contenuto resta comunque leggibile.
+   Qui --funzione e' legittimo: e' un comando, non decorazione. */
+.approfondimento{border-top:1px solid var(--bordo);border-bottom:1px solid var(--bordo);
+  margin:24px 0 28px;max-width:var(--misura-prosa)}
+.approfondimento>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;
+  padding:15px 2px;color:var(--ghiaccio);font-size:15.5px;
+  transition:color var(--durata-micro) var(--ease-viscoso)}
+.approfondimento>summary::-webkit-details-marker{display:none}
+.approfondimento>summary:hover{color:var(--testo)}
+.approfondimento>summary:focus-visible{outline:2px solid var(--funzione);outline-offset:4px;color:var(--testo)}
+.approfondimento .segno{position:relative;flex:0 0 11px;width:11px;height:11px}
+.approfondimento .segno::before,.approfondimento .segno::after{content:'';position:absolute;
+  background:var(--funzione);transition:transform .34s var(--ease-viscoso),opacity .34s var(--ease-viscoso)}
+.approfondimento .segno::before{left:0;top:5px;width:11px;height:1px}
+.approfondimento .segno::after{left:5px;top:0;width:1px;height:11px}
+.approfondimento[open] .segno::after{transform:scaleY(0);opacity:0}
+/* il corpo rientra sotto l'etichetta, non sotto il segno: la colonna del segno
+   resta un canale vuoto e l'approfondimento si legge come un oggetto solo */
+.approfondimento .corpo{padding:10px 0 4px 25px}
+.approfondimento .corpo p{margin:0 0 14px;font-size:15px;line-height:1.62;color:var(--ghiaccio);max-width:none}
+.approfondimento .corpo p:last-child{margin-bottom:0}
+@media(max-width:600px){.approfondimento .corpo{padding-left:0}}
+.approfondimento[open] .corpo{animation:apre .42s var(--ease-viscoso) both}
+@keyframes apre{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .approfondimento .segno::before,.approfondimento .segno::after{transition:none}
+  .approfondimento[open] .corpo{animation:none}
+}
+/* etichetta della data sopra un quadro di misura */
+.misura-quando{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mezzo);margin:0 0 14px}
+.quadro{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:0 26px;margin:34px 0 14px;max-width:var(--misura-prosa)}
+/* il filetto sta sulla cella, non sul contenitore: cosi' ogni riga della griglia
+   ha il suo, e i nodi non restano appesi nel vuoto quando le colonne vanno a capo */
+.quadro .misura{position:relative;padding:26px 0 20px;border-top:1px solid var(--bordo-forte)}
+.quadro .misura::before{content:'';position:absolute;left:0;top:0;width:1px;height:17px;background:var(--bordo-forte)}
+.quadro .misura::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
+  background:var(--ghiaccio);transform:rotate(45deg)}
+.quadro .val{display:block;font-family:var(--font-display);font-weight:500;
+  font-size:clamp(30px,4.2vw,44px);line-height:1;letter-spacing:-.022em;color:var(--testo)}
+.quadro .eti{display:block;margin-top:10px;font-size:14.5px;line-height:1.45;color:var(--ghiaccio)}
+.letture{list-style:none;padding:0;margin:30px 0 26px;max-width:var(--misura-prosa);border-top:1px solid var(--bordo)}
+.letture li{position:relative;display:grid;grid-template-columns:minmax(34px,auto) 1fr;
+  gap:5px 22px;align-items:baseline;padding:19px 0 18px;border-bottom:1px solid var(--bordo)}
+/* stessa giunzione del quadro: il nodo da solo galleggiava e sembrava un apostrofo,
+   con il montante che scende diventa una struttura appesa al filetto */
+.letture li::before{content:'';position:absolute;left:0;top:0;width:1px;height:15px;background:var(--bordo-forte)}
+.letture li::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
+  background:var(--ghiaccio);transform:rotate(45deg)}
+/* l'ordinale, non il valore: i valori misurati riguardano il prodotto di qualcun
+   altro e restano fuori dal sito. Space Mono solo qui, che e' micro-metadata. */
+.letture .ord{font-family:var(--font-mono);font-weight:400;font-size:12px;letter-spacing:.1em;color:var(--mezzo)}
+.letture .nome{font-family:var(--font-display);font-weight:500;font-size:clamp(17px,1.5vw,20px);line-height:1.35;letter-spacing:-.004em;color:var(--testo)}
+.letture .dice{grid-column:2;font-size:14.5px;line-height:1.55;color:var(--ghiaccio)}
+@media(max-width:600px){
+  .letture li{grid-template-columns:1fr;gap:7px}
+  .letture .dice{grid-column:1}
+}
+.figure{display:flex;flex-direction:column;gap:28px;max-width:600px;margin:8px 0 20px}
+.figura{
+  position:relative;border:1px solid var(--bordo);border-radius:22px 14px 20px 16px;overflow:hidden;
+  display:flex;flex-direction:column;gap:16px;padding:22px 22px 18px;
+  background:radial-gradient(130% 150% at 30% 24%, color-mix(in srgb, var(--ghiaccio) 8%, var(--abisso)) 0%, var(--superficie) 72%);
+}
+.figura svg{width:100%;height:auto;display:block}
+/* La figura nasce per i diagrammi astratti, ma regge anche una schermata reale:
+   stesso contenitore, stessa didascalia, stesso gesto di ingresso. Serviva solo
+   dire all'immagine di comportarsi come l'SVG. */
+.figura img{width:100%;height:auto;display:block;border-radius:6px}
+
+/* ── LASTRA: la figura quando dentro c'e' una schermata ────────────────────
+   .figura nasce per i diagrammi: un pannello con gradiente su cui galleggia un
+   disegno a linee. Una schermata ha gia' il suo fondo e il suo bordo, quindi
+   li' dentro diventa una cornice dentro una cornice. La lastra toglie il
+   pannello (l'immagine E' la superficie) e riduce il telaio a due giunzioni
+   d'angolo con nodo, la stessa grammatica di .quadro, .letture e .carte.
+
+   NIENTE INGRANDIMENTO AL PASSAGGIO. C'era, ed e' stato tolto il 24 settembre:
+   ingrandiva un punto a caso, sballava la lettura e non risolveva davvero la
+   leggibilita', perche' quello che serve e' vedere l'immagine intera piu'
+   grande, non un dettaglio sotto il puntatore. Se la leggibilita' torna a
+   essere un problema, la risposta e' un'apertura a grandezza reale
+   raggiungibile anche da tastiera, non un effetto sull'hover. ── */
+.figura.lastra{position:relative;overflow:visible;border:0;border-radius:0;padding:0;background:none;gap:12px}
+.figura.lastra .telaio{position:relative;border-radius:3px;overflow:hidden;
+  background:color-mix(in srgb, var(--ghiaccio) 4%, var(--abisso))}
+.figura.lastra .telaio img{border-radius:0}
+/* le due giunzioni: filetto d'angolo piu' nodo, come le celle del quadro */
+.figura.lastra::before,.figura.lastra::after{
+  content:'';position:absolute;width:20px;height:20px;pointer-events:none}
+.figura.lastra::before{top:-8px;left:-8px;
+  border-top:1px solid var(--bordo-forte);border-left:1px solid var(--bordo-forte)}
+.figura.lastra::after{bottom:-8px;right:-8px;
+  border-bottom:1px solid var(--bordo-forte);border-right:1px solid var(--bordo-forte)}
+.figura.lastra .nodo{position:absolute;left:-10.5px;top:-10.5px;width:5px;height:5px;
+  background:var(--ghiaccio);transform:rotate(45deg);pointer-events:none}
+/* la didascalia usa tutta la larghezza dell'immagine, non la misura di prosa */
+.figura.lastra figcaption{max-width:none}
+}
+.figura figcaption{font-size:14px;color:var(--mezzo);max-width:38ch}
+
+/* ── PRINCIPIO (firma editoriale): voce display su filetto, niente corsivi ── */
+.banda-principio{padding:clamp(64px,9vw,104px) 0;border-top:1px solid var(--bordo)}
+.principio blockquote{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,3.2vw,38px);line-height:1.4;letter-spacing:-.005em}
+.principio .p-fonte{display:flex;align-items:center;gap:14px;margin-top:26px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
+.principio .p-fonte::before{content:'';width:44px;height:1px;background:var(--bordo-forte)}
+.coda .griglia{display:grid;grid-template-columns:1fr auto;gap:clamp(28px,5vw,64px);align-items:center}
+@media(max-width:760px){.coda .griglia{grid-template-columns:1fr}}
+.cs-card{
+  position:relative;display:block;border-radius:26px 16px 24px 18px;overflow:hidden;text-decoration:none;color:var(--testo);
+  background:var(--superficie);border:1px solid var(--bordo);max-width:420px;
+  transition:transform var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso);
+}
+.cs-cover{height:150px;position:relative;overflow:hidden;
+  background:
+    radial-gradient(120px 96px at 74% 22%, var(--abisso) 32%, transparent 33%),
+    radial-gradient(80px 64px at 24% 78%, var(--abisso) 30%, transparent 31%),
+    radial-gradient(130% 150% at 30% 30%, color-mix(in srgb, var(--ghiaccio) 34%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 11%, var(--abisso)) 62%, var(--superficie) 100%);}
+.cs-body{padding:22px;position:relative;z-index:2}
+.cs-meta{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px}
+.cs-body h3{font-family:var(--font-display);font-weight:500;font-size:19px;line-height:1.3}
+.coda .oppure{font-size:15px;color:var(--mezzo)}
+.coda .oppure a{font-weight:500}
+
+/* Con l'indice ancorato sotto la barra principale l'ancora deve fermarsi
+   sotto entrambe. --offset-ancora lo scrive il JS della pagina.
+   Sta qui e non in stile.css perche' section[id] esiste anche nella home,
+   dove le barre sono una sola e 96px sono giusti. */
+:target,section[id],header[id],div[id]{scroll-margin-top:var(--offset-ancora,150px)}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ARTEFATTO: la stessa cosa detta a una persona e detta a una macchina.
+   ──────────────────────────────────────────────────────────────────────────
+   Sta in caso.css e non in stile.css: lo usa un solo case study, e la regola
+   di portata vale anche quando la regola e' nuova.
+
+   DEROGA DICHIARATA ALLA TIPOGRAFIA: Space Mono e' riservato al
+   micro-metadato, mai al testo di lettura. Qui porta un blocco lungo, e la
+   deroga sta in piedi per un motivo solo: in questo caso la spaziatura fissa
+   non e' stile, e' il contenuto. Un indice leggibile da una macchina e' fatto
+   di allineamento e indentazione, e riscriverlo in un font proporzionale
+   significherebbe mostrare una cosa diversa da quella di cui si parla.
+   Fuori da qui la regola resta quella di prima.
+   ══════════════════════════════════════════════════════════════════════════ */
+.artefatto{
+  position:relative;margin:34px 0 22px;
+  border-top:1px solid var(--bordo-forte);
+}
+/* stessa grammatica di quadro, letture, carte e lastra: montante e nodo */
+.artefatto::before{
+  content:'';position:absolute;left:0;top:0;width:1px;height:17px;background:var(--bordo-forte);
+}
+.artefatto::after{
+  content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
+  background:var(--ghiaccio);transform:rotate(45deg);
+}
+.artefatto .a-lato{padding:24px 0 2px}
+.artefatto .a-lato + .a-lato{border-top:1px solid var(--bordo)}
+.artefatto .a-eti{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--mezzo);margin:0 0 14px;
+}
+.artefatto .a-prosa{max-width:var(--misura-prosa);color:var(--mezzo);margin:0 0 20px}
+.artefatto .a-struttura{
+  font-family:var(--font-mono);font-size:12px;line-height:1.7;
+  color:var(--testo);
+  background:color-mix(in srgb, var(--ghiaccio) 3%, var(--abisso));
+  border:1px solid var(--bordo);border-radius:3px;
+  margin:0 0 20px;padding:18px 20px;
+  /* la voce e' larga: a schermo stretto scorre invece di andare a capo,
+     perche' un a capo automatico rompe l'indentazione, che qui e' contenuto */
+  overflow-x:auto;white-space:pre;
+}
+@media(max-width:760px){.artefatto .a-struttura{font-size:11px;padding:14px 15px}}

@@ -31,312 +31,24 @@
 <meta name="twitter:title" content="Askme AI: dalla conversazione all'azione · Simone Ariotti">
 <meta name="twitter:description" content="Progettare un agent che opera, non solo che risponde: dalla conversazione all'oggetto azionabile dentro una piattaforma enterprise. Caso in evoluzione.">
 <meta name="twitter:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
-<style>
-/* Font ospitati qui, nessuna terza parte. Solo i pesi che il sito usa davvero,
-   verificati misurando il font-weight calcolato di ogni elemento nel browser:
-   Clash Display solo 500, General Sans 400 e 500, Space Mono 400.
-   Aggiungerne uno = copiare il .woff2 e ripetere il blocco.
-   Licenze in assets/font/, ITF Free Font License per i due Fontshare. */
-@font-face{
-  font-family:'Clash Display';font-style:normal;font-weight:500;font-display:swap;
-  src:url('assets/font/clash-display-500.woff2') format('woff2');
-}
-@font-face{
-  font-family:'General Sans';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/general-sans-400.woff2') format('woff2');
-}
-@font-face{
-  font-family:'General Sans';font-style:normal;font-weight:500;font-display:swap;
-  src:url('assets/font/general-sans-500.woff2') format('woff2');
-}
-/* Space Mono ospitato qui, non su un CDN esterno: senza terze parti
-   nessun IP dei visitatori esce dal sito. SIL Open Font License 1.1,
-   licenza in assets/font/LICENSE-space-mono.txt */
-@font-face{
-  font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/space-mono-400-latin.woff2') format('woff2');
-  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-@font-face{
-  font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/space-mono-400-latin-ext.woff2') format('woff2');
-  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-
-:root{
-  /* ── Palette RETICOLO: un solo tema, scuro ── */
-  --abisso:#080B18; --ghiaccio:#C4CEF5; --testo:#EAEDFA; --mezzo:#7E86AD; --funzione:#A9B4F5;
-  --superficie:color-mix(in srgb, var(--ghiaccio) 7%, var(--abisso));
-  --bordo:color-mix(in srgb, var(--testo) 14%, transparent);
-  --bordo-forte:color-mix(in srgb, var(--testo) 28%, transparent);
-  --trama-fondo:
-    radial-gradient(125% 85% at 86% -12%, #141A3C 0%, rgba(20,26,60,0) 50%),
-    radial-gradient(115% 95% at -14% 114%, #0E1330 0%, rgba(14,19,48,0) 48%),
-    var(--abisso);
-  --font-display:'Clash Display','Segoe UI',system-ui,sans-serif;
-  --font-body:'General Sans',system-ui,sans-serif;
-  --font-mono:'Space Mono',ui-monospace,monospace;
-  --ease-viscoso:cubic-bezier(0.22,1,0.36,1);
-  --durata-micro:220ms;
-  --misura-prosa:70ch;
-  --materia:.65;   /* quanto emerge la materia di fondo. Verificato: oltre .65 il testo secondario scende sotto 4.5:1 */
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-/* la barra resta in cima: gli ancoraggi devono fermarsi sotto, non sparirci dietro */
-:target,section[id],header[id],div[id]{scroll-margin-top:96px}
-@media(max-width:760px){:target,section[id],header[id],div[id]{scroll-margin-top:110px}}
-@media (prefers-reduced-motion: reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation:none!important;transition-duration:1ms!important}
-}
-/* ── MOTION: vocabolario di gesti. Ogni tipo di elemento ha il suo, ma tutti condividono easing e famiglia di tempi, così l'ingresso di una sezione e un'animazione composita e armonica ── */
-.m{transition:opacity var(--d,560ms) var(--ease-viscoso), transform var(--d,560ms) var(--ease-viscoso)}
-.reveal-on .m{opacity:0;transform:var(--from,translateY(14px))}
-.reveal-on .m.in{opacity:1;transform:none}
-.m-eyebrow{--from:translateX(-14px);--d:660ms}   /* occhiello: scivola da sinistra */
-.m-title{--from:translateY(26px);--d:1050ms}     /* titolo: sale lento, gesto ancora */
-.m-text{--from:translateY(16px);--d:840ms}       /* paragrafo: sale corto */
-.m-li{--from:translateY(12px);--d:720ms}         /* voce di lista: sale minima, in cascata */
-.m-figure{--from:translateY(18px) scale(.955);--d:1150ms} /* diagramma: entra con scala, e a parte */
-.m-quote{--from:translateY(20px);--d:1000ms}     /* citazione: sale ampio */
-@media (prefers-reduced-motion: reduce){.reveal-on .m{opacity:1;transform:none;transition:none}}
-
-/* ── CURSORE: la lampada sulla struttura. Cambia forma secondo l'oggetto sotto ── */
-.cursor-on, .cursor-on *{cursor:none}
-#cursore{
-  position:fixed;left:0;top:0;z-index:9999;pointer-events:none;opacity:0;
-  width:12px;height:12px;border-radius:50%;
-  background:var(--funzione);
-  box-shadow:0 0 6px 0 color-mix(in srgb, var(--funzione) 24%, transparent);
-  transition:width .28s var(--ease-viscoso), height .28s var(--ease-viscoso),
-    border-radius .28s var(--ease-viscoso), background .28s var(--ease-viscoso),
-    border-color .28s var(--ease-viscoso), opacity .3s var(--ease-viscoso);
-  will-change:transform;
-}
-#cursore.is-int{
-  width:38px;height:38px;background:transparent;
-  border:1.5px solid var(--funzione);border-radius:50%;
-  box-shadow:0 0 10px 0 color-mix(in srgb, var(--funzione) 16%, transparent);
-}
-#cursore.is-text{
-  width:2px;height:26px;border-radius:1px;background:var(--ghiaccio);
-  box-shadow:0 0 4px color-mix(in srgb, var(--ghiaccio) 35%, transparent);
-  animation:curblink 1.1s steps(1) infinite;
-}
-@keyframes curblink{0%,49%{opacity:1}50%,99%{opacity:.2}100%{opacity:1}}
-
-/* ── LINK EDITORIALE: sottolineatura che si disegna al passaggio ── */
-p a:not(.btn), li a:not(.btn){
-  text-decoration:none;
-  background-image:linear-gradient(var(--funzione),var(--funzione));
-  background-size:0% 1px;background-position:0 100%;background-repeat:no-repeat;
-  transition:background-size .32s var(--ease-viscoso);
-}
-p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
-body{background:var(--trama-fondo);background-attachment:fixed;color:var(--testo);font-family:var(--font-body);font-size:17px;line-height:1.7}
-a{color:var(--funzione)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--funzione);outline-offset:3px;border-radius:2px}
-.icona{width:20px;height:20px;flex:0 0 auto;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
-.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
-.wrap-prosa{max-width:calc(var(--misura-prosa) + 2*clamp(20px,4.5vw,56px));margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
-
-/* ── MATERIA DI FONDO: la struttura non finisce con la hero.
-   Un livello fisso dietro tutta la pagina, immobile mentre il contenuto scorre.
-   E un'immagine, non lo shader: tenere accesa la GPU per dieci schermate di scroll
-   si paga in batteria e fluidita, e le prestazioni sono una regola non negoziabile.
-   --materia governa quanto emerge: oltre .65 il testo secondario scende sotto 4.5:1,
-   quindi non si alza a occhio. ── */
-.materia{
-  position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:url('assets/materia.webp') center center / cover no-repeat;
-  opacity:var(--materia);
-}
-@media (max-width:760px){.materia{opacity:calc(var(--materia) * .8)}}
-
-/* ── NAV: filetto sottile, nessuna banda ── */
-nav.principale{
-  position:sticky;top:0;z-index:40;
-  display:flex;justify-content:space-between;align-items:center;
-  padding:24px clamp(20px,4.5vw,56px);
-  background:rgba(8,11,24,.985);
-  border-bottom:1px solid var(--bordo);
-  transition:background-color var(--durata-micro) var(--ease-viscoso),
-             border-color var(--durata-micro) var(--ease-viscoso),
-             padding var(--durata-micro) var(--ease-viscoso);
-}
-/* appena si lascia la cima la barra si stringe: resta consultabile senza rubare schermo */
-nav.principale.ancorata{padding-top:14px;padding-bottom:14px}
-/* sulla home galleggia sopra la hero: trasparente in cima, prende corpo quando si scende.
-   Fondo pieno e non sfocato: un blur permanente sopra il canvas si paga a ogni frame */
-nav.principale.sovrapposta{position:fixed;left:0;right:0;background:transparent;border-bottom-color:transparent}
-nav.principale.sovrapposta.ancorata{background:rgba(8,11,24,.985);border-bottom-color:var(--bordo)}
-nav.principale .logo{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:500;font-size:17px;color:var(--testo);text-decoration:none}
-nav.principale ul{display:flex;gap:clamp(16px,2.6vw,32px);list-style:none}
-nav.principale ul a{font-size:15px;font-weight:500;text-decoration:none;color:var(--mezzo);transition:color var(--durata-micro) var(--ease-viscoso)}
-nav.principale ul a:hover{color:var(--funzione)}
-/* Switch di lingua. Stesso modello della barra indice dell'about:
-   l'accento segnala dove sei, e uno stato attivo, non decorazione.
-   Sopra la hero la barra e trasparente e il fondo e la struttura animata:
-   li --mezzo scende a 2,5:1, quindi la lingua non attiva usa --ghiaccio. */
-nav.principale ul li.lingua{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em}
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{
-  /* area di tocco 24x24 minimo (WCAG 2.5.8): i margini negativi la allargano
-     senza spostare il resto della barra */
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:24px;min-height:24px;margin:-4px -2px;
-  font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;
-  border-bottom:2px solid transparent;
-  transition:color var(--durata-micro) var(--ease-viscoso),border-color var(--durata-micro) var(--ease-viscoso);
-}
-/* Space Mono esiste solo in 400 e 700: ereditare il 500 della barra farebbe
-   sintetizzare al browser un finto grassetto. */
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{font-weight:400}
-nav.principale ul li.lingua a{color:var(--ghiaccio);text-decoration:none}
-nav.principale ul li.lingua a:hover,nav.principale ul li.lingua a:focus-visible{color:var(--testo)}
-/* Deroga voluta rispetto alla barra indice, che colora anche il testo di --funzione:
-   qui la barra puo' stare sopra la hero, dove --funzione sul testo scende a 4,3:1.
-   L'accento resta sul filetto (elemento grafico, soglia 3:1), il testo va su --testo. */
-nav.principale ul li.lingua .attiva{color:var(--testo);border-bottom-color:var(--funzione)}
-nav.principale ul li.lingua .sep{color:color-mix(in srgb, var(--ghiaccio) 40%, transparent)}
-@media (prefers-reduced-motion: reduce){nav.principale ul li.lingua a{transition:none}}
-@media(max-width:760px){
-  nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{min-height:44px;margin:-4px -2px}
-}
-.sez-nota{color:var(--mezzo);font-size:14px;margin:-4px 0 30px}
-/* Switch di lingua. Stesso modello della barra indice dell'about:
-   l'accento segnala dove sei, e uno stato attivo, non decorazione.
-   Sopra la hero la barra e trasparente e il fondo e la struttura animata:
-   li --mezzo scende a 2,5:1, quindi la lingua non attiva usa --ghiaccio. */
-nav.principale ul li.lingua{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em}
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{
-  /* area di tocco 24x24 minimo (WCAG 2.5.8): i margini negativi la allargano
-     senza spostare il resto della barra */
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:24px;min-height:24px;margin:-4px -2px;
-  font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;
-  border-bottom:2px solid transparent;
-  transition:color var(--durata-micro) var(--ease-viscoso),border-color var(--durata-micro) var(--ease-viscoso);
-}
-nav.principale ul li.lingua a{color:var(--ghiaccio);text-decoration:none}
-nav.principale ul li.lingua a:hover,nav.principale ul li.lingua a:focus-visible{color:var(--testo)}
-/* Deroga voluta rispetto alla barra indice, che colora anche il testo di --funzione:
-   qui la barra puo' stare sopra la hero, dove --funzione sul testo scende a 4,3:1.
-   L'accento resta sul filetto (elemento grafico, soglia 3:1), il testo va su --testo. */
-nav.principale ul li.lingua .attiva{color:var(--testo);border-bottom-color:var(--funzione)}
-nav.principale ul li.lingua .sep{color:color-mix(in srgb, var(--ghiaccio) 40%, transparent)}
-@media (prefers-reduced-motion: reduce){nav.principale ul li.lingua a{transition:none}}
-@media(max-width:760px){
-  nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{min-height:44px;margin:-4px -2px}
-}
-.sez-nota{color:var(--mezzo);font-size:14px;margin:-4px 0 30px}
-nav.principale ul a[aria-current="page"]{color:var(--testo)}
-@media(max-width:760px){
-  /* sotto i 760px le voci non stanno su una riga con il logo: il logo prende la sua riga,
-     le voci vanno a capo per conto loro e ricevono l'area tattile che a 15px non avevano */
-  nav.principale{flex-direction:column;align-items:flex-start;gap:2px;padding:18px clamp(20px,4.5vw,56px)}
-  nav.principale .logo{white-space:nowrap}
-  nav.principale ul{flex-wrap:wrap;gap:0 20px}
-  nav.principale ul a{font-size:13px;padding:9px 0;display:inline-block}
-  /* a due righe su schermo stretto la barra pesa: da ancorata si stringe ancora */
-  nav.principale.ancorata{padding-top:9px;padding-bottom:7px}
-  nav.principale.ancorata .logo{font-size:15px}
-}
-@media (prefers-reduced-motion: reduce){nav.principale{transition:none}}
-
-/* ── HERO DI PAGINA: sul fondo continuo, separato solo da spazio ── */
-.cs-hero{padding:clamp(64px,8vw,100px) 0 clamp(52px,7vw,80px)}
-.cs-hero .meta{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:14px;margin-bottom:26px}
-.cs-hero h1{font-family:var(--font-display);font-weight:500;font-size:clamp(32px,4.6vw,60px);line-height:1.08;letter-spacing:-.014em;max-width:20ch;margin-bottom:20px;text-wrap:balance}
-.cs-hero .piano{font-size:19px;color:var(--mezzo);max-width:52ch}
-
-/* ── PROSA ── */
-section.blocco{padding:clamp(48px,6vw,72px) 0;border-top:1px solid var(--bordo)}
-.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:14px}
-.blocco h2{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,2.8vw,34px);letter-spacing:-.006em;margin-bottom:22px}
-.blocco h3{font-family:var(--font-display);font-weight:500;font-size:21px;margin:36px 0 14px}
-.blocco p{margin-bottom:1.15em;max-width:var(--misura-prosa)}
-.blocco p.secondario{color:var(--mezzo)}
-.blocco ul{margin:0 0 1.3em 0;padding:0;list-style:none;max-width:var(--misura-prosa)}
-.blocco ul li{position:relative;padding-left:26px;margin-bottom:14px}
-.blocco ul li::before{content:'';position:absolute;left:2px;top:.62em;width:10px;height:2px;background:var(--ghiaccio)}
-.blocco ul li strong{font-weight:500}
-.evidenza{
-  font-family:var(--font-display);font-weight:500;font-size:clamp(21px,2.4vw,29px);line-height:1.42;letter-spacing:-.004em;
-  color:var(--testo);max-width:var(--misura-prosa);
-  padding:6px 0 6px 26px;border-left:2px solid var(--bordo-forte);
-  margin:32px 0;
-}
-
-/* ── FIGURE: diagrammi astratti, pattern e strutture non interfacce reali ── */
-.figure{display:flex;flex-direction:column;gap:28px;max-width:600px;margin:8px 0 20px}
-.figura{
-  position:relative;border:1px solid var(--bordo);border-radius:22px 14px 20px 16px;overflow:hidden;
-  display:flex;flex-direction:column;gap:16px;padding:22px 22px 18px;
-  background:radial-gradient(130% 150% at 30% 24%, color-mix(in srgb, var(--ghiaccio) 8%, var(--abisso)) 0%, var(--superficie) 72%);
-}
-.figura svg{width:100%;height:auto;display:block}
-.figura figcaption{font-size:14px;color:var(--mezzo);max-width:38ch}
-
-/* ── PRINCIPIO (firma editoriale): voce display su filetto, niente corsivi ── */
-.banda-principio{padding:clamp(64px,9vw,104px) 0;border-top:1px solid var(--bordo)}
-.principio{position:relative;max-width:880px;margin:0 auto;padding:6px 0 6px 28px}
-.principio::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--bordo-forte);transform-origin:top;transition:transform .9s var(--ease-viscoso)}
-.reveal-on .principio::before{transform:scaleY(0)}
-.reveal-on .principio.lit::before{transform:scaleY(1)}
-@media (prefers-reduced-motion: reduce){.reveal-on .principio::before{transform:scaleY(1);transition:none}}
-.principio .p-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:16px}
-.principio blockquote{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,3.2vw,38px);line-height:1.4;letter-spacing:-.005em}
-.principio .p-fonte{display:flex;align-items:center;gap:14px;margin-top:26px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
-.principio .p-fonte::before{content:'';width:44px;height:1px;background:var(--bordo-forte)}
-
-/* ── CODA: prossimo case study ── */
-.coda{padding:clamp(60px,8vw,92px) 0;border-top:1px solid var(--bordo)}
-.coda .griglia{display:grid;grid-template-columns:1fr auto;gap:clamp(28px,5vw,64px);align-items:center}
-@media(max-width:760px){.coda .griglia{grid-template-columns:1fr}}
-.cs-card{
-  position:relative;display:block;border-radius:26px 16px 24px 18px;overflow:hidden;text-decoration:none;color:var(--testo);
-  background:var(--superficie);border:1px solid var(--bordo);max-width:420px;
-  transition:transform var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso);
-}
-.cs-card:hover{transform:translateY(-4px);border-color:var(--bordo-forte)}
-.cs-card .luce{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity var(--durata-micro) var(--ease-viscoso);
-  background:radial-gradient(280px circle at var(--lx,72%) var(--ly,22%), color-mix(in srgb, var(--ghiaccio) 14%, transparent) 0%, transparent 70%)}
-.cs-card:hover .luce{opacity:1}
-.cs-cover{height:150px;position:relative;overflow:hidden;
-  background:
-    radial-gradient(120px 96px at 74% 22%, var(--abisso) 32%, transparent 33%),
-    radial-gradient(80px 64px at 24% 78%, var(--abisso) 30%, transparent 31%),
-    radial-gradient(130% 150% at 30% 30%, color-mix(in srgb, var(--ghiaccio) 34%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 11%, var(--abisso)) 62%, var(--superficie) 100%);}
-.cs-body{padding:22px;position:relative;z-index:2}
-.cs-meta{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px}
-.cs-meta .gate{color:var(--funzione)}
-.cs-body h3{font-family:var(--font-display);font-weight:500;font-size:19px;line-height:1.3}
-.coda .oppure{font-size:15px;color:var(--mezzo)}
-.coda .oppure a{font-weight:500}
-
-/* footer: tre livelli distinti invece di righe accatastate.
-   identita (micro-metadata) > la riga sul work in progress (prosa) > il copyright, staccato da un filetto */
-footer{border-top:1px solid var(--bordo);padding:52px 0 40px}
-footer .identita{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);line-height:2}
-footer .identita strong{color:var(--testo);font-weight:400}
-footer .wip{text-transform:none;letter-spacing:0;font-size:14px;line-height:1.6;margin-top:22px;max-width:42ch;color:var(--mezzo)}
-footer .chiudi{
-  margin-top:34px;padding-top:20px;border-top:1px solid var(--bordo);
-  display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);
-}
-</style>
+<link rel="stylesheet" href="assets/stile.css">
+<link rel="stylesheet" href="assets/caso.css">
 </head>
 <body>
 
 <!-- Sprite iconografica: SOLO Lucide, stroke 2, currentColor -->
+<!-- ═══ ICONOGRAFIA · blocco identico su ogni pagina, vedi storybook ═══
+     Griglia 24, tratto 2, estremi e giunti tondi, nessun riempimento, colore
+     ereditato da currentColor. Quattro segni e basta: freccia (vai), giu'
+     (scendi nella pagina), esterno (esci dal sito), indietro (torna alla home).
+     Uno stato non e' un'icona: lo dice il nodo di .gate. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-freccia" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-giu" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+  <symbol id="i-esterno" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
   <symbol id="i-indietro" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
 </svg>
 
-<div class="materia" aria-hidden="true"></div>
 <nav class="principale" aria-label="Principale">
   <a class="logo" href="index.html"><svg class="icona" style="width:18px;height:18px" aria-hidden="true"><use href="#i-indietro"/></svg>Simone Ariotti</a>
   <ul>
@@ -346,6 +58,22 @@ footer .chiudi{
     <li><a href="index.html#contatti">Contatti</a></li>
     <li class="lingua"><span class="attiva" aria-current="true">IT</span><span class="sep" aria-hidden="true">/</span><a href="en/case-study-02.html" hreflang="en" lang="en" title="Read in English">EN</a></li>
   </ul>
+</nav>
+
+<nav class="indice" aria-label="Indice della pagina">
+  <ul>
+    <li><a href="#s01">Contesto</a></li>
+    <li><a href="#s02">Problema</a></li>
+    <li><a href="#s03">Ragionamento</a></li>
+    <li><a href="#s04">Decisione</a></li>
+    <li><a href="#s05">Risultato</a></li>
+  </ul>
+  <div class="casi">
+    <span class="eti" aria-hidden="true">Casi</span>
+    <a href="case-study-01.html" title="01 Design system">01<span class="fuori-vista">Design system</span></a>
+    <span class="voce" aria-current="page" title="02 Sistema agentico">02<span class="fuori-vista">Sistema agentico</span><span class="fuori-vista">: sei qui</span></span>
+    <span class="voce gate" data-stato="atteso" title="03 Conversation design: in scrittura">03<span class="fuori-vista">Conversation design</span><span class="fuori-vista">: in scrittura</span></span>
+  </div>
 </nav>
 
 <!-- ═══ HERO DI PAGINA ═══ -->
@@ -358,29 +86,34 @@ footer .chiudi{
 </header>
 
 <!-- ═══ 01 CONTESTO ═══ -->
-<section class="blocco">
+<section class="blocco" id="s01">
   <div class="wrap-prosa">
     <p class="eyebrow">01 · Contesto</p>
     <h2>Un'AI accanto, non un'AI a parte.</h2>
-    <p>La visione era portare l'intelligenza artificiale dentro i moduli di <a href="https://askme.it" target="_blank" rel="noopener">Askme</a>: un agente sempre di fianco e contestualizzato, che velocizza le operazioni che l'utente deve comunque svolgere sugli oggetti della suite. Prima non c'era un agente: c'erano funzionalità AI, ma nessun agente operativo che lavorasse accanto alle persone.</p>
-    <p>L'agente di Askme AI, che dentro la suite si chiama l'Agent, nasce per stare dentro i moduli e non accanto.</p>
-    <p>L'ho progettato da zero, ed è la parte del mio lavoro di cui vado più fiero: nessun rework, terreno vergine, la libertà di dare forma a un paradigma nuovo tenendo sempre i paletti dei vincoli reali.</p>
-    <p>Da zero non vuol dire da solo: il paradigma è mio, i limiti me li ha dati il confronto continuo con chi lo costruisce. Le due cose si sono corrette a vicenda per tutto il progetto.</p>
+    <p class="attacco">La visione era portare l'intelligenza artificiale dentro i moduli di <a href="https://askme.it" target="_blank" rel="noopener">Askme</a>: un agente sempre di fianco e contestualizzato, che velocizza le operazioni che l'utente deve comunque svolgere sugli oggetti della suite. Prima non c'era un agente: c'erano funzionalità AI, ma nessun agente operativo che lavorasse accanto alle persone.</p>
+    <ul class="carte">
+      <li><span class="c-eti">L'Agent</span><span class="c-testo">Dentro la suite si chiama così: nasce per stare dentro i moduli, non accanto.</span></li>
+      <li><span class="c-eti">Il mio ruolo</span><span class="c-testo">L'ho progettato da zero: nessun rework, terreno vergine, la libertà di dare forma a un paradigma nuovo tenendo sempre i paletti dei vincoli reali. È la parte del mio lavoro di cui vado più fiero.</span></li>
+      <li><span class="c-eti">Da zero non da solo</span><span class="c-testo">Il paradigma è mio, i limiti me li ha dati il confronto continuo con chi lo costruisce. Le due cose si sono corrette a vicenda per tutto il progetto.</span></li>
+    </ul>
   </div>
 </section>
 
 <!-- ═══ 02 IL PROBLEMA ═══ -->
-<section class="blocco">
+<section class="blocco" id="s02">
   <div class="wrap-prosa">
     <p class="eyebrow">02 · Il problema</p>
-    <h2>Conversare non basta per operare.</h2>
-    <p>Il linguaggio naturale è perfetto per aprire un dialogo con l'AI. Ma quando l'operazione si complica, il testo libero perde pezzi: informazioni ambigue, dati mancanti, nessuna garanzia su cosa succede dopo. Un agente che si limita a rispondere lascia l'utente a completare l'azione da un'altra parte.</p>
-    <p>Il salto da fare era questo: passare da un'AI che parla a un'AI che opera. Non un chatbot appiccicato al prodotto, ma un agente che raccoglie le informazioni e compie le azioni dentro la suite, senza far uscire l'utente dal flusso.</p>
+    <h2>Il linguaggio naturale apre il dialogo, poi l'azione si compie da un'altra parte.</h2>
+    <p class="attacco">Il linguaggio naturale è perfetto per aprire un dialogo con l'AI. Un agente che si limita a rispondere, però, lascia l'utente a completare l'azione da un'altra parte.</p>
+    <ul class="carte">
+      <li><span class="c-eti">Dove si rompe</span><span class="c-testo">Quando l'operazione si complica, il testo libero perde pezzi: informazioni ambigue, dati mancanti, nessuna garanzia su cosa succede dopo.</span></li>
+      <li><span class="c-eti">Il salto da fare</span><span class="c-testo">Passare da un'AI che parla a un'AI che opera. Non un chatbot appiccicato al prodotto, ma un agente che raccoglie le informazioni e compie le azioni dentro la suite, senza far uscire l'utente dal flusso.</span></li>
+    </ul>
   </div>
 </section>
 
 <!-- ═══ 03 IL RAGIONAMENTO ═══ -->
-<section class="blocco">
+<section class="blocco" id="s03">
   <div class="wrap-prosa">
     <p class="eyebrow">03 · Il ragionamento</p>
     <h2>Linguaggio naturale per parlare, componenti per operare.</h2>
@@ -397,7 +130,7 @@ footer .chiudi{
 </section>
 
 <!-- ═══ 04 LAVORO SELEZIONATO ═══ -->
-<section class="blocco">
+<section class="blocco" id="s04">
   <div class="wrap-prosa">
     <p class="eyebrow">04 · La forma della decisione</p>
     <h2>La struttura, non la chat.</h2>
@@ -485,7 +218,7 @@ footer .chiudi{
 </section>
 
 <!-- ═══ 05 RISULTATO E PRINCIPI ═══ -->
-<section class="blocco">
+<section class="blocco" id="s05">
   <div class="wrap-prosa">
     <p class="eyebrow">05 · Risultato e principi</p>
     <h2>Meno tempo per operare, l'AI dentro il lavoro.</h2>
@@ -536,139 +269,6 @@ footer .chiudi{
   </div>
 </footer>
 
-<script>
-/* la luce del reticolo segue il puntatore (solo pointer fine) */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.querySelectorAll('[data-luce]').forEach(el=>{
-    el.addEventListener('pointermove',e=>{
-      const r=el.getBoundingClientRect();
-      el.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%');
-      el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
-    },{passive:true});
-  });
-})();
-
-/* ancore al caricamento: con scroll-behavior:smooth sulla radice il salto iniziale
-   diventa un'animazione lunga che il browser puo' annullare, e la pagina resta in cima.
-   Lo stato sicuro e' arrivarci subito: si disattiva il morbido per l'istante del salto,
-   si ripete dopo che il layout si e' assestato (font, altezze calcolate), e si riattiva. */
-(function(){
-  if(!location.hash) return;
-  var radice=document.documentElement;
-  function vai(){
-    var t=document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    if(!t) return;
-    var prima=radice.style.scrollBehavior;
-    radice.style.scrollBehavior='auto';
-    t.scrollIntoView();
-    requestAnimationFrame(function(){ radice.style.scrollBehavior=prima; });
-  }
-  if(history.scrollRestoration) history.scrollRestoration='manual';
-  addEventListener('load', function(){ vai(); setTimeout(vai,150); setTimeout(vai,600); });
-})();
-
-/* motion: ogni sezione entra come composizione di gesti tipizzati, in cascata. Degrada a statico con reduced-motion */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.documentElement.classList.add('reveal-on');
-  const groups=document.querySelectorAll('.wrap-prosa, .banda-principio .principio, .coda .griglia');
-  function roleOf(el){
-    if(el.matches('.eyebrow,.p-label,.p-fonte,.meta')) return 'm-eyebrow';
-    if(el.matches('h1,h2,h3')) return 'm-title';
-    if(el.matches('blockquote,.evidenza')) return 'm-quote';
-    return 'm-text';
-  }
-  function unitsOf(g){
-    const out=[];
-    Array.from(g.children).forEach(c=>{
-      if(c.matches('ul,ol')) c.querySelectorAll(':scope > li').forEach(li=>out.push([li,'m-li']));
-      else if(c.matches('.figure')) c.querySelectorAll(':scope > figure').forEach(f=>out.push([f,'m-figure']));
-      else out.push([c,roleOf(c)]);
-    });
-    return out;
-  }
-  const io=new IntersectionObserver((entries,obs)=>{
-    entries.forEach(e=>{
-      if(!e.isIntersecting) return;
-      (e.target.__units||[]).forEach(([el,role],i)=>{
-        const d=Math.min(i*140,720);
-        el.style.transitionDelay=d+'ms';
-        requestAnimationFrame(()=>el.classList.add('in'));
-        setTimeout(()=>{ el.style.transitionDelay=''; el.classList.remove('m',role,'in'); },d+1400);
-      });
-      if(e.target.matches('.principio')) e.target.classList.add('lit');
-      obs.unobserve(e.target);
-    });
-  },{threshold:0.1, rootMargin:'0px 0px -6% 0px'});
-  /* Un gruppo gia' dentro l'area visibile all'avvio non si nasconde affatto:
-     l'osservatore notifica solo i cambiamenti, quindi se la pagina non si muove piu'
-     quel testo resterebbe invisibile per sempre. Lo stato di partenza sicuro e' visibile. */
-  const soglia=innerHeight*0.92;
-  groups.forEach(g=>{
-    if(g.getBoundingClientRect().top < soglia) return;
-    const units=unitsOf(g);
-    units.forEach(([el,role])=>el.classList.add('m',role));
-    g.__units=units;
-    io.observe(g);
-  });
-})();
-
-/* cursore-lampada: stato per oggetto, solo puntatore fine, statico con reduced-motion */
-(function(){
-  if(!window.matchMedia('(pointer:fine)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const cur=document.createElement('div');
-  cur.id='cursore'; cur.setAttribute('aria-hidden','true');
-  document.body.appendChild(cur);
-  document.documentElement.classList.add('cursor-on');
-  let tx=innerWidth/2, ty=innerHeight/2, cx=tx, cy=ty;
-  const intSel='a,button,.btn,.cs-card,[data-luce],input,textarea,label,[role="button"]';
-  const txtSel='h1,h2,h3,h4,h5,p,li,blockquote,figcaption';
-  addEventListener('pointermove',e=>{ tx=e.clientX; ty=e.clientY; cur.style.opacity=1; },{passive:true});
-  addEventListener('pointerover',e=>{
-    const t=e.target;
-    if(t.closest && t.closest(intSel)){ cur.classList.add('is-int'); cur.classList.remove('is-text'); }
-    else if(t.closest && t.closest(txtSel)){ cur.classList.add('is-text'); cur.classList.remove('is-int'); }
-    else { cur.classList.remove('is-int','is-text'); }
-  },{passive:true});
-  document.addEventListener('mouseleave',()=>{ cur.style.opacity=0; });
-  (function loop(){
-    cx+=(tx-cx)*0.3; cy+=(ty-cy)*0.3;
-    cur.style.transform='translate('+cx+'px,'+cy+'px) translate(-50%,-50%)';
-    requestAnimationFrame(loop);
-  })();
-})();
-
-/* magnetismo: i bottoni si muovono verso il cursore. Solo puntatore fine, statico con reduced-motion */
-(function(){
-  if(!window.matchMedia('(pointer:fine)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.querySelectorAll('.btn').forEach(el=>{
-    el.addEventListener('pointermove',e=>{
-      const r=el.getBoundingClientRect();
-      const mx=Math.max(-2,Math.min(2,(e.clientX-(r.left+r.width/2))*0.04));
-      const my=Math.max(-2,Math.min(2,(e.clientY-(r.top+r.height/2))*0.045));
-      el.style.transform='translate('+mx+'px,'+my+'px)';
-      el.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%');
-      el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
-    });
-    el.addEventListener('pointerleave',()=>{ el.style.transform=''; });
-  });
-})();
-</script>
-<script>
-/* anno del copyright scritto dal browser: il sito non invecchia da solo */
-document.querySelectorAll('[data-anno]').forEach(e=>{e.textContent=new Date().getFullYear();});
-/* la barra si stringe (e sulla home prende corpo) appena si lascia la cima: sempre visibile, mai invadente */
-(function(){
-  const nav=document.querySelector('nav.principale');
-  if(!nav) return;
-  let atteso=false;
-  function stato(){ atteso=false; nav.classList.toggle('ancorata', scrollY>24); }
-  addEventListener('scroll',()=>{ if(!atteso){ atteso=true; requestAnimationFrame(stato); } },{passive:true});
-  stato();
-})();
-</script>
+<script src="assets/sito.js"></script>
 </body>
 </html>

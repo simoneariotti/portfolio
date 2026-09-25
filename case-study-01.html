@@ -31,384 +31,24 @@
 <meta name="twitter:title" content="Askme Design System: da zero a AI-ready · Simone Ariotti">
 <meta name="twitter:description" content="Costruire da zero il design system di una suite B2B con tre prodotti, e renderlo leggibile anche a un'AI: token, componenti e regole prima degli artefatti.">
 <meta name="twitter:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
-<style>
-/* Font ospitati qui, nessuna terza parte. Solo i pesi che il sito usa davvero,
-   verificati misurando il font-weight calcolato di ogni elemento nel browser:
-   Clash Display solo 500, General Sans 400 e 500, Space Mono 400.
-   Aggiungerne uno = copiare il .woff2 e ripetere il blocco.
-   Licenze in assets/font/, ITF Free Font License per i due Fontshare. */
-@font-face{
-  font-family:'Clash Display';font-style:normal;font-weight:500;font-display:swap;
-  src:url('assets/font/clash-display-500.woff2') format('woff2');
-}
-@font-face{
-  font-family:'General Sans';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/general-sans-400.woff2') format('woff2');
-}
-@font-face{
-  font-family:'General Sans';font-style:normal;font-weight:500;font-display:swap;
-  src:url('assets/font/general-sans-500.woff2') format('woff2');
-}
-/* Space Mono ospitato qui, non su un CDN esterno: senza terze parti
-   nessun IP dei visitatori esce dal sito. SIL Open Font License 1.1,
-   licenza in assets/font/LICENSE-space-mono.txt */
-@font-face{
-  font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/space-mono-400-latin.woff2') format('woff2');
-  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-@font-face{
-  font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/space-mono-400-latin-ext.woff2') format('woff2');
-  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-
-:root{
-  /* ── Palette RETICOLO: un solo tema, scuro ── */
-  --abisso:#080B18; --ghiaccio:#C4CEF5; --testo:#EAEDFA; --mezzo:#7E86AD; --funzione:#A9B4F5;
-  --superficie:color-mix(in srgb, var(--ghiaccio) 7%, var(--abisso));
-  --bordo:color-mix(in srgb, var(--testo) 14%, transparent);
-  --bordo-forte:color-mix(in srgb, var(--testo) 28%, transparent);
-  --trama-fondo:
-    radial-gradient(125% 85% at 86% -12%, #141A3C 0%, rgba(20,26,60,0) 50%),
-    radial-gradient(115% 95% at -14% 114%, #0E1330 0%, rgba(14,19,48,0) 48%),
-    var(--abisso);
-  --font-display:'Clash Display','Segoe UI',system-ui,sans-serif;
-  --font-body:'General Sans',system-ui,sans-serif;
-  --font-mono:'Space Mono',ui-monospace,monospace;
-  --ease-viscoso:cubic-bezier(0.22,1,0.36,1);
-  --durata-micro:220ms;
-  --misura-prosa:70ch;
-  --materia:.65;   /* quanto emerge la materia di fondo. Verificato: oltre .65 il testo secondario scende sotto 4.5:1 */
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-/* la barra resta in cima: gli ancoraggi devono fermarsi sotto, non sparirci dietro */
-:target,section[id],header[id],div[id]{scroll-margin-top:96px}
-@media(max-width:760px){:target,section[id],header[id],div[id]{scroll-margin-top:110px}}
-@media (prefers-reduced-motion: reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation:none!important;transition-duration:1ms!important}
-}
-/* ── MOTION: vocabolario di gesti. Ogni tipo di elemento ha il suo, ma tutti condividono easing e famiglia di tempi, così l'ingresso di una sezione e un'animazione composita e armonica ── */
-.m{transition:opacity var(--d,560ms) var(--ease-viscoso), transform var(--d,560ms) var(--ease-viscoso)}
-.reveal-on .m{opacity:0;transform:var(--from,translateY(14px))}
-.reveal-on .m.in{opacity:1;transform:none}
-.m-eyebrow{--from:translateX(-14px);--d:660ms}   /* occhiello: scivola da sinistra */
-.m-title{--from:translateY(26px);--d:1050ms}     /* titolo: sale lento, gesto ancora */
-.m-text{--from:translateY(16px);--d:840ms}       /* paragrafo: sale corto */
-.m-li{--from:translateY(12px);--d:720ms}         /* voce di lista: sale minima, in cascata */
-.m-figure{--from:translateY(18px) scale(.955);--d:1150ms} /* diagramma: entra con scala, e a parte */
-.m-quote{--from:translateY(20px);--d:1000ms}     /* citazione: sale ampio */
-@media (prefers-reduced-motion: reduce){.reveal-on .m{opacity:1;transform:none;transition:none}}
-
-/* ── CURSORE: la lampada sulla struttura. Cambia forma secondo l'oggetto sotto ── */
-.cursor-on, .cursor-on *{cursor:none}
-#cursore{
-  position:fixed;left:0;top:0;z-index:9999;pointer-events:none;opacity:0;
-  width:12px;height:12px;border-radius:50%;
-  background:var(--funzione);
-  box-shadow:0 0 6px 0 color-mix(in srgb, var(--funzione) 24%, transparent);
-  transition:width .28s var(--ease-viscoso), height .28s var(--ease-viscoso),
-    border-radius .28s var(--ease-viscoso), background .28s var(--ease-viscoso),
-    border-color .28s var(--ease-viscoso), opacity .3s var(--ease-viscoso);
-  will-change:transform;
-}
-#cursore.is-int{
-  width:38px;height:38px;background:transparent;
-  border:1.5px solid var(--funzione);border-radius:50%;
-  box-shadow:0 0 10px 0 color-mix(in srgb, var(--funzione) 16%, transparent);
-}
-#cursore.is-text{
-  width:2px;height:26px;border-radius:1px;background:var(--ghiaccio);
-  box-shadow:0 0 4px color-mix(in srgb, var(--ghiaccio) 35%, transparent);
-  animation:curblink 1.1s steps(1) infinite;
-}
-@keyframes curblink{0%,49%{opacity:1}50%,99%{opacity:.2}100%{opacity:1}}
-
-/* ── LINK EDITORIALE: sottolineatura che si disegna al passaggio ── */
-p a:not(.btn), li a:not(.btn){
-  text-decoration:none;
-  background-image:linear-gradient(var(--funzione),var(--funzione));
-  background-size:0% 1px;background-position:0 100%;background-repeat:no-repeat;
-  transition:background-size .32s var(--ease-viscoso);
-}
-p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
-body{background:var(--trama-fondo);background-attachment:fixed;color:var(--testo);font-family:var(--font-body);font-size:17px;line-height:1.7}
-a{color:var(--funzione)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--funzione);outline-offset:3px;border-radius:2px}
-.icona{width:20px;height:20px;flex:0 0 auto;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
-.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
-.wrap-prosa{max-width:calc(var(--misura-prosa) + 2*clamp(20px,4.5vw,56px));margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
-
-/* ── MATERIA DI FONDO: la struttura non finisce con la hero.
-   Un livello fisso dietro tutta la pagina, immobile mentre il contenuto scorre.
-   E un'immagine, non lo shader: tenere accesa la GPU per dieci schermate di scroll
-   si paga in batteria e fluidita, e le prestazioni sono una regola non negoziabile.
-   --materia governa quanto emerge: oltre .65 il testo secondario scende sotto 4.5:1,
-   quindi non si alza a occhio. ── */
-.materia{
-  position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:url('assets/materia.webp') center center / cover no-repeat;
-  opacity:var(--materia);
-}
-@media (max-width:760px){.materia{opacity:calc(var(--materia) * .8)}}
-
-/* ── NAV: filetto sottile, nessuna banda ── */
-nav.principale{
-  position:sticky;top:0;z-index:40;
-  display:flex;justify-content:space-between;align-items:center;
-  padding:24px clamp(20px,4.5vw,56px);
-  background:rgba(8,11,24,.985);
-  border-bottom:1px solid var(--bordo);
-  transition:background-color var(--durata-micro) var(--ease-viscoso),
-             border-color var(--durata-micro) var(--ease-viscoso),
-             padding var(--durata-micro) var(--ease-viscoso);
-}
-/* appena si lascia la cima la barra si stringe: resta consultabile senza rubare schermo */
-nav.principale.ancorata{padding-top:14px;padding-bottom:14px}
-/* sulla home galleggia sopra la hero: trasparente in cima, prende corpo quando si scende.
-   Fondo pieno e non sfocato: un blur permanente sopra il canvas si paga a ogni frame */
-nav.principale.sovrapposta{position:fixed;left:0;right:0;background:transparent;border-bottom-color:transparent}
-nav.principale.sovrapposta.ancorata{background:rgba(8,11,24,.985);border-bottom-color:var(--bordo)}
-nav.principale .logo{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:500;font-size:17px;color:var(--testo);text-decoration:none}
-nav.principale ul{display:flex;gap:clamp(16px,2.6vw,32px);list-style:none}
-nav.principale ul a{font-size:15px;font-weight:500;text-decoration:none;color:var(--mezzo);transition:color var(--durata-micro) var(--ease-viscoso)}
-nav.principale ul a:hover{color:var(--funzione)}
-/* Switch di lingua. Stesso modello della barra indice dell'about:
-   l'accento segnala dove sei, e uno stato attivo, non decorazione.
-   Sopra la hero la barra e trasparente e il fondo e la struttura animata:
-   li --mezzo scende a 2,5:1, quindi la lingua non attiva usa --ghiaccio. */
-nav.principale ul li.lingua{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em}
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{
-  /* area di tocco 24x24 minimo (WCAG 2.5.8): i margini negativi la allargano
-     senza spostare il resto della barra */
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:24px;min-height:24px;margin:-4px -2px;
-  font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;
-  border-bottom:2px solid transparent;
-  transition:color var(--durata-micro) var(--ease-viscoso),border-color var(--durata-micro) var(--ease-viscoso);
-}
-/* Space Mono esiste solo in 400 e 700: ereditare il 500 della barra farebbe
-   sintetizzare al browser un finto grassetto. */
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{font-weight:400}
-nav.principale ul li.lingua a{color:var(--ghiaccio);text-decoration:none}
-nav.principale ul li.lingua a:hover,nav.principale ul li.lingua a:focus-visible{color:var(--testo)}
-/* Deroga voluta rispetto alla barra indice, che colora anche il testo di --funzione:
-   qui la barra puo' stare sopra la hero, dove --funzione sul testo scende a 4,3:1.
-   L'accento resta sul filetto (elemento grafico, soglia 3:1), il testo va su --testo. */
-nav.principale ul li.lingua .attiva{color:var(--testo);border-bottom-color:var(--funzione)}
-nav.principale ul li.lingua .sep{color:color-mix(in srgb, var(--ghiaccio) 40%, transparent)}
-@media (prefers-reduced-motion: reduce){nav.principale ul li.lingua a{transition:none}}
-@media(max-width:760px){
-  nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{min-height:44px;margin:-4px -2px}
-}
-.sez-nota{color:var(--mezzo);font-size:14px;margin:-4px 0 30px}
-/* Switch di lingua. Stesso modello della barra indice dell'about:
-   l'accento segnala dove sei, e uno stato attivo, non decorazione.
-   Sopra la hero la barra e trasparente e il fondo e la struttura animata:
-   li --mezzo scende a 2,5:1, quindi la lingua non attiva usa --ghiaccio. */
-nav.principale ul li.lingua{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em}
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{
-  /* area di tocco 24x24 minimo (WCAG 2.5.8): i margini negativi la allargano
-     senza spostare il resto della barra */
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:24px;min-height:24px;margin:-4px -2px;
-  font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;
-  border-bottom:2px solid transparent;
-  transition:color var(--durata-micro) var(--ease-viscoso),border-color var(--durata-micro) var(--ease-viscoso);
-}
-nav.principale ul li.lingua a{color:var(--ghiaccio);text-decoration:none}
-nav.principale ul li.lingua a:hover,nav.principale ul li.lingua a:focus-visible{color:var(--testo)}
-/* Deroga voluta rispetto alla barra indice, che colora anche il testo di --funzione:
-   qui la barra puo' stare sopra la hero, dove --funzione sul testo scende a 4,3:1.
-   L'accento resta sul filetto (elemento grafico, soglia 3:1), il testo va su --testo. */
-nav.principale ul li.lingua .attiva{color:var(--testo);border-bottom-color:var(--funzione)}
-nav.principale ul li.lingua .sep{color:color-mix(in srgb, var(--ghiaccio) 40%, transparent)}
-@media (prefers-reduced-motion: reduce){nav.principale ul li.lingua a{transition:none}}
-@media(max-width:760px){
-  nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{min-height:44px;margin:-4px -2px}
-}
-.sez-nota{color:var(--mezzo);font-size:14px;margin:-4px 0 30px}
-nav.principale ul a[aria-current="page"]{color:var(--testo)}
-@media(max-width:760px){
-  /* sotto i 760px le voci non stanno su una riga con il logo: il logo prende la sua riga,
-     le voci vanno a capo per conto loro e ricevono l'area tattile che a 15px non avevano */
-  nav.principale{flex-direction:column;align-items:flex-start;gap:2px;padding:18px clamp(20px,4.5vw,56px)}
-  nav.principale .logo{white-space:nowrap}
-  nav.principale ul{flex-wrap:wrap;gap:0 20px}
-  nav.principale ul a{font-size:13px;padding:9px 0;display:inline-block}
-  /* a due righe su schermo stretto la barra pesa: da ancorata si stringe ancora */
-  nav.principale.ancorata{padding-top:9px;padding-bottom:7px}
-  nav.principale.ancorata .logo{font-size:15px}
-}
-@media (prefers-reduced-motion: reduce){nav.principale{transition:none}}
-
-/* ── HERO DI PAGINA: sul fondo continuo, separato solo da spazio ── */
-.cs-hero{padding:clamp(64px,8vw,100px) 0 clamp(52px,7vw,80px)}
-.cs-hero .meta{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:14px;margin-bottom:26px}
-.cs-hero h1{font-family:var(--font-display);font-weight:500;font-size:clamp(32px,4.6vw,60px);line-height:1.08;letter-spacing:-.014em;max-width:20ch;margin-bottom:20px;text-wrap:balance}
-.cs-hero .piano{font-size:19px;color:var(--mezzo);max-width:52ch}
-
-/* ── PROSA ── */
-section.blocco{padding:clamp(48px,6vw,72px) 0;border-top:1px solid var(--bordo)}
-.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:14px}
-.blocco h2{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,2.8vw,34px);letter-spacing:-.006em;margin-bottom:22px}
-.blocco h3{font-family:var(--font-display);font-weight:500;font-size:21px;margin:36px 0 14px}
-.blocco p{margin-bottom:1.15em;max-width:var(--misura-prosa)}
-.blocco p.secondario{color:var(--mezzo)}
-.blocco ul{margin:0 0 1.3em 0;padding:0;list-style:none;max-width:var(--misura-prosa)}
-.blocco ul li{position:relative;padding-left:26px;margin-bottom:14px}
-.blocco ul li::before{content:'';position:absolute;left:2px;top:.62em;width:10px;height:2px;background:var(--ghiaccio)}
-.blocco ul li strong{font-weight:500}
-.evidenza{
-  font-family:var(--font-display);font-weight:500;font-size:clamp(21px,2.4vw,29px);line-height:1.42;letter-spacing:-.004em;
-  color:var(--testo);max-width:var(--misura-prosa);
-  padding:6px 0 6px 26px;border-left:2px solid var(--bordo-forte);
-  margin:32px 0;
-}
-
-/* ── FIGURE: diagrammi astratti, pattern e strutture non interfacce reali ── */
-/* ── QUADRO DI MISURA e LETTURE ────────────────────────────────────────────
-   Non sono card: sono una struttura appesa. Un filetto orizzontale comune, e
-   da ogni giunzione scende un montante con il suo nodo, la stessa grammatica
-   del filetto verticale del blocco "Principio emerso". Entrambi i blocchi sono
-   liste: il sistema di motion le riconosce gia' come ul>li e le fa entrare in
-   cascata, quindi non serve una riga di JS in piu'.
-   Nessuna barra di riempimento sulle letture: quattro indicatori su cinque
-   migliorano salendo e uno scendendo, quindi una barra unica mentirebbe. */
-/* ── APPROFONDIMENTO: <details> nativo, zero JS ────────────────────────────
-   Il segno "piu'" e' due filetti da 1px, non un'icona presa altrove: aprendo,
-   il tratto verticale si ritrae e resta l'orizzontale. Stessa materia del
-   reticolo. <details>/<summary> danno gratis tastiera, ruolo e stato
-   annunciato, e senza CSS il contenuto resta comunque leggibile.
-   Qui --funzione e' legittimo: e' un comando, non decorazione. */
-.approfondimento{border-top:1px solid var(--bordo);border-bottom:1px solid var(--bordo);
-  margin:24px 0 28px;max-width:var(--misura-prosa)}
-.approfondimento>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;
-  padding:15px 2px;color:var(--ghiaccio);font-size:15.5px;
-  transition:color var(--durata-micro) var(--ease-viscoso)}
-.approfondimento>summary::-webkit-details-marker{display:none}
-.approfondimento>summary:hover{color:var(--testo)}
-.approfondimento>summary:focus-visible{outline:2px solid var(--funzione);outline-offset:4px;color:var(--testo)}
-.approfondimento .segno{position:relative;flex:0 0 11px;width:11px;height:11px}
-.approfondimento .segno::before,.approfondimento .segno::after{content:'';position:absolute;
-  background:var(--funzione);transition:transform .34s var(--ease-viscoso),opacity .34s var(--ease-viscoso)}
-.approfondimento .segno::before{left:0;top:5px;width:11px;height:1px}
-.approfondimento .segno::after{left:5px;top:0;width:1px;height:11px}
-.approfondimento[open] .segno::after{transform:scaleY(0);opacity:0}
-/* il corpo rientra sotto l'etichetta, non sotto il segno: la colonna del segno
-   resta un canale vuoto e l'approfondimento si legge come un oggetto solo */
-.approfondimento .corpo{padding:10px 0 4px 25px}
-.approfondimento .corpo p{margin:0 0 14px;font-size:15px;line-height:1.62;color:var(--ghiaccio);max-width:none}
-.approfondimento .corpo p:last-child{margin-bottom:0}
-@media(max-width:600px){.approfondimento .corpo{padding-left:0}}
-.approfondimento[open] .corpo{animation:apre .42s var(--ease-viscoso) both}
-@keyframes apre{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion: reduce){
-  .approfondimento .segno::before,.approfondimento .segno::after{transition:none}
-  .approfondimento[open] .corpo{animation:none}
-}
-
-.misura-quando{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mezzo);margin:0 0 14px}
-.quadro{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
-  gap:0 26px;margin:34px 0 14px;max-width:var(--misura-prosa)}
-/* il filetto sta sulla cella, non sul contenitore: cosi' ogni riga della griglia
-   ha il suo, e i nodi non restano appesi nel vuoto quando le colonne vanno a capo */
-.quadro .misura{position:relative;padding:26px 0 20px;border-top:1px solid var(--bordo-forte)}
-.quadro .misura::before{content:'';position:absolute;left:0;top:0;width:1px;height:17px;background:var(--bordo-forte)}
-.quadro .misura::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
-  background:var(--ghiaccio);transform:rotate(45deg)}
-.quadro .val{display:block;font-family:var(--font-display);font-weight:500;
-  font-size:clamp(30px,4.2vw,44px);line-height:1;letter-spacing:-.022em;color:var(--testo)}
-.quadro .eti{display:block;margin-top:10px;font-size:14.5px;line-height:1.45;color:var(--ghiaccio)}
-
-.letture{list-style:none;padding:0;margin:30px 0 26px;max-width:var(--misura-prosa);border-top:1px solid var(--bordo)}
-.letture li{position:relative;display:grid;grid-template-columns:minmax(34px,auto) 1fr;
-  gap:5px 22px;align-items:baseline;padding:19px 0 18px;border-bottom:1px solid var(--bordo)}
-/* stessa giunzione del quadro: il nodo da solo galleggiava e sembrava un apostrofo,
-   con il montante che scende diventa una struttura appesa al filetto */
-.letture li::before{content:'';position:absolute;left:0;top:0;width:1px;height:15px;background:var(--bordo-forte)}
-.letture li::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
-  background:var(--ghiaccio);transform:rotate(45deg)}
-/* l'ordinale, non il valore: i valori misurati riguardano il prodotto di qualcun
-   altro e restano fuori dal sito. Space Mono solo qui, che e' micro-metadata. */
-.letture .ord{font-family:var(--font-mono);font-weight:400;font-size:12px;letter-spacing:.1em;color:var(--mezzo)}
-.letture .nome{font-family:var(--font-display);font-weight:500;font-size:clamp(17px,1.5vw,20px);line-height:1.35;letter-spacing:-.004em;color:var(--testo)}
-.letture .dice{grid-column:2;font-size:14.5px;line-height:1.55;color:var(--ghiaccio)}
-@media(max-width:600px){
-  .letture li{grid-template-columns:1fr;gap:7px}
-  .letture .dice{grid-column:1}
-}
-
-.figure{display:flex;flex-direction:column;gap:28px;max-width:600px;margin:8px 0 20px}
-.figura{
-  position:relative;border:1px solid var(--bordo);border-radius:22px 14px 20px 16px;overflow:hidden;
-  display:flex;flex-direction:column;gap:16px;padding:22px 22px 18px;
-  background:radial-gradient(130% 150% at 30% 24%, color-mix(in srgb, var(--ghiaccio) 8%, var(--abisso)) 0%, var(--superficie) 72%);
-}
-.figura svg{width:100%;height:auto;display:block}
-.figura figcaption{font-size:14px;color:var(--mezzo);max-width:38ch}
-
-/* ── PRINCIPIO (firma editoriale): voce display su filetto, niente corsivi ── */
-.banda-principio{padding:clamp(64px,9vw,104px) 0;border-top:1px solid var(--bordo)}
-.principio{position:relative;max-width:880px;margin:0 auto;padding:6px 0 6px 28px}
-.principio::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--bordo-forte);transform-origin:top;transition:transform .9s var(--ease-viscoso)}
-.reveal-on .principio::before{transform:scaleY(0)}
-.reveal-on .principio.lit::before{transform:scaleY(1)}
-@media (prefers-reduced-motion: reduce){.reveal-on .principio::before{transform:scaleY(1);transition:none}}
-.principio .p-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:16px}
-.principio blockquote{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,3.2vw,38px);line-height:1.4;letter-spacing:-.005em}
-.principio .p-fonte{display:flex;align-items:center;gap:14px;margin-top:26px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
-.principio .p-fonte::before{content:'';width:44px;height:1px;background:var(--bordo-forte)}
-
-/* ── CODA: prossimo case study ── */
-.coda{padding:clamp(60px,8vw,92px) 0;border-top:1px solid var(--bordo)}
-.coda .griglia{display:grid;grid-template-columns:1fr auto;gap:clamp(28px,5vw,64px);align-items:center}
-@media(max-width:760px){.coda .griglia{grid-template-columns:1fr}}
-.cs-card{
-  position:relative;display:block;border-radius:26px 16px 24px 18px;overflow:hidden;text-decoration:none;color:var(--testo);
-  background:var(--superficie);border:1px solid var(--bordo);max-width:420px;
-  transition:transform var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso);
-}
-.cs-card:hover{transform:translateY(-4px);border-color:var(--bordo-forte)}
-.cs-card .luce{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity var(--durata-micro) var(--ease-viscoso);
-  background:radial-gradient(280px circle at var(--lx,72%) var(--ly,22%), color-mix(in srgb, var(--ghiaccio) 14%, transparent) 0%, transparent 70%)}
-.cs-card:hover .luce{opacity:1}
-.cs-cover{height:150px;position:relative;overflow:hidden;
-  background:
-    radial-gradient(120px 96px at 74% 22%, var(--abisso) 32%, transparent 33%),
-    radial-gradient(80px 64px at 24% 78%, var(--abisso) 30%, transparent 31%),
-    radial-gradient(130% 150% at 30% 30%, color-mix(in srgb, var(--ghiaccio) 34%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 11%, var(--abisso)) 62%, var(--superficie) 100%);}
-.cs-body{padding:22px;position:relative;z-index:2}
-.cs-meta{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px}
-.cs-meta .gate{color:var(--funzione)}
-.cs-body h3{font-family:var(--font-display);font-weight:500;font-size:19px;line-height:1.3}
-.coda .oppure{font-size:15px;color:var(--mezzo)}
-.coda .oppure a{font-weight:500}
-
-/* footer: tre livelli distinti invece di righe accatastate.
-   identita (micro-metadata) > la riga sul work in progress (prosa) > il copyright, staccato da un filetto */
-footer{border-top:1px solid var(--bordo);padding:52px 0 40px}
-footer .identita{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);line-height:2}
-footer .identita strong{color:var(--testo);font-weight:400}
-footer .wip{text-transform:none;letter-spacing:0;font-size:14px;line-height:1.6;margin-top:22px;max-width:42ch;color:var(--mezzo)}
-footer .chiudi{
-  margin-top:34px;padding-top:20px;border-top:1px solid var(--bordo);
-  display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);
-}
-</style>
+<link rel="stylesheet" href="assets/stile.css">
+<link rel="stylesheet" href="assets/caso.css">
 </head>
 <body>
 
 <!-- Sprite iconografica: SOLO Lucide, stroke 2, currentColor -->
+<!-- ═══ ICONOGRAFIA · blocco identico su ogni pagina, vedi storybook ═══
+     Griglia 24, tratto 2, estremi e giunti tondi, nessun riempimento, colore
+     ereditato da currentColor. Quattro segni e basta: freccia (vai), giu'
+     (scendi nella pagina), esterno (esci dal sito), indietro (torna alla home).
+     Uno stato non e' un'icona: lo dice il nodo di .gate. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-freccia" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-giu" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+  <symbol id="i-esterno" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
   <symbol id="i-indietro" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
 </svg>
 
-<div class="materia" aria-hidden="true"></div>
 <nav class="principale" aria-label="Principale">
   <a class="logo" href="index.html"><svg class="icona" style="width:18px;height:18px" aria-hidden="true"><use href="#i-indietro"/></svg>Simone Ariotti</a>
   <ul>
@@ -418,6 +58,22 @@ footer .chiudi{
     <li><a href="index.html#contatti">Contatti</a></li>
     <li class="lingua"><span class="attiva" aria-current="true">IT</span><span class="sep" aria-hidden="true">/</span><a href="en/case-study-01.html" hreflang="en" lang="en" title="Read in English">EN</a></li>
   </ul>
+</nav>
+
+<nav class="indice" aria-label="Indice della pagina">
+  <ul>
+    <li><a href="#s01">Contesto</a></li>
+    <li><a href="#s02">Problema</a></li>
+    <li><a href="#s03">Ragionamento</a></li>
+    <li><a href="#s04">Risultato</a></li>
+    <li><a href="#s05">Misura</a></li>
+  </ul>
+  <div class="casi">
+    <span class="eti" aria-hidden="true">Casi</span>
+    <span class="voce" aria-current="page" title="01 Design system">01<span class="fuori-vista">Design system</span><span class="fuori-vista">: sei qui</span></span>
+    <a href="case-study-02.html" title="02 Sistema agentico">02<span class="fuori-vista">Sistema agentico</span></a>
+    <span class="voce gate" data-stato="atteso" title="03 Conversation design: in scrittura">03<span class="fuori-vista">Conversation design</span><span class="fuori-vista">: in scrittura</span></span>
+  </div>
 </nav>
 
 <!-- ═══ HERO DI PAGINA ═══ -->
@@ -430,34 +86,40 @@ footer .chiudi{
 </header>
 
 <!-- ═══ 01 CONTESTO ═══ -->
-<section class="blocco">
+<section class="blocco" id="s01">
   <div class="wrap-prosa">
     <p class="eyebrow">01 · Contesto</p>
     <h2>Tre prodotti, un designer, nessun sistema.</h2>
-    <p>Sono entrato come product designer in una suite dove i tre moduli erano cresciuti in modo indipendente: nessun componente condiviso, nessun linguaggio comune, nessun design system. L'ho costruito da zero, e ne ho la responsabilità da tre anni: variabili, componenti condivisi, pattern cross-modulo e le linee guida di branding che ci stanno sopra.</p>
+    <p class="attacco">Sono entrato come product designer in una suite dove i tre moduli erano cresciuti in modo indipendente: nessun componente condiviso, nessun linguaggio comune, nessun design system. L'ho costruito da zero, e ne ho la responsabilità da tre anni.</p>
+    <ul class="carte">
+      <li><span class="c-eti">Perimetro</span><span class="c-testo">Variabili, componenti condivisi, pattern cross-modulo e le linee guida di branding che ci stanno sopra.</span></li>
+      <li><span class="c-eti">Cosa copre il caso</span><span class="c-testo">Due archi: la costruzione del sistema, e il lavoro in corso per renderlo leggibile dall'AI.</span></li>
+      <li><span class="c-eti">Il fine</span><span class="c-testo">Non l'ordine. Askme non è tre prodotti affiancati: è una piattaforma dove il modulo è l'unità con cui si risponde al mercato. Il sistema lo fa nascere già coerente, e fa progettare ogni funzionalità dentro vincoli noti.</span></li>
+    </ul>
     <details class="approfondimento">
       <summary><span class="segno" aria-hidden="true"></span>Cos'è Askme</summary>
       <div class="corpo">
         <p><a href="https://askme.it" target="_blank" rel="noopener">Askme</a> è una piattaforma B2B enterprise per l'automazione dei processi aziendali: service management, firma elettronica con valore legale e AI conversazionale nativa. È usata da organizzazioni in ambito finance, industria, energia, sanità, università e pubblica amministrazione.</p>
       </div>
     </details>
-    <p>Questo case study copre due archi: la costruzione del sistema, e il lavoro in corso per renderlo leggibile dall'AI. Il fine però non è l'ordine. Askme oggi non è tre prodotti affiancati: è una piattaforma di automazione dei processi, dove il modulo è l'unità con cui si risponde al mercato. Il design system serve a far nascere quel modulo in fretta e già coerente, invece di ricominciare ogni volta dalla forma.</p>
   </div>
 </section>
 
 <!-- ═══ 02 IL PROBLEMA ═══ -->
-<section class="blocco">
+<section class="blocco" id="s02">
   <div class="wrap-prosa">
     <p class="eyebrow">02 · Il problema</p>
     <h2>La divergenza, poi la divergenza alla velocità dell'AI.</h2>
-    <p>Tre prodotti, tre storie, un brand. Ogni nuova funzionalità reinventava pattern che esistevano già da qualche altra parte nella suite. La coerenza reggeva a livello di singola feature, si incrinava a livello di modulo, si rompeva del tutto tra un modulo e l'altro.</p>
-    <p>Il prezzo non era estetico. Ogni modulo nuovo ripartiva dalla forma invece che dal problema: si ridiscuteva l'aspetto di un bottone mentre il mercato aspettava una funzionalità. Su una piattaforma che cresce aggiungendo moduli, la divergenza non si paga in bruttezza, si paga in tempo.</p>
-    <p>Poi è arrivato un secondo problema, più veloce: lo sviluppo assistito dall'AI permetteva ai team di rilasciare nuove interfacce senza passare dal design. L'output era usabile, ma ogni schermata generata usava pattern propri, duplicando componenti già esistenti. Divergenza alla velocità dell'AI.</p>
+    <p class="attacco">Tre prodotti, tre storie, un brand. Ogni nuova funzionalità reinventava pattern che esistevano già da qualche altra parte nella suite: la coerenza reggeva sulla singola feature, si incrinava sul modulo, si rompeva del tutto tra un modulo e l'altro.</p>
+    <ul class="carte">
+      <li><span class="c-eti">Il prezzo</span><span class="c-testo">Non era estetico. Ogni modulo nuovo ripartiva dalla forma invece che dal problema: si ridiscuteva l'aspetto di un bottone mentre il mercato aspettava una funzionalità. Su una piattaforma che cresce aggiungendo moduli, la divergenza si paga in tempo.</span></li>
+      <li><span class="c-eti">Poi l'acceleratore</span><span class="c-testo">Lo sviluppo assistito dall'AI permetteva ai team di rilasciare interfacce senza passare dal design. L'output era usabile, ma ogni schermata generata usava pattern propri, duplicando componenti già esistenti. Divergenza alla velocità dell'AI.</span></li>
+    </ul>
   </div>
 </section>
 
 <!-- ═══ 03 IL RAGIONAMENTO ═══ -->
-<section class="blocco">
+<section class="blocco" id="s03">
   <div class="wrap-prosa">
     <p class="eyebrow">03 · Il ragionamento</p>
     <h2>Pattern che sopravvivono a futuri non ancora disegnati.</h2>
@@ -520,7 +182,8 @@ footer .chiudi{
 
     <h3>Renderlo leggibile dall'AI, il lavoro in corso</h3>
     <p class="evidenza">La stessa spinta AI che alimenta la divergenza è ciò che rende necessario un sistema che l'AI sappia leggere.</p>
-    <p>Il sistema che avevo costruito era coerente per un occhio umano e illeggibile per una macchina. I componenti erano nati per funzionare sullo schermo: struttura di varianti e property decisa caso per caso, nomi che non coincidevano con quelli del codice, insiemi duplicati rimasti in circolo. Il progetto AI-ready ha reso quel debito esigibile tutto insieme, e oggi sto rifacendo la struttura interna di componenti che consideravo chiusi: non l'interfaccia, che regge, ma il modo in cui sono costruiti dentro.</p>
+    <p>Il sistema era progettato per il destinatario che aveva: una persona. Specifiche scritte per l'handoff con lo sviluppo, in prosa che un developer legge, componenti costruiti per funzionare sullo schermo. Era <strong>human ready</strong>, cioè leggibile da chi lo doveva usare, ed era la scelta giusta per il requisito di allora.</p>
+    <p>Poi il destinatario è raddoppiato, e una macchina non legge la prosa di una specifica: legge struttura. Nomi che non coincidono con quelli del codice, varianti e property decise caso per caso, insiemi duplicati rimasti in circolo: per una persona sono attriti che si aggirano leggendo, per un agent sono ambiguità su cui sbaglia. Il progetto AI-ready non ha scoperto un sistema fatto male, ha cambiato il criterio con cui si giudica. Oggi rifaccio la struttura interna di componenti che consideravo chiusi: non l'interfaccia, che regge, ma il modo in cui sono costruiti dentro.</p>
     <p>Se ognuno usa la propria AI con i propri pattern, la divergenza si moltiplica. Se l'AI legge il design system, la stessa velocità diventa convergenza. La strategia che ho proposto e sto eseguendo:</p>
     <ul>
       <li><strong>Portabilità prima del lock-in.</strong> Fondamenti convertiti allo standard W3C DTCG per i token: leggibili da qualsiasi strumento, non intrappolati in un singolo vendor.</li>
@@ -565,46 +228,96 @@ footer .chiudi{
         <figcaption>La pipeline dei token: design, repository versionato, codice generato. È progettata e approvata, l'esecuzione è in corso un anello per volta: il diagramma mostra la destinazione, non lo stato di oggi.</figcaption>
       </figure>
     </div>
-    <p>La strategia si chiude con un pilota falsificabile: dato il solo design system, un'AI riesce a comporre un modulo nuovo e coerente? Criteri di successo espliciti, con la libertà dichiarata di restituire un onesto «non ancora». Presentarlo come esperimento invece che come promessa è ciò che rende la proposta credibile.</p>
-    <p>Il pilota è stato eseguito, e la risposta è sì, con un limite. Ho costruito un modulo finto usando soltanto pezzi già esistenti, e lo sviluppo ha confermato che un agent, partendo dal pacchetto, ricompone moduli semplici. Sui casi articolati no, non ancora: il pilota serviva anche a questo, a far vedere dove il sistema ha ancora dei buchi invece di lasciarli scoprire a chi lo userà.</p>
-    <p>Quello che ha reso possibile il sì è documentazione scritta per una macchina invece che per una persona: un indice strutturato dei componenti, un catalogo che spiega come si combinano, una scheda per ciascuno. E un ciclo di rilascio chiuso, dal file di design al pacchetto per lo sviluppo fino alla pubblicazione nel repository, con un controllo umano prima dell'ultimo passo.</p>
+    <div class="artefatto">
+      <div class="a-lato">
+        <p class="a-eti">Per una persona</p>
+        <p class="a-prosa">L'indicatore di caricamento segnala che qualcosa è in corso e non è ancora mostrabile. Esiste in due taglie, piccola e grande: la piccola sta dentro un bottone o accanto a un'etichetta, la grande al centro dell'area che sta caricando. Il colore è quello del testo secondario, mai quello del modulo, perché non è un elemento di identità ma un segnale di sistema. Se l'attesa supera i due secondi va accompagnato da un testo che dice cosa sta succedendo, altrimenti resta muto. Non si usa per le percentuali: lì serve una barra, non un cerchio che gira.</p>
+      </div>
+      <div class="a-lato">
+        <p class="a-eti">Per una macchina</p>
+        <pre class="a-struttura">- nome: indicatore-caricamento
+  id: "0000:000"
+  pagina: Feedback
+  ruolo: "segnala che un'operazione è in corso e il risultato
+          non è ancora mostrabile"
+  stato_censimento: completo
+  varianti: 4
+  regola_cardine: "Non è identità, è sistema: non si veste del colore
+                   del modulo. E non dice QUANTO manca: per quello
+                   serve un altro oggetto."
+  property:
+  - nome: dimensione
+    tipo: VARIANT
+    valori: [sm, md]
+    nota: "sm dentro un comando, md al centro dell'area"
+  - nome: stato
+    tipo: VARIANT
+    valori: [default, in-attesa]
+    nota: "in-attesa accende il testo sotto"
+  - nome: etichetta
+    tipo: TEXT
+    default: "Caricamento…"
+    nota: "solo su stato=in-attesa"
+  anatomia:
+    layer:
+    - { nome: anello, nota: "cerchio con arco scoperto; ruota" }
+    - { nome: etichetta, solo_su: "stato=in-attesa" }
+  token:
+    anello: "testo/secondario (su fondo scuro: testo/inverso)"
+    etichetta: testo/secondario
+    gap: 8
+  misure: { sm: 16, md: 32, metodo: "nodo 0000:000 letto via API" }
+  usare_quando:
+  - "attesa breve e senza percentuale nota"
+  - "dentro un comando che ha già preso il click"
+  non_usare_quando:
+  - "l'avanzamento è misurabile (barra)"
+  - "l'attesa è l'intera pagina al primo caricamento"
+  invarianti:
+  - "non porta mai il colore del modulo"
+  - "sopra i due secondi l'etichetta è obbligatoria"
+  chiave_codice: app-spinner
+  chiave_codice_nota: "da confermare con lo sviluppo"
+  istanze_vive: { totale: 000, metodo: "istanze risolte al main" }
+  debiti:
+  - "la rotazione non è descritta: il motion non è ancora
+     un capitolo del sistema"
+  deciso: "00-00-0000, nuovo. Sostituisce due cerchi a mano."
+  monografia: Componente_Caricamento.md</pre>
+      </div>
+    </div>
+    <p class="secondario">Lo stesso componente, documentato nei due modi. Il componente è inventato e i valori sono di comodo: la struttura, i nomi dei campi e il loro ordine sono quelli veri. La voce è mandata a capo per stare nella colonna.</p>
+    <p>Questa voce è pulita perché l'ho presa dall'ordine più frequente, e sarebbe disonesto lasciar credere che il file sia tutto così. I nomi dei campi e il loro ordine cambiano da voce a voce, diversi campi compaiono su poco più di metà delle voci, e lo schema dichiarato in testa al file non elenca tutto quello che il file usa davvero. Perfino dentro il campo che dovrebbe togliere i valori letterali ne resta qualcuno: il <code>gap: 8</code> qui sopra è uno. <strong>La struttura regge e non è ancora assestata</strong>, e dirlo è più utile che mostrare solo l'esempio pulito: è la differenza fra un sistema che si misura e uno che si presenta.</p>
+    <p>La strategia si chiude con un pilota falsificabile: dato il solo design system, un'AI riesce a comporre un modulo nuovo e coerente? Criteri di successo espliciti, e la libertà dichiarata di restituire un onesto «non ancora». Presentarlo come esperimento invece che come promessa è ciò che ha reso la proposta credibile.</p>
+    <p>Quello che ha reso possibile la risposta è documentazione scritta per una macchina invece che per una persona: un indice strutturato dei componenti, un catalogo che spiega come si combinano, una scheda per ciascuno. E un ciclo di rilascio chiuso, dal file di design al pacchetto per lo sviluppo fino alla pubblicazione nel repository, con un controllo umano prima dell'ultimo passo.</p>
     <p class="secondario">Gli approfondimenti visivi arrivano come diagrammi rifatti in forma astratta: pattern e strutture, non interfacce reali del prodotto.</p>
   </div>
 </section>
 
 <!-- ═══ 04 RISULTATO ═══ -->
-<section class="blocco">
+<section class="blocco" id="s04">
   <div class="wrap-prosa">
     <p class="eyebrow">04 · Risultato</p>
-    <h2>Un linguaggio solo, e moduli nuovi che partono già coerenti.</h2>
+    <h2>Un linguaggio solo, e un'analisi che parte dai vincoli invece che dalla forma.</h2>
     <p>I moduli oggi condividono un solo linguaggio di design, una libreria di componenti unica tra design e codice, e linee guida di branding integrate nel sistema invece che appoggiate accanto. La strategia AI-ready è stata scritta come un documento unico per due pubblici insieme, proposta per chi decide e guida di riferimento per chi esegue, ed è ora in esecuzione.</p>
-    <p>Il punto di arrivo non è la coerenza in sé: è che un modulo nuovo possa nascere in fretta senza rimettere in discussione la forma. Il pilota dice che sui moduli semplici ci siamo, e mostra dove il sistema cede sugli altri. È la differenza fra un sistema che si dichiara pronto e uno che sa dire in cosa non lo è ancora.</p>
+    <p class="evidenza">Il pilota ha risposto sì: dal solo design system un agent ricompone moduli coerenti. Sui casi più articolati non ancora, ed è il pilota stesso a far vedere dove.</p>
+    <p>Il punto di arrivo non è la coerenza in sé. È che un modulo nuovo nasca in fretta senza rimettere in discussione la forma, e che <strong>ogni funzionalità nuova si progetti dentro vincoli già definiti</strong>: l'analisi parte da un insieme noto di pezzi invece che dal foglio bianco, e quello che resta da decidere è il problema. È anche la differenza fra un sistema che si dichiara pronto e uno che sa dire in cosa non lo è ancora.</p>
   </div>
 </section>
 
 <!-- ═══ 05 LA MISURA ═══ -->
-<section class="blocco">
+<section class="blocco" id="s05">
   <div class="wrap-prosa">
     <p class="eyebrow">05 · La misura</p>
-    <h2>Finché non lo misuri, un sistema si difende a opinioni.</h2>
-    <p>Per tre anni ho governato il design system a giudizio: sapevo dove faceva male, non di quanto. Ad agosto 2026 l'ho misurato, dal file di design fino al codice che ne viene generato, con il metodo dichiarato accanto a ogni numero.</p>
-    <p class="misura-quando">Prima misura, agosto 2026</p>
-    <ul class="quadro">
-      <li class="misura"><span class="val">125</span><span class="eti">elementi di libreria, di cui circa settanta insiemi di varianti</span></li>
-      <li class="misura"><span class="val">223</span><span class="eti">icone, tutte sulla stessa griglia da 24</span></li>
-      <li class="misura"><span class="val">9.174</span><span class="eti">istanze risolte al componente sorgente, zero fallimenti</span></li>
-      <li class="misura"><span class="val">46</span><span class="eti">pagine di progetto attraversate una per una</span></li>
-    </ul>
-    <p class="sez-nota">Ogni istanza è risolta all'identificatore del componente sorgente, mai al nome: nel file cinque componenti si chiamano File e due insiemi diversi si chiamano Buttons. Contare per nome dà un numero plausibile e sbagliato.</p>
-
-    <p class="misura-quando">Seconda misura, settembre 2026</p>
+    <h2>Per tre anni ho saputo dove faceva male, non di quanto.</h2>
+    <p>L'ho governato a giudizio, e ha funzionato finché il sistema è stato piccolo. A settembre 2026 l'ho misurato, dal file di design fino al codice che ne viene generato, con il metodo dichiarato accanto a ogni numero.</p>
+    <p class="misura-quando">Misura, settembre 2026</p>
     <ul class="quadro">
       <li class="misura"><span class="val">124</span><span class="eti">componenti vivi nel perimetro corrente</span></li>
       <li class="misura"><span class="val">93</span><span class="eti">di questi hanno una specifica scritta: tre su quattro</span></li>
       <li class="misura"><span class="val">221</span><span class="eti">icone, tutte sulla stessa griglia da 24</span></li>
     </ul>
-    <p class="sez-nota">Metodo: componenti e insiemi di varianti di primo livello sulle pagine che il file stesso dichiara come perimetro del sistema, icone escluse dal conto e misurate a parte.</p>
-    <p>Il perimetro non si confronta con quello di agosto: nel frattempo il sistema è stato ripulito, e quarantasette elementi superati sono usciti dal conto dei vivi. È il primo intervallo fra due misure, ed è la ragione per cui la prima serviva.</p>
+    <p class="sez-nota">Metodo: componenti e insiemi di varianti di primo livello sulle pagine che il file stesso dichiara come perimetro del sistema, icone escluse dal conto e misurate a parte. Ogni conteggio risolve all'identificatore del componente sorgente e mai al nome: nel file cinque componenti si chiamano File e due insiemi diversi si chiamano Buttons, quindi contare per nome dà un numero plausibile e sbagliato.</p>
     <p>Il perimetro però dice solo cosa c'è. La domanda utile è un'altra: il sistema viene davvero usato, e quanto di lui sopravvive al codice? Cinque indicatori.</p>
     <ul class="letture">
       <li><span class="ord">01</span><span class="nome">Adozione del componente canonico</span><span class="dice">Quante istanze usano il componente ufficiale invece di un suo predecessore rimasto in circolo.</span></li>
@@ -613,7 +326,7 @@ footer .chiudi{
       <li><span class="ord">04</span><span class="nome">Istanze appese a librerie esterne</span><span class="dice">Quanta parte del sistema si muove quando si muove qualcun altro.</span></li>
       <li><span class="ord">05</span><span class="nome">Stati che arrivano al codice</span><span class="dice">Quante delle property dichiarate nel design sopravvivono alla generazione del codice.</span></li>
     </ul>
-    <p>Misurarli è stata la parte scomoda. Un sistema senza numeri si difende con l'entusiasmo, e finché nessuno li guarda hanno ragione tutti. Adesso hanno una data, e la seconda misura esiste: da qui in avanti ogni indicatore ha una direzione invece che un'opinione. Dove il sistema sta peggio, e cosa ho scelto di alzare per primo, lo racconto volentieri di persona: sono numeri che riguardano il prodotto di qualcun altro.</p>
+    <p>Misurarli è stata la parte scomoda. Un sistema senza numeri si difende con l'entusiasmo, e finché nessuno li guarda hanno ragione tutti. Adesso hanno una data e un metodo ripetibile: la misura successiva si confronta con questa, e da lì ogni indicatore ha una direzione invece che un'opinione. Dove il sistema sta peggio, e cosa ho scelto di alzare per primo, lo racconto volentieri di persona: sono numeri che riguardano il prodotto di qualcun altro.</p>
   </div>
 </section>
 
@@ -658,139 +371,6 @@ footer .chiudi{
   </div>
 </footer>
 
-<script>
-/* la luce del reticolo segue il puntatore (solo pointer fine) */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.querySelectorAll('[data-luce]').forEach(el=>{
-    el.addEventListener('pointermove',e=>{
-      const r=el.getBoundingClientRect();
-      el.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%');
-      el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
-    },{passive:true});
-  });
-})();
-
-/* ancore al caricamento: con scroll-behavior:smooth sulla radice il salto iniziale
-   diventa un'animazione lunga che il browser puo' annullare, e la pagina resta in cima.
-   Lo stato sicuro e' arrivarci subito: si disattiva il morbido per l'istante del salto,
-   si ripete dopo che il layout si e' assestato (font, altezze calcolate), e si riattiva. */
-(function(){
-  if(!location.hash) return;
-  var radice=document.documentElement;
-  function vai(){
-    var t=document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    if(!t) return;
-    var prima=radice.style.scrollBehavior;
-    radice.style.scrollBehavior='auto';
-    t.scrollIntoView();
-    requestAnimationFrame(function(){ radice.style.scrollBehavior=prima; });
-  }
-  if(history.scrollRestoration) history.scrollRestoration='manual';
-  addEventListener('load', function(){ vai(); setTimeout(vai,150); setTimeout(vai,600); });
-})();
-
-/* motion: ogni sezione entra come composizione di gesti tipizzati, in cascata. Degrada a statico con reduced-motion */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.documentElement.classList.add('reveal-on');
-  const groups=document.querySelectorAll('.wrap-prosa, .banda-principio .principio, .coda .griglia');
-  function roleOf(el){
-    if(el.matches('.eyebrow,.p-label,.p-fonte,.meta')) return 'm-eyebrow';
-    if(el.matches('h1,h2,h3')) return 'm-title';
-    if(el.matches('blockquote,.evidenza')) return 'm-quote';
-    return 'm-text';
-  }
-  function unitsOf(g){
-    const out=[];
-    Array.from(g.children).forEach(c=>{
-      if(c.matches('ul,ol')) c.querySelectorAll(':scope > li').forEach(li=>out.push([li,'m-li']));
-      else if(c.matches('.figure')) c.querySelectorAll(':scope > figure').forEach(f=>out.push([f,'m-figure']));
-      else out.push([c,roleOf(c)]);
-    });
-    return out;
-  }
-  const io=new IntersectionObserver((entries,obs)=>{
-    entries.forEach(e=>{
-      if(!e.isIntersecting) return;
-      (e.target.__units||[]).forEach(([el,role],i)=>{
-        const d=Math.min(i*140,720);
-        el.style.transitionDelay=d+'ms';
-        requestAnimationFrame(()=>el.classList.add('in'));
-        setTimeout(()=>{ el.style.transitionDelay=''; el.classList.remove('m',role,'in'); },d+1400);
-      });
-      if(e.target.matches('.principio')) e.target.classList.add('lit');
-      obs.unobserve(e.target);
-    });
-  },{threshold:0.1, rootMargin:'0px 0px -6% 0px'});
-  /* Un gruppo gia' dentro l'area visibile all'avvio non si nasconde affatto:
-     l'osservatore notifica solo i cambiamenti, quindi se la pagina non si muove piu'
-     quel testo resterebbe invisibile per sempre. Lo stato di partenza sicuro e' visibile. */
-  const soglia=innerHeight*0.92;
-  groups.forEach(g=>{
-    if(g.getBoundingClientRect().top < soglia) return;
-    const units=unitsOf(g);
-    units.forEach(([el,role])=>el.classList.add('m',role));
-    g.__units=units;
-    io.observe(g);
-  });
-})();
-
-/* cursore-lampada: stato per oggetto, solo puntatore fine, statico con reduced-motion */
-(function(){
-  if(!window.matchMedia('(pointer:fine)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const cur=document.createElement('div');
-  cur.id='cursore'; cur.setAttribute('aria-hidden','true');
-  document.body.appendChild(cur);
-  document.documentElement.classList.add('cursor-on');
-  let tx=innerWidth/2, ty=innerHeight/2, cx=tx, cy=ty;
-  const intSel='a,button,.btn,.cs-card,[data-luce],input,textarea,label,[role="button"]';
-  const txtSel='h1,h2,h3,h4,h5,p,li,blockquote,figcaption';
-  addEventListener('pointermove',e=>{ tx=e.clientX; ty=e.clientY; cur.style.opacity=1; },{passive:true});
-  addEventListener('pointerover',e=>{
-    const t=e.target;
-    if(t.closest && t.closest(intSel)){ cur.classList.add('is-int'); cur.classList.remove('is-text'); }
-    else if(t.closest && t.closest(txtSel)){ cur.classList.add('is-text'); cur.classList.remove('is-int'); }
-    else { cur.classList.remove('is-int','is-text'); }
-  },{passive:true});
-  document.addEventListener('mouseleave',()=>{ cur.style.opacity=0; });
-  (function loop(){
-    cx+=(tx-cx)*0.3; cy+=(ty-cy)*0.3;
-    cur.style.transform='translate('+cx+'px,'+cy+'px) translate(-50%,-50%)';
-    requestAnimationFrame(loop);
-  })();
-})();
-
-/* magnetismo: i bottoni si muovono verso il cursore. Solo puntatore fine, statico con reduced-motion */
-(function(){
-  if(!window.matchMedia('(pointer:fine)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.querySelectorAll('.btn').forEach(el=>{
-    el.addEventListener('pointermove',e=>{
-      const r=el.getBoundingClientRect();
-      const mx=Math.max(-2,Math.min(2,(e.clientX-(r.left+r.width/2))*0.04));
-      const my=Math.max(-2,Math.min(2,(e.clientY-(r.top+r.height/2))*0.045));
-      el.style.transform='translate('+mx+'px,'+my+'px)';
-      el.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%');
-      el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
-    });
-    el.addEventListener('pointerleave',()=>{ el.style.transform=''; });
-  });
-})();
-</script>
-<script>
-/* anno del copyright scritto dal browser: il sito non invecchia da solo */
-document.querySelectorAll('[data-anno]').forEach(e=>{e.textContent=new Date().getFullYear();});
-/* la barra si stringe (e sulla home prende corpo) appena si lascia la cima: sempre visibile, mai invadente */
-(function(){
-  const nav=document.querySelector('nav.principale');
-  if(!nav) return;
-  let atteso=false;
-  function stato(){ atteso=false; nav.classList.toggle('ancorata', scrollY>24); }
-  addEventListener('scroll',()=>{ if(!atteso){ atteso=true; requestAnimationFrame(stato); } },{passive:true});
-  stato();
-})();
-</script>
+<script src="assets/sito.js"></script>
 </body>
 </html>

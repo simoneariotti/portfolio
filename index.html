@@ -31,547 +31,24 @@
 <meta name="twitter:title" content="Simone Ariotti · Digital Product Designer">
 <meta name="twitter:description" content="Digital Product Designer. Progetto sistemi che reggono la crescita: design system, esperienze con AI e piattaforme enterprise B2B. Case study, percorso e contatti.">
 <meta name="twitter:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
-<style>
-/* Font ospitati qui, nessuna terza parte. Solo i pesi che il sito usa davvero,
-   verificati misurando il font-weight calcolato di ogni elemento nel browser:
-   Clash Display solo 500, General Sans 400 e 500, Space Mono 400.
-   Aggiungerne uno = copiare il .woff2 e ripetere il blocco.
-   Licenze in assets/font/, ITF Free Font License per i due Fontshare. */
-@font-face{
-  font-family:'Clash Display';font-style:normal;font-weight:500;font-display:swap;
-  src:url('assets/font/clash-display-500.woff2') format('woff2');
-}
-@font-face{
-  font-family:'General Sans';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/general-sans-400.woff2') format('woff2');
-}
-@font-face{
-  font-family:'General Sans';font-style:normal;font-weight:500;font-display:swap;
-  src:url('assets/font/general-sans-500.woff2') format('woff2');
-}
-/* Space Mono ospitato qui, non su un CDN esterno: senza terze parti
-   nessun IP dei visitatori esce dal sito. SIL Open Font License 1.1,
-   licenza in assets/font/LICENSE-space-mono.txt */
-@font-face{
-  font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/space-mono-400-latin.woff2') format('woff2');
-  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-@font-face{
-  font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/space-mono-400-latin-ext.woff2') format('woff2');
-  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-
-:root{
-  /* ── Palette RETICOLO: un solo tema, scuro ── */
-  --abisso:#080B18;      /* fondo, indaco profondissimo, mai nero puro */
-  --ghiaccio:#C4CEF5;    /* la struttura, viola-ghiaccio */
-  --testo:#EAEDFA;
-  --mezzo:#7E86AD;       /* testo secondario, metadata */
-  --funzione:#A9B4F5;    /* accento funzionale: SOLO interattivo */
-
-  --superficie:color-mix(in srgb, var(--ghiaccio) 7%, var(--abisso));
-  --bordo:color-mix(in srgb, var(--testo) 14%, transparent);
-  --bordo-forte:color-mix(in srgb, var(--testo) 28%, transparent);
-
-  /* trama di fondo: gradiente unico e continuo per tutta la pagina, mai bande per sezione */
-  --trama-fondo:
-    radial-gradient(125% 85% at 86% -12%, #141A3C 0%, rgba(20,26,60,0) 50%),
-    radial-gradient(115% 95% at -14% 114%, #0E1330 0%, rgba(14,19,48,0) 48%),
-    var(--abisso);
-
-  --font-display:'Clash Display','Segoe UI',system-ui,sans-serif;
-  --font-body:'General Sans',system-ui,sans-serif;
-  --font-mono:'Space Mono',ui-monospace,monospace;
-
-  --ease-viscoso:cubic-bezier(0.22,1,0.36,1);
-  --durata-micro:220ms; --durata-orchestrata:800ms;
-  --misura-prosa:70ch;
-  --materia:.65;   /* quanto emerge la materia di fondo. Verificato: oltre .65 il testo secondario scende sotto 4.5:1 */
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-/* la barra resta in cima: gli ancoraggi devono fermarsi sotto, non sparirci dietro */
-:target,section[id],header[id],div[id]{scroll-margin-top:96px}
-@media(max-width:760px){:target,section[id],header[id],div[id]{scroll-margin-top:110px}}
-@media (prefers-reduced-motion: reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation:none!important;transition-duration:1ms!important}
-}
-body{background:var(--trama-fondo);background-attachment:fixed;color:var(--testo);font-family:var(--font-body);font-size:17px;line-height:1.65}
-
-a{color:var(--funzione)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--funzione);outline-offset:3px;border-radius:2px}
-
-.salta{position:absolute;left:-9999px;top:0;background:var(--funzione);color:var(--abisso);padding:10px 18px;border-radius:0 0 8px 0;z-index:50}
-.salta:focus{left:0}
-
-/* ── MATERIA DI FONDO: la struttura non finisce con la hero.
-   Un livello fisso dietro tutta la pagina, immobile mentre il contenuto scorre.
-   E un'immagine, non lo shader: tenere accesa la GPU per dieci schermate di scroll
-   si paga in batteria e fluidita, e le prestazioni sono una regola non negoziabile.
-   --materia governa quanto emerge: oltre un certo valore il testo secondario scende
-   sotto la soglia di contrasto, quindi non si alza a occhio. ── */
-.materia{
-  position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:url('assets/materia.webp') center center / cover no-repeat;
-  opacity:var(--materia);
-}
-@media (max-width:760px){.materia{opacity:calc(var(--materia) * .8)}}
-.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
-
-/* ── NAV ── */
-nav.principale{
-  position:sticky;top:0;z-index:40;
-  display:flex;justify-content:space-between;align-items:center;
-  padding:24px clamp(20px,4.5vw,56px);
-  background:rgba(8,11,24,.985);
-  border-bottom:1px solid var(--bordo);
-  transition:background-color var(--durata-micro) var(--ease-viscoso),
-             border-color var(--durata-micro) var(--ease-viscoso),
-             padding var(--durata-micro) var(--ease-viscoso);
-}
-/* appena si lascia la cima la barra si stringe: resta consultabile senza rubare schermo */
-nav.principale.ancorata{padding-top:14px;padding-bottom:14px}
-/* sulla home galleggia sopra la hero: trasparente in cima, prende corpo quando si scende.
-   Fondo pieno e non sfocato: un blur permanente sopra il canvas si paga a ogni frame */
-nav.principale.sovrapposta{position:fixed;left:0;right:0;background:transparent;border-bottom-color:transparent}
-nav.principale.sovrapposta.ancorata{background:rgba(8,11,24,.985);border-bottom-color:var(--bordo)}
-nav.principale .logo{font-family:var(--font-display);font-weight:500;font-size:17px;color:var(--testo);text-decoration:none}
-nav.principale ul{display:flex;gap:clamp(16px,2.6vw,32px);list-style:none}
-nav.principale ul a{
-  font-size:15px;font-weight:500;text-decoration:none;color:var(--testo);
-  transition:color var(--durata-micro) var(--ease-viscoso);
-}
-nav.principale ul a:hover{color:var(--funzione)}
-/* Switch di lingua. Stesso modello della barra indice dell'about:
-   l'accento segnala dove sei, e uno stato attivo, non decorazione.
-   Sopra la hero la barra e trasparente e il fondo e la struttura animata:
-   li --mezzo scende a 2,5:1, quindi la lingua non attiva usa --ghiaccio. */
-nav.principale ul li.lingua{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em}
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{
-  /* area di tocco 24x24 minimo (WCAG 2.5.8): i margini negativi la allargano
-     senza spostare il resto della barra */
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:24px;min-height:24px;margin:-4px -2px;
-  font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;
-  border-bottom:2px solid transparent;
-  transition:color var(--durata-micro) var(--ease-viscoso),border-color var(--durata-micro) var(--ease-viscoso);
-}
-/* Space Mono esiste solo in 400 e 700: ereditare il 500 della barra farebbe
-   sintetizzare al browser un finto grassetto. */
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{font-weight:400}
-nav.principale ul li.lingua a{color:var(--ghiaccio);text-decoration:none}
-nav.principale ul li.lingua a:hover,nav.principale ul li.lingua a:focus-visible{color:var(--testo)}
-/* Deroga voluta rispetto alla barra indice, che colora anche il testo di --funzione:
-   qui la barra puo' stare sopra la hero, dove --funzione sul testo scende a 4,3:1.
-   L'accento resta sul filetto (elemento grafico, soglia 3:1), il testo va su --testo. */
-nav.principale ul li.lingua .attiva{color:var(--testo);border-bottom-color:var(--funzione)}
-nav.principale ul li.lingua .sep{color:color-mix(in srgb, var(--ghiaccio) 40%, transparent)}
-@media (prefers-reduced-motion: reduce){nav.principale ul li.lingua a{transition:none}}
-@media(max-width:760px){
-  nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{min-height:44px;margin:-4px -2px}
-}
-.sez-nota{color:var(--mezzo);font-size:14px;margin:-4px 0 30px}
-/* Switch di lingua. Stesso modello della barra indice dell'about:
-   l'accento segnala dove sei, e uno stato attivo, non decorazione.
-   Sopra la hero la barra e trasparente e il fondo e la struttura animata:
-   li --mezzo scende a 2,5:1, quindi la lingua non attiva usa --ghiaccio. */
-nav.principale ul li.lingua{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em}
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{
-  /* area di tocco 24x24 minimo (WCAG 2.5.8): i margini negativi la allargano
-     senza spostare il resto della barra */
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:24px;min-height:24px;margin:-4px -2px;
-  font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;
-  border-bottom:2px solid transparent;
-  transition:color var(--durata-micro) var(--ease-viscoso),border-color var(--durata-micro) var(--ease-viscoso);
-}
-nav.principale ul li.lingua a{color:var(--ghiaccio);text-decoration:none}
-nav.principale ul li.lingua a:hover,nav.principale ul li.lingua a:focus-visible{color:var(--testo)}
-/* Deroga voluta rispetto alla barra indice, che colora anche il testo di --funzione:
-   qui la barra puo' stare sopra la hero, dove --funzione sul testo scende a 4,3:1.
-   L'accento resta sul filetto (elemento grafico, soglia 3:1), il testo va su --testo. */
-nav.principale ul li.lingua .attiva{color:var(--testo);border-bottom-color:var(--funzione)}
-nav.principale ul li.lingua .sep{color:color-mix(in srgb, var(--ghiaccio) 40%, transparent)}
-@media (prefers-reduced-motion: reduce){nav.principale ul li.lingua a{transition:none}}
-@media(max-width:760px){
-  nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{min-height:44px;margin:-4px -2px}
-}
-.sez-nota{color:var(--mezzo);font-size:14px;margin:-4px 0 30px}
-@media(max-width:760px){
-  /* sotto i 760px le voci non stanno su una riga con il logo: il logo prende la sua riga,
-     le voci vanno a capo per conto loro e ricevono l'area tattile che a 15px non avevano */
-  nav.principale{flex-direction:column;align-items:flex-start;gap:2px;padding:18px clamp(20px,4.5vw,56px)}
-  nav.principale .logo{white-space:nowrap}
-  nav.principale ul{flex-wrap:wrap;gap:0 20px}
-  nav.principale ul a{font-size:13px;padding:9px 0;display:inline-block}
-  /* a due righe su schermo stretto la barra pesa: da ancorata si stringe ancora */
-  nav.principale.ancorata{padding-top:9px;padding-bottom:7px}
-  nav.principale.ancorata .logo{font-size:15px}
-}
-@media (prefers-reduced-motion: reduce){nav.principale{transition:none}}
-
-/* ── HERO: la materia e il reticolo, momento orchestrato della pagina ── */
-.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
-#reticolo{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:pan-y pinch-zoom}
-.hero-scrim{ /* protezione di lettura sul lato del testo */
-  position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:
-    linear-gradient(to top, rgba(8,11,24,.88) 0px, rgba(8,11,24,0) 150px),
-    linear-gradient(100deg, rgba(8,11,24,.93) 0%, rgba(8,11,24,.86) 34%, rgba(8,11,24,.55) 58%, rgba(8,11,24,.12) 78%, rgba(8,11,24,0) 92%);
-}
-@media(max-width:900px){
-  /* su schermo stretto il testo va da bordo a bordo: lo scrim diventa una fascia verticale,
-     altrimenti la meta destra di ogni riga finisce sopra la struttura illuminata */
-  .hero-scrim{
-    background:
-      linear-gradient(to top, rgba(8,11,24,.92) 0px, rgba(8,11,24,0) 170px),
-      linear-gradient(180deg, rgba(8,11,24,.58) 0%, rgba(8,11,24,.74) 18%, rgba(8,11,24,.74) 74%, rgba(8,11,24,.42) 100%);
-  }
-}
-.hero-testo{
-  position:relative;z-index:2;
-  padding:96px clamp(20px,4.5vw,56px) 0;
-  max-width:1050px;
-}
-.hero .eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ghiaccio);margin-bottom:24px}
-.hero h1{
-  font-family:var(--font-display);font-weight:500;
-  font-size:clamp(38px,5.8vw,84px);line-height:1.05;letter-spacing:-.015em;text-wrap:balance;
-  margin-bottom:26px;text-shadow:0 4px 54px rgba(8,11,24,.75);
-}
-.hero .firma{font-size:16px;color:var(--ghiaccio);max-width:54ch;margin-bottom:38px;text-shadow:0 2px 30px rgba(8,11,24,.85)}
-.hero .firma strong{color:var(--testo);font-weight:500}
-.hero-basso{
-  position:absolute;bottom:26px;left:0;right:0;z-index:2;
-  display:flex;justify-content:flex-start;align-items:center;
-  padding:0 clamp(20px,4.5vw,56px);
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ghiaccio);
-}
-.hero-basso .hint{display:flex;align-items:center;gap:10px}
-.hero-basso .hint::before{
-  content:'';width:7px;height:7px;border-radius:50%;background:var(--funzione);opacity:.85;
-  animation:pulse 3.4s var(--ease-viscoso) infinite;
-}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.55);opacity:.3}}
-@media (pointer:coarse){
-  /* niente cursore da muovere: l'istruzione sparisce, e con essa l'intera riga */
-  .hero-basso{display:none}
-}
-
-/* ── BOTTONI (DS): parti del reticolo, raggio organico e luce che segue il puntatore ── */
-.icona{width:20px;height:20px;flex:0 0 auto;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
-.btn{
-  position:relative;overflow:hidden;isolation:isolate;
-  display:inline-flex;align-items:center;gap:10px;
-  font-family:var(--font-body);font-weight:500;font-size:15px;
-  border-radius:16px 22px 16px 22px;padding:13px 26px;cursor:pointer;border:1px solid transparent;text-decoration:none;
-  transition:background var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso),
-             color var(--durata-micro) var(--ease-viscoso), transform var(--durata-micro) var(--ease-viscoso);
-}
-.btn:active{transform:scale(.985)}
-.btn .freccia{transition:transform var(--durata-micro) var(--ease-viscoso)}
-.btn:hover .freccia{transform:translateX(4px)}
-.btn:hover .freccia-giu{transform:translateY(3px)}
-.btn-primaria::before{
-  content:'';position:absolute;inset:0;z-index:-1;opacity:0;
-  transition:opacity .55s var(--ease-viscoso);
-  background:radial-gradient(150px circle at var(--lx,50%) var(--ly,50%),
-    color-mix(in srgb, var(--ghiaccio) 58%, transparent) 0%,
-    color-mix(in srgb, var(--ghiaccio) 26%, transparent) 38%,
-    transparent 72%);
-}
-.btn-primaria:hover::before{opacity:1}
-.btn-primaria{background:var(--funzione);color:var(--abisso)}
-.btn-silenziosa{background:transparent;color:var(--funzione);padding-left:0;padding-right:0;border-radius:4px;overflow:visible}
-.btn-silenziosa:hover{text-decoration:underline;text-underline-offset:5px}
-
-/* ── SEZIONI: sfondo continuo, filetti sottili e spazio, MAI bande di colore ── */
-section{padding:clamp(72px,9vw,110px) 0;border-top:1px solid var(--bordo)}
-.hero+section{border-top:none}
-.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:16px}
-.sez-titolo{font-family:var(--font-display);font-weight:500;font-size:clamp(26px,3vw,38px);letter-spacing:-.008em;margin-bottom:14px}
-.sez-intro{color:var(--mezzo);max-width:58ch;margin-bottom:clamp(36px,5vw,56px)}
-
-/* card: la cover buca verso l'abisso, come il reticolo */
-.cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px}
-.cs-card{
-  position:relative;display:block;border-radius:26px 16px 24px 18px;overflow:hidden;text-decoration:none;color:var(--testo);
-  background:var(--superficie);border:1px solid var(--bordo);
-  transition:transform var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso);
-}
-.cs-card:hover{transform:translateY(-4px);border-color:var(--bordo-forte)}
-/* la luce del reticolo entra nella card e segue il puntatore, come nella hero */
-.cs-card .luce{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;
-  transition:opacity var(--durata-micro) var(--ease-viscoso);
-  background:radial-gradient(280px circle at var(--lx,72%) var(--ly,22%), color-mix(in srgb, var(--ghiaccio) 14%, transparent) 0%, transparent 70%)}
-.cs-card:hover .luce{opacity:1}
-.cs-cover{height:185px;position:relative;overflow:hidden}
-.cs-cover .trama{position:absolute;inset:0;transition:transform 700ms var(--ease-viscoso)}
-.cs-card:hover .trama{transform:scale(1.05)}
-.cover-1 .trama{background:
-  radial-gradient(150px 120px at 74% 20%, var(--abisso) 32%, transparent 33%),
-  radial-gradient(90px 74px at 22% 78%, var(--abisso) 30%, transparent 31%),
-  radial-gradient(130% 140% at 30% 30%, color-mix(in srgb, var(--ghiaccio) 38%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 12%, var(--abisso)) 62%, var(--superficie) 100%);}
-.cover-2 .trama{background:
-  radial-gradient(120px 100px at 26% 26%, var(--abisso) 31%, transparent 32%),
-  radial-gradient(80px 66px at 78% 72%, var(--abisso) 30%, transparent 31%),
-  radial-gradient(130% 140% at 70% 60%, color-mix(in srgb, var(--ghiaccio) 34%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 11%, var(--abisso)) 62%, var(--superficie) 100%);}
-.cover-3 .trama{background:
-  radial-gradient(110px 92px at 68% 76%, var(--abisso) 31%, transparent 32%),
-  radial-gradient(76px 62px at 24% 24%, var(--abisso) 30%, transparent 31%),
-  radial-gradient(130% 140% at 50% 20%, color-mix(in srgb, var(--ghiaccio) 36%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 12%, var(--abisso)) 62%, var(--superficie) 100%);}
-.cs-body{padding:24px;position:relative;z-index:2}
-.cs-meta{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px}
-.cs-meta .gate{color:var(--funzione)}
-.cs-body h3{font-family:var(--font-display);font-weight:500;font-size:21px;line-height:1.28;margin-bottom:8px}
-.cs-body p{font-size:15px;color:var(--mezzo)}
-.cs-cover .indice{
-  position:absolute;right:16px;bottom:8px;z-index:1;
-  font-family:var(--font-display);font-weight:500;font-size:80px;line-height:1;
-  color:color-mix(in srgb, var(--ghiaccio) 30%, transparent);
-  pointer-events:none;
-}
-.cs-azione{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-top:16px;padding-top:14px;border-top:1px solid var(--bordo);
-  font-size:14px;font-weight:500;color:var(--funzione);
-}
-.cs-azione .dove{font-weight:400;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
-.cs-azione .vai{display:inline-block;transition:transform var(--durata-micro) var(--ease-viscoso)}
-.cs-card:hover .cs-azione .vai{transform:translateX(4px)}
-
-/* principio: voce display su filetto, niente corsivi */
-.principio{position:relative;max-width:880px;margin:0 auto;padding:6px 0 6px 28px}
-.principio::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--bordo-forte);transform-origin:top;transition:transform .9s var(--ease-viscoso)}
-.reveal-on .principio::before{transform:scaleY(0)}
-.reveal-on .principio.lit::before{transform:scaleY(1)}
-@media (prefers-reduced-motion: reduce){.reveal-on .principio::before{transform:scaleY(1);transition:none}}
-.principio .p-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:16px}
-.principio blockquote{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,3vw,36px);line-height:1.4;letter-spacing:-.005em}
-
-/* R&R */
-.rr{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,5vw,64px);align-items:center}
-@media(max-width:820px){.rr{grid-template-columns:1fr}}
-.rr-testo p{color:var(--mezzo);max-width:52ch;margin-bottom:28px}
-.rr-testo p strong{color:var(--testo);font-weight:500}
-.rr-visual{
-  height:280px;border-radius:18px;position:relative;overflow:hidden;border:1px solid var(--bordo);
-  background:
-    radial-gradient(170px 140px at 76% 24%, var(--abisso) 34%, transparent 35%),
-    radial-gradient(110px 90px at 18% 82%, var(--abisso) 32%, transparent 33%),
-    radial-gradient(130% 150% at 34% 40%, color-mix(in srgb, var(--ghiaccio) 32%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 10%, var(--abisso)) 64%, var(--superficie) 100%);
-}
-.rr-visual .marchio{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-display);font-weight:500;font-size:clamp(22px,2.4vw,30px);color:var(--testo);
-}
-
-/* ── CHI C'E DIETRO: il filo rosso, sezione pinnata sotto la hero. Lo scroll pilota la fascia di fuoco ── */
-/* --crescita: quanto cresce la cella a fuoco. Unica fonte di verita: il JS la legge per calcolare gli ingombri a scala piena.
-   Dove c'e meno spazio la cella cresce meno, cosi a scala piena resta dentro il viewport e sotto il titolo.
-   Il JS rilegge la variabile a ogni resize: gli ingombri del filo si adeguano da soli */
-.filo{position:relative;height:680vh;padding:0;--crescita:.6}
-@media (max-width:1200px),(max-height:840px){.filo{--crescita:.4}}
-@media (max-height:700px){.filo{--crescita:.28}}
-.filo .stage{position:sticky;top:0;height:100vh;overflow:hidden;--praw:0}
-/* scrim: le celle scompaiono in modo elegante uscendo in alto (dietro il titolo) ed entrando dal basso */
-.filo .stage::before,.filo .stage::after{content:'';position:absolute;left:0;right:0;z-index:2;pointer-events:none}
-.filo .stage::before{top:0;height:34vh;background:linear-gradient(var(--abisso) 32%, transparent)}
-.filo .stage::after{bottom:0;height:22vh;background:linear-gradient(transparent, var(--abisso))}
-.filo .titolo{position:absolute;top:8vh;left:0;right:0;text-align:center;z-index:3;
-  font-family:var(--font-display);font-weight:500;font-size:clamp(26px,3.4vw,44px);letter-spacing:-.012em;padding:0 24px;text-wrap:balance}
-.filo .titolo .eyebrow{display:block;font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:14px;font-weight:400}
-.filo .colonna{position:absolute;left:0;right:0;top:0;margin:0 auto;max-width:640px;text-align:center;transform:translateY(var(--ty,0px));will-change:transform}
-/* il filo e spezzato: un segmento per stazione, che parte dal bordo della cella precedente (misurato a scala piena)
-   e arriva al nodo della successiva. Nessun tratto corre dietro una cella, quindi non la attraversa mai.
-   viewBox in pixel reali: la curvatura disegnata e quella che si vede */
-.filo .thread{position:absolute;left:50%;top:0;transform:translateX(-50%);width:150px;height:100%;overflow:visible;z-index:0}
-.filo .thread path{fill:none;stroke:var(--ghiaccio);stroke-width:2;stroke-linecap:round;
-  filter:drop-shadow(0 0 6px color-mix(in srgb,var(--ghiaccio) 60%,transparent));
-  stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--f,0))}
-.filo .tappe{list-style:none;position:relative;z-index:1;margin:0;padding:0}
-.filo .tappa{position:relative;padding-top:34px;margin:0 auto clamp(150px,20vh,220px);--focus:0;--vis:0;--on:0}
-/* il nodo e il punto d'arrivo del filo: il JS lo posiziona sopra il bordo della cella misurato a scala piena,
-   cosi non le finisce mai dentro quando cresce */
-.filo .nodo{position:absolute;top:var(--nodo-y,0px);left:50%;transform:translateX(-50%) scale(calc(.7 + var(--on)*.3 + var(--focus)*.35));
-  width:13px;height:13px;border-radius:50%;z-index:2;
-  background:color-mix(in srgb, var(--ghiaccio) calc(var(--on)*100%), transparent);
-  border:1.5px solid color-mix(in srgb, var(--ghiaccio) calc(28% + max(var(--on),var(--focus))*72%), transparent);
-  box-shadow:0 0 calc(var(--focus)*20px) color-mix(in srgb, var(--ghiaccio) 75%, transparent)}
-/* la cella del reticolo: bordo e superficie che si accendono col fuoco */
-/* crescita con transform:scale (non font-size): non rifluisce il layout, la cella resta ancorata al centro.
-   Larghezza base contenuta perche a scala piena (x1.6) deve stare nel viewport.
-   Due variabili distinte: --focus tiene la scala (piano largo, uscita lenta), --vis toglie l'opacita prima
-   e piu in fretta. Cosi la cella resta grande piu a lungo ma sparisce netta, senza incrociare il filo */
-.filo .cella{position:relative;z-index:1;display:inline-block;max-width:min(56vw,430px);padding:20px clamp(24px,3vw,36px) 22px;
-  border-radius:38px 22px 34px 24px;transform-origin:center;transform:scale(calc(1 + var(--focus)*var(--crescita)));
-  background:color-mix(in srgb, var(--ghiaccio) calc(5% + var(--focus)*4%), var(--abisso));
-  border:1px solid color-mix(in srgb, var(--ghiaccio) calc(12% + var(--focus)*42%), transparent);
-  box-shadow:0 26px 70px -34px color-mix(in srgb, var(--ghiaccio) calc(var(--focus)*45%), transparent);
-  opacity:var(--vis)}
-.filo .anno{display:block;font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mezzo);margin-bottom:10px}
-.filo .voce{display:block;font-family:var(--font-display);font-weight:500;line-height:1.08;letter-spacing:-.012em;
-  font-size:clamp(22px,2.6vw,32px);overflow-wrap:break-word;   /* una parola lunga non deve mai uscire dalla cella */
-  color:color-mix(in srgb, var(--testo) calc((.42 + max(var(--on)*.5,var(--focus))*.58)*100%), var(--abisso))}
-.filo .desc{display:block;margin:12px auto 0;max-width:34ch;font-family:var(--font-body);line-height:1.42;color:var(--mezzo);
-  font-size:clamp(14px,1.5vw,16px);opacity:var(--focus);transform:translateY(calc((1 - var(--focus))*-4px))}
-.filo .ritratto-wrap{display:flex;justify-content:center;padding-top:26px;position:relative;--focus:0;--vis:0;--on:0}
-/* il ritratto: elemento puramente fotografico, naturale, che si stacca dal concept.
-   Nessun trattamento, forma pulita, entra con una semplice dissolvenza. E l'ultima stazione: il filo ci arriva, non lo taglia */
-.filo .ritratto{position:relative;width:min(74%,340px);aspect-ratio:4/5;
-  border-radius:20px;overflow:hidden;border:1px solid var(--bordo);background:var(--superficie);
-  opacity:var(--vis);transform:scale(calc(.94 + var(--focus)*.06));
-  box-shadow:0 34px 80px -40px rgba(0,0,0,.65)}
-.filo .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
-/* su viewport basse il ritratto va limitato: a 640px di altezza la chiusura gli finiva sopra */
-@media (max-height:820px){.filo .ritratto{width:min(74%,300px,32vh)}}
-.filo .chiusura{position:absolute;left:0;right:0;bottom:7vh;z-index:3;text-align:center;padding:0 24px;
-  --c:clamp(0,(var(--praw) - 0.86)/0.14,1);opacity:var(--c);transform:translateY(calc((1 - var(--c))*14px));pointer-events:none}
-.filo .chiusura p{color:var(--mezzo);max-width:52ch;margin:0 auto 18px}
-.filo .chiusura p strong{color:var(--testo);font-weight:500}
-.filo .chiusura p{pointer-events:auto}
-.filo .chiusura .btn{pointer-events:auto}
-/* statico: touch / reduced-motion / no-JS. La sezione diventa un blocco normale, tutto rivelato */
-@media (max-width:760px){
-  /* in modalita statica la cella non deve piu crescere in scala: puo prendersi la larghezza vera.
-     Il blocco resta centrato sotto il filo, ma il testo torna sull'asse sinistro come nel resto del sito */
-  .filo.statico .cella{max-width:86vw;text-align:left;padding:20px 22px 22px}
-  .filo.statico .desc{margin:12px 0 0;max-width:none}
-  .filo.statico .voce{font-size:clamp(20px,5.4vw,26px)}
-}
-/* le stazioni entrano una alla volta invece di essere gia tutte li: senza JS
-   o con reduced-motion la regola non si applica e resta tutto visibile */
-.reveal-on .filo.statico .tappa,.reveal-on .filo.statico .ritratto-wrap{
-  opacity:0;transform:translateY(20px);
-  transition:opacity 760ms var(--ease-viscoso),transform 760ms var(--ease-viscoso);
-}
-.reveal-on .filo.statico .tappa.entra,.reveal-on .filo.statico .ritratto-wrap.entra{opacity:1;transform:none}
-.filo.statico{height:auto}
-.filo.statico .stage{position:static;height:auto;overflow:visible;padding:clamp(64px,9vw,110px) 0}
-.filo.statico .titolo{position:static;margin-bottom:36px}
-.filo.statico .colonna{position:static;transform:none}
-.filo.statico .thread{display:none}
-/* statico: le stazioni sono tutte alla loro forma piena. A .35 restavano a meta
-   accensione e i titoli leggevano come uno stato disabilitato, che non si attiva mai */
-.filo.statico .tappa,.filo.statico .ritratto-wrap{--on:1;--focus:1;--vis:1}
-/* con focus pieno bordo e alone diventerebbero da elemento selezionato: qui nessuna
-   cella e "quella a fuoco", quindi si riportano a un valore di riposo */
-.filo.statico .cella{border-color:color-mix(in srgb, var(--ghiaccio) 24%, transparent);box-shadow:0 20px 50px -34px rgba(0,0,0,.6)}
-.filo.statico .nodo{transform:translateX(-50%) scale(1);box-shadow:0 0 10px color-mix(in srgb, var(--ghiaccio) 45%, transparent)}
-.filo.statico .tappa{margin-bottom:36px}
-.filo.statico .nodo{top:0}
-.filo.statico .desc{opacity:1;transform:none}
-.filo.statico .chiusura{position:static;opacity:1;transform:none;margin-top:36px}
-.filo.statico .ritratto{margin:0 auto;transform:none}
-.filo.statico .cella{opacity:1;transform:none}
-.filo.statico .stage::before,.filo.statico .stage::after{display:none}
-
-/* contatto */
-.contatto h2{font-family:var(--font-display);font-weight:500;font-size:clamp(38px,5.4vw,68px);letter-spacing:-.014em;margin-bottom:14px}
-.contatto .invito{color:var(--mezzo);max-width:52ch;margin-bottom:clamp(34px,5vw,48px)}
-/* la mail non va mai a capo: si dimensiona sulla colonna che la contiene, non sul viewport.
-   La stringa e larga ~13,5 volte il corpo, quindi 7cqw la fa stare dentro con margine.
-   Il clamp in vw resta come ripiego dove i container query non ci sono */
-.contatto-testo{container-type:inline-size}
-.mail-grande{
-  display:inline-block;font-family:var(--font-display);font-weight:500;
-  font-size:clamp(20px,3.2vw,50px);
-  font-size:min(7cqw,50px);
-  letter-spacing:-.01em;white-space:nowrap;
-  color:var(--testo);text-decoration:none;
-  border-bottom:3px solid var(--funzione);padding-bottom:8px;
-  transition:color var(--durata-micro) var(--ease-viscoso);
-}
-.mail-grande:hover{color:var(--funzione)}
-.contatto-meta{margin-top:32px;display:flex;flex-wrap:wrap;gap:10px 26px;font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo)}
-.contatto-meta a{color:var(--funzione);text-decoration:none}
-.contatto-meta a:hover{text-decoration:underline;text-underline-offset:4px}
-
-.contatto-layout{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(32px,5vw,64px);align-items:center}
-@media(max-width:820px){.contatto-layout{grid-template-columns:1fr}}
-.contatto-foto{
-  aspect-ratio:4/3;border-radius:16px;overflow:hidden;
-  border:1px solid var(--bordo);background:var(--superficie);
-}
-.contatto-foto img{width:100%;height:100%;object-fit:cover;object-position:50% 16%;display:block}
-.rr-vai{margin:18px 0 0;font-size:15px}
-.rr-vai a{color:var(--mezzo)}
-.rr-vai a:hover,.rr-vai a:focus-visible{color:var(--funzione)}
-.rr-visual{display:block;text-decoration:none}
-.rr-gate{margin:0 0 16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
-
-/* footer: tre livelli distinti invece di righe accatastate.
-   identita (micro-metadata) > la riga sul work in progress (prosa) > il copyright, staccato da un filetto */
-footer{border-top:1px solid var(--bordo);padding:52px 0 40px}
-footer .identita{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);line-height:2}
-footer .identita strong{color:var(--testo);font-weight:400}
-footer .wip{text-transform:none;letter-spacing:0;font-size:14px;line-height:1.6;margin-top:22px;max-width:42ch;color:var(--mezzo)}
-footer .chiudi{
-  margin-top:34px;padding-top:20px;border-top:1px solid var(--bordo);
-  display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);
-}
-
-/* ── MOTION: vocabolario di gesti. Ogni tipo di elemento ha il suo, tutti sulla stessa easing e famiglia di tempi ── */
-.m{transition:opacity var(--d,560ms) var(--ease-viscoso), transform var(--d,560ms) var(--ease-viscoso)}
-.reveal-on .m{opacity:0;transform:var(--from,translateY(14px))}
-.reveal-on .m.in{opacity:1;transform:none}
-.m-eyebrow{--from:translateX(-14px);--d:660ms}
-.m-title{--from:translateY(26px);--d:1050ms}
-.m-text{--from:translateY(16px);--d:840ms}
-.m-li{--from:translateY(12px);--d:720ms}
-.m-figure{--from:translateY(18px) scale(.955);--d:1150ms}
-.m-quote{--from:translateY(20px);--d:1000ms}
-@media (prefers-reduced-motion: reduce){.reveal-on .m{opacity:1;transform:none;transition:none}}
-
-/* ── CURSORE: la lampada sulla struttura. Cambia forma secondo l'oggetto sotto ── */
-.cursor-on, .cursor-on *{cursor:none}
-#cursore{
-  position:fixed;left:0;top:0;z-index:9999;pointer-events:none;opacity:0;
-  width:12px;height:12px;border-radius:50%;
-  background:var(--funzione);
-  box-shadow:0 0 6px 0 color-mix(in srgb, var(--funzione) 24%, transparent);
-  transition:width .28s var(--ease-viscoso), height .28s var(--ease-viscoso),
-    border-radius .28s var(--ease-viscoso), background .28s var(--ease-viscoso),
-    border-color .28s var(--ease-viscoso), opacity .3s var(--ease-viscoso);
-  will-change:transform;
-}
-#cursore.is-int{
-  width:38px;height:38px;background:transparent;
-  border:1.5px solid var(--funzione);border-radius:50%;
-  box-shadow:0 0 10px 0 color-mix(in srgb, var(--funzione) 16%, transparent);
-}
-#cursore.is-text{
-  width:2px;height:26px;border-radius:1px;background:var(--ghiaccio);
-  box-shadow:0 0 4px color-mix(in srgb, var(--ghiaccio) 35%, transparent);
-  animation:curblink 1.1s steps(1) infinite;
-}
-@keyframes curblink{0%,49%{opacity:1}50%,99%{opacity:.2}100%{opacity:1}}
-
-/* ── LINK EDITORIALE: sottolineatura che si disegna al passaggio ── */
-p a:not(.btn), li a:not(.btn){
-  text-decoration:none;
-  background-image:linear-gradient(var(--funzione),var(--funzione));
-  background-size:0% 1px;background-position:0 100%;background-repeat:no-repeat;
-  transition:background-size .32s var(--ease-viscoso);
-}
-p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
-</style>
+<link rel="stylesheet" href="assets/stile.css">
+<link rel="stylesheet" href="assets/home.css">
 </head>
 <body>
 
 <!-- Sprite iconografica: SOLO Lucide, stroke 2, currentColor. L'icona dichiara la funzione. -->
+<!-- ═══ ICONOGRAFIA · blocco identico su ogni pagina, vedi storybook ═══
+     Griglia 24, tratto 2, estremi e giunti tondi, nessun riempimento, colore
+     ereditato da currentColor. Quattro segni e basta: freccia (vai), giu'
+     (scendi nella pagina), esterno (esci dal sito), indietro (torna alla home).
+     Uno stato non e' un'icona: lo dice il nodo di .gate. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-freccia" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
   <symbol id="i-giu" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
   <symbol id="i-esterno" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
-  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-indietro" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
 </svg>
 
-<div class="materia" aria-hidden="true"></div>
 <a class="salta" href="#lavori">Salta al contenuto</a>
 
 <nav class="principale sovrapposta" aria-label="Principale">
@@ -604,8 +81,8 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
 <section id="lavori">
   <div class="wrap">
     <p class="eyebrow">Case study</p>
-    <h2 class="sez-titolo">Tre lavori scelti, un metodo.</h2>
-    <p class="sez-intro">Ogni progetto qui dentro racconta come ragiono, non solo cosa ho prodotto.</p>
+    <h2 class="sez-titolo">Tre progetti da Product Designer di cui vado fiero.</h2>
+    <p class="sez-intro">Design system, AI dentro il prodotto, conversation design: tre casi su piattaforme B2B enterprise. Non tutto quello che ho fatto: quello che racconta meglio come ragiono.</p>
     <div class="cs-grid">
       <a class="cs-card cover-1" data-luce href="case-study-01.html">
         <div class="luce" aria-hidden="true"></div>
@@ -631,7 +108,7 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
         <div class="luce" aria-hidden="true"></div>
         <div class="cs-cover"><div class="trama"></div><span class="indice" aria-hidden="true">03</span></div>
         <div class="cs-body">
-          <p class="cs-meta"><span>Conversation design</span><span class="gate">◈ In scrittura</span></p>
+          <p class="cs-meta"><span>Conversation design</span><span class="gate" data-stato="atteso">In scrittura</span></p>
           <h3>Un chatbot che usa l'AI solo quando serve</h3>
           <p>L'80% del flusso non tocca mai un LLM. Di proposito. E conviene a tutti.</p>
           <div class="cs-azione"><span class="dove">In scrittura</span><span style="display:inline-flex;align-items:center;gap:8px">Ne parliamo <svg class="icona vai" aria-hidden="true"><use href="#i-freccia"/></svg></span></div>
@@ -685,13 +162,18 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
       <p class="eyebrow">Fuori dal lavoro · Progetto personale</p>
       <h2 class="sez-titolo">Rotte e Racconti</h2>
       <p>Un progetto editoriale di viaggio costruito da zero con mio fratello: lui percorre gli itinerari e li documenta, io ho costruito tutto il resto: <strong>identità, sito, sistema editoriale, strategia</strong>. È quello che succede quando progetto qualcosa di mio, senza committente.</p>
-      <p class="rr-gate"><span class="gate">◈ Online, sei diari pubblicati</span></p>
-      <a class="btn btn-silenziosa" href="rotte-e-racconti.html">Leggi il case study <svg class="icona freccia" aria-hidden="true"><use href="#i-freccia"/></svg></a>
-      <p class="rr-vai"><a href="https://rotte-e-racconti.simone-ariotti97.workers.dev/" target="_blank" rel="noopener">Vai al sito</a></p>
+      <p class="rr-gate"><span class="gate">Online, sei diari pubblicati</span></p>
+      <p class="rr-azioni">
+        <a class="btn btn-primaria" data-luce href="rotte-e-racconti.html">Leggi il case study <svg class="icona freccia" aria-hidden="true"><use href="#i-freccia"/></svg></a>
+        <a class="btn btn-silenziosa" href="https://rotte-e-racconti.simone-ariotti97.workers.dev/" target="_blank" rel="noopener">Vai al sito <svg class="icona freccia" aria-hidden="true"><use href="#i-esterno"/></svg></a>
+      </p>
     </div>
-    <a class="rr-visual" href="https://rotte-e-racconti.simone-ariotti97.workers.dev/" target="_blank" rel="noopener" aria-label="Apri il sito di Rotte e Racconti">
-      <span class="marchio" aria-hidden="true">Rotte e Racconti</span>
-    </a>
+    <div class="rr-lato">
+      <a class="rr-visual" href="https://rotte-e-racconti.simone-ariotti97.workers.dev/" target="_blank" rel="noopener" aria-label="Apri il sito di Rotte e Racconti">
+        <img src="assets/rr-home.webp" width="1000" height="668" loading="lazy" alt="La home di Rotte e Racconti: il marchio in grande sopra la costa vulcanica di Lanzarote al tramonto.">
+      </a>
+      <p class="rr-credito">Fotografia di Emanuele. Identità, sito e sistema editoriale miei.</p>
+    </div>
   </div>
 </section>
 
@@ -736,7 +218,14 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
   if(!gl){canvas.style.background='radial-gradient(circle at 62% 38%, #171D3E 0%, #080B18 72%)';return;}
 
   const ridotto=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const DPR=Math.min(window.devicePixelRatio||1,1.0);
+  /* La risoluzione era fissata a 1 pixel fisico per pixel CSS: su uno schermo
+     denso il fotogramma veniva poi ingrandito dal browser, e ogni bordo
+     calcolato dallo shader arrivava a schermo scalettato. Adesso parte a 1.5
+     e scende da sola se i fotogrammi non tengono. Non risale: una risalita
+     che poi va rifatta si vede come uno scatto. 1.5 e non 2 perche' il costo
+     e' quadratico e questo shader fa circa 88 valutazioni di campo per pixel;
+     su una macchina che regge, il numero da alzare e' questo. */
+  let DPR=Math.min(window.devicePixelRatio||1,1.5);
 
   const vsrc=`attribute vec2 a; void main(){ gl_Position=vec4(a,0.0,1.0); }`;
   const fsrc=`
@@ -813,8 +302,15 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
       if(hit){
         vec3 n=normale(pos);
 
+        /* Il dettaglio di superficie gira a 55 volte la frequenza della forma:
+           oltre una certa distanza un pixel ne copre piu' di un periodo e
+           quello che resta non e' materia, e' grana. fp e' l'impronta di un
+           pixel in unita' di mondo; dove l'impronta supera il dettaglio, il
+           dettaglio si spegne. Alzando la risoluzione l'impronta si stringe e
+           il dettaglio torna da solo: e' la stessa formula a decidere. */
+        float fp=t/(1.55*min(uRes.x,uRes.y));
         vec3 dn3=vec3(gy(pos*55.0), gy(pos*55.0+vec3(2.7,1.3,4.1)), gy(pos*55.0+vec3(5.2,3.9,1.7)));
-        n=normalize(n+0.07*dn3);
+        n=normalize(n+0.07*exp(-1.2*fp*55.0)*dn3);
 
         float ao=0.0, sca=1.0;
         for(int i=1;i<=4;i++){
@@ -840,6 +336,9 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
 
         float pr=0.6*gy(pos*52.0)+0.4*gy(pos*93.0);
         float pore=smoothstep(0.60,1.10,pr);
+        /* i pori sfumano verso la loro media, non verso zero: cosi a distanza
+           la superficie perde il brulichio senza schiarirsi */
+        pore=mix(0.20,pore,exp(-1.2*fp*62.0));
         float micro=1.0-0.15*pore;
 
         vec3 ghiaccio=vec3(0.769,0.808,0.961);
@@ -926,140 +425,41 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
   new IntersectionObserver(en=>{ visibile=en[0].isIntersecting; },{threshold:0.02})
     .observe(canvas);
 
-  let start=performance.now();
+  let start=performance.now(), prima=start;
+  const durate=[];
   function loop(now){
+    const dt=Math.min(Math.max((now-prima)/1000,0.001),0.1); prima=now;
     clock=(now-start)/1000;
     if(visibile){
-      mx+=(tx-mx)*0.07; my+=(ty-my)*0.07;
-      force+=(tforce-force)*0.05;
+      /* Lo smorzamento era 0.07 per fotogramma: a 120Hz arrivava al doppio
+         della velocita' e quando un fotogramma saltava faceva uno scatto.
+         Scritto sul tempo, la costante e' la stessa a qualsiasi refresh:
+         0.07 e 0.05 a 60Hz valgono 0.23s e 0.32s di costante di tempo. */
+      const kM=1-Math.exp(-dt/0.23), kF=1-Math.exp(-dt/0.32);
+      mx+=(tx-mx)*kM; my+=(ty-my)*kM;
+      force+=(tforce-force)*kF;
       draw(clock);
+
+      /* Governo della risoluzione: solo in discesa. Si parte da 1.5 e si
+         scende se i fotogrammi non tengono; non si risale mai, perche' una
+         risalita che poi va rifatta si vede come uno scatto e un salto di
+         nitidezza proprio nella prima schermata. Si guarda la mediana di 40
+         fotogrammi, non la media: un singolo scatto del sistema non deve
+         far scendere tutto. La soglia e' assoluta (50 fotogrammi al secondo)
+         e non relativa al refresh: su uno schermo a 120Hz tenere 60 va bene. */
+      durate.push(dt*1000); if(durate.length>40) durate.shift();
+      if(durate.length===40){
+        const m=durate.slice().sort((a,b)=>a-b)[20];
+        if(m>20 && DPR>1){ DPR=Math.max(1,DPR-0.25); durate.length=0; resize(); }
+      }
     }
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
 })();
-
-/* la luce del reticolo segue il puntatore su card e bottoni (solo pointer fine) */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.querySelectorAll('[data-luce]').forEach(el=>{
-    el.addEventListener('pointermove',e=>{
-      const r=el.getBoundingClientRect();
-      el.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%');
-      el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
-    },{passive:true});
-  });
-})();
-
-/* ancore al caricamento: con scroll-behavior:smooth sulla radice il salto iniziale
-   diventa un'animazione lunga che il browser puo' annullare, e la pagina resta in cima.
-   Lo stato sicuro e' arrivarci subito: si disattiva il morbido per l'istante del salto,
-   si ripete dopo che il layout si e' assestato (font, altezze calcolate), e si riattiva. */
-(function(){
-  if(!location.hash) return;
-  var radice=document.documentElement;
-  function vai(){
-    var t=document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    if(!t) return;
-    var prima=radice.style.scrollBehavior;
-    radice.style.scrollBehavior='auto';
-    t.scrollIntoView();
-    requestAnimationFrame(function(){ radice.style.scrollBehavior=prima; });
-  }
-  if(history.scrollRestoration) history.scrollRestoration='manual';
-  addEventListener('load', function(){ vai(); setTimeout(vai,150); setTimeout(vai,600); });
-})();
-
-/* motion: ogni sezione entra come composizione di gesti tipizzati, in cascata */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.documentElement.classList.add('reveal-on');
-  const groups=document.querySelectorAll('.hero-testo, #lavori .wrap, .principio, .rr-testo, .contatto-layout > div');
-  function roleOf(el){
-    if(el.matches('.eyebrow,.p-label,.p-fonte,.meta')) return 'm-eyebrow';
-    if(el.matches('h1,h2,h3')) return 'm-title';
-    if(el.matches('blockquote,.evidenza')) return 'm-quote';
-    return 'm-text';
-  }
-  function unitsOf(g){
-    const out=[];
-    Array.from(g.children).forEach(c=>{
-      if(c.matches('ul,ol')) c.querySelectorAll(':scope > li').forEach(li=>out.push([li,'m-li']));
-      else if(c.matches('.figure')) c.querySelectorAll(':scope > figure').forEach(f=>out.push([f,'m-figure']));
-      else if(c.matches('.cs-grid')) c.querySelectorAll(':scope > *').forEach(k=>out.push([k,'m-figure']));
-      else out.push([c,roleOf(c)]);
-    });
-    return out;
-  }
-  const io=new IntersectionObserver((entries,obs)=>{
-    entries.forEach(e=>{
-      if(!e.isIntersecting) return;
-      (e.target.__units||[]).forEach(([el,role],i)=>{
-        const d=Math.min(i*140,720);
-        el.style.transitionDelay=d+'ms';
-        requestAnimationFrame(()=>el.classList.add('in'));
-        setTimeout(()=>{ el.style.transitionDelay=''; el.classList.remove('m',role,'in'); },d+1400);
-      });
-      if(e.target.matches('.principio')) e.target.classList.add('lit');
-      obs.unobserve(e.target);
-    });
-  },{threshold:0.1, rootMargin:'0px 0px -6% 0px'});
-  /* Un gruppo gia' dentro l'area visibile all'avvio non si nasconde affatto:
-     l'osservatore notifica solo i cambiamenti, quindi se la pagina non si muove piu'
-     quel testo resterebbe invisibile per sempre. Lo stato di partenza sicuro e' visibile. */
-  const soglia=innerHeight*0.92;
-  groups.forEach(g=>{
-    if(g.getBoundingClientRect().top < soglia) return;
-    const units=unitsOf(g);
-    units.forEach(([el,role])=>el.classList.add('m',role));
-    g.__units=units;
-    io.observe(g);
-  });
-})();
-
-/* cursore-lampada: stato per oggetto, solo puntatore fine, statico con reduced-motion */
-(function(){
-  if(!window.matchMedia('(pointer:fine)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const cur=document.createElement('div');
-  cur.id='cursore'; cur.setAttribute('aria-hidden','true');
-  document.body.appendChild(cur);
-  document.documentElement.classList.add('cursor-on');
-  let tx=innerWidth/2, ty=innerHeight/2, cx=tx, cy=ty;
-  const intSel='a,button,.btn,.cs-card,[data-luce],input,textarea,label,[role="button"]';
-  const txtSel='h1,h2,h3,h4,h5,p,li,blockquote,figcaption';
-  addEventListener('pointermove',e=>{ tx=e.clientX; ty=e.clientY; cur.style.opacity=1; },{passive:true});
-  addEventListener('pointerover',e=>{
-    const t=e.target;
-    if(t.closest && t.closest(intSel)){ cur.classList.add('is-int'); cur.classList.remove('is-text'); }
-    else if(t.closest && t.closest(txtSel)){ cur.classList.add('is-text'); cur.classList.remove('is-int'); }
-    else { cur.classList.remove('is-int','is-text'); }
-  },{passive:true});
-  document.addEventListener('mouseleave',()=>{ cur.style.opacity=0; });
-  (function loop(){
-    cx+=(tx-cx)*0.3; cy+=(ty-cy)*0.3;
-    cur.style.transform='translate('+cx+'px,'+cy+'px) translate(-50%,-50%)';
-    requestAnimationFrame(loop);
-  })();
-})();
-
-/* magnetismo: i bottoni si muovono verso il cursore */
-(function(){
-  if(!window.matchMedia('(pointer:fine)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.querySelectorAll('.btn').forEach(el=>{
-    el.addEventListener('pointermove',e=>{
-      const r=el.getBoundingClientRect();
-      const mx=Math.max(-2,Math.min(2,(e.clientX-(r.left+r.width/2))*0.04));
-      const my=Math.max(-2,Math.min(2,(e.clientY-(r.top+r.height/2))*0.045));
-      el.style.transform='translate('+mx+'px,'+my+'px)';
-      el.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%');
-      el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
-    });
-    el.addEventListener('pointerleave',()=>{ el.style.transform=''; });
-  });
-})();
-
+</script>
+<script src="assets/sito.js"></script>
+<script>
 /* ═══ Sezione "Chi c'e dietro": la colonna trasla, una fascia di fuoco al centro ingrandisce ═══
    Solo puntatore fine + motion ok; altrimenti versione statica. Zero reflow: transform/opacity/dashoffset.
    Il filo e spezzato in segmenti fra una stazione e l'altra: si disegnano man mano che scendono sotto la
@@ -1199,19 +599,7 @@ p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
   init();
 })();
 </script>
-<script>
-/* anno del copyright: scritto dal browser, cosi il sito non invecchia da solo */
-document.querySelectorAll('[data-anno]').forEach(e=>{e.textContent=new Date().getFullYear();});
-/* la barra prende corpo appena si lascia la cima: sempre visibile, mai invadente sulla hero */
-(function(){
-  const nav=document.querySelector('nav.principale');
-  if(!nav) return;
-  let atteso=false;
-  function stato(){ atteso=false; nav.classList.toggle('ancorata', scrollY>24); }
-  addEventListener('scroll',()=>{ if(!atteso){ atteso=true; requestAnimationFrame(stato); } },{passive:true});
-  stato();
-})();
-</script>
+
 <script>
 /* Il filo in modalita statica (touch e schermi piccoli) non ha nessun movimento:
    le stazioni entrano una alla volta mentre si scorre. In modalita dinamica queste

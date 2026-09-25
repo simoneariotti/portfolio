@@ -31,383 +31,24 @@
 <meta name="twitter:title" content="Rotte e Racconti: un sistema editoriale che regge senza di me · Simone Ariotti">
 <meta name="twitter:description" content="Un progetto editoriale a due persone che produce come un team: gerarchia di documenti versionati, regole generative al posto dei cataloghi, ricerca usata con disciplina.">
 <meta name="twitter:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
-<style>
-/* Font ospitati qui, nessuna terza parte. Solo i pesi che il sito usa davvero,
-   verificati misurando il font-weight calcolato di ogni elemento nel browser:
-   Clash Display solo 500, General Sans 400 e 500, Space Mono 400.
-   Aggiungerne uno = copiare il .woff2 e ripetere il blocco.
-   Licenze in assets/font/, ITF Free Font License per i due Fontshare. */
-@font-face{
-  font-family:'Clash Display';font-style:normal;font-weight:500;font-display:swap;
-  src:url('assets/font/clash-display-500.woff2') format('woff2');
-}
-@font-face{
-  font-family:'General Sans';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/general-sans-400.woff2') format('woff2');
-}
-@font-face{
-  font-family:'General Sans';font-style:normal;font-weight:500;font-display:swap;
-  src:url('assets/font/general-sans-500.woff2') format('woff2');
-}
-/* Space Mono ospitato qui, non su un CDN esterno: senza terze parti
-   nessun IP dei visitatori esce dal sito. SIL Open Font License 1.1,
-   licenza in assets/font/LICENSE-space-mono.txt */
-@font-face{
-  font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/space-mono-400-latin.woff2') format('woff2');
-  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-@font-face{
-  font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;
-  src:url('assets/font/space-mono-400-latin-ext.woff2') format('woff2');
-  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-
-:root{
-  /* ── Palette RETICOLO: un solo tema, scuro ── */
-  --abisso:#080B18; --ghiaccio:#C4CEF5; --testo:#EAEDFA; --mezzo:#7E86AD; --funzione:#A9B4F5;
-  --superficie:color-mix(in srgb, var(--ghiaccio) 7%, var(--abisso));
-  --bordo:color-mix(in srgb, var(--testo) 14%, transparent);
-  --bordo-forte:color-mix(in srgb, var(--testo) 28%, transparent);
-  --trama-fondo:
-    radial-gradient(125% 85% at 86% -12%, #141A3C 0%, rgba(20,26,60,0) 50%),
-    radial-gradient(115% 95% at -14% 114%, #0E1330 0%, rgba(14,19,48,0) 48%),
-    var(--abisso);
-  --font-display:'Clash Display','Segoe UI',system-ui,sans-serif;
-  --font-body:'General Sans',system-ui,sans-serif;
-  --font-mono:'Space Mono',ui-monospace,monospace;
-  --ease-viscoso:cubic-bezier(0.22,1,0.36,1);
-  --durata-micro:220ms;
-  --misura-prosa:70ch;
-  --materia:.65;   /* quanto emerge la materia di fondo. Verificato: oltre .65 il testo secondario scende sotto 4.5:1 */
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-/* la barra resta in cima: gli ancoraggi devono fermarsi sotto, non sparirci dietro */
-:target,section[id],header[id],div[id]{scroll-margin-top:96px}
-@media(max-width:760px){:target,section[id],header[id],div[id]{scroll-margin-top:110px}}
-@media (prefers-reduced-motion: reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation:none!important;transition-duration:1ms!important}
-}
-/* ── MOTION: vocabolario di gesti. Ogni tipo di elemento ha il suo, ma tutti condividono easing e famiglia di tempi, così l'ingresso di una sezione e un'animazione composita e armonica ── */
-.m{transition:opacity var(--d,560ms) var(--ease-viscoso), transform var(--d,560ms) var(--ease-viscoso)}
-.reveal-on .m{opacity:0;transform:var(--from,translateY(14px))}
-.reveal-on .m.in{opacity:1;transform:none}
-.m-eyebrow{--from:translateX(-14px);--d:660ms}   /* occhiello: scivola da sinistra */
-.m-title{--from:translateY(26px);--d:1050ms}     /* titolo: sale lento, gesto ancora */
-.m-text{--from:translateY(16px);--d:840ms}       /* paragrafo: sale corto */
-.m-li{--from:translateY(12px);--d:720ms}         /* voce di lista: sale minima, in cascata */
-.m-figure{--from:translateY(18px) scale(.955);--d:1150ms} /* diagramma: entra con scala, e a parte */
-.m-quote{--from:translateY(20px);--d:1000ms}     /* citazione: sale ampio */
-@media (prefers-reduced-motion: reduce){.reveal-on .m{opacity:1;transform:none;transition:none}}
-
-/* ── CURSORE: la lampada sulla struttura. Cambia forma secondo l'oggetto sotto ── */
-.cursor-on, .cursor-on *{cursor:none}
-#cursore{
-  position:fixed;left:0;top:0;z-index:9999;pointer-events:none;opacity:0;
-  width:12px;height:12px;border-radius:50%;
-  background:var(--funzione);
-  box-shadow:0 0 6px 0 color-mix(in srgb, var(--funzione) 24%, transparent);
-  transition:width .28s var(--ease-viscoso), height .28s var(--ease-viscoso),
-    border-radius .28s var(--ease-viscoso), background .28s var(--ease-viscoso),
-    border-color .28s var(--ease-viscoso), opacity .3s var(--ease-viscoso);
-  will-change:transform;
-}
-#cursore.is-int{
-  width:38px;height:38px;background:transparent;
-  border:1.5px solid var(--funzione);border-radius:50%;
-  box-shadow:0 0 10px 0 color-mix(in srgb, var(--funzione) 16%, transparent);
-}
-#cursore.is-text{
-  width:2px;height:26px;border-radius:1px;background:var(--ghiaccio);
-  box-shadow:0 0 4px color-mix(in srgb, var(--ghiaccio) 35%, transparent);
-  animation:curblink 1.1s steps(1) infinite;
-}
-@keyframes curblink{0%,49%{opacity:1}50%,99%{opacity:.2}100%{opacity:1}}
-
-/* ── LINK EDITORIALE: sottolineatura che si disegna al passaggio ── */
-p a:not(.btn), li a:not(.btn){
-  text-decoration:none;
-  background-image:linear-gradient(var(--funzione),var(--funzione));
-  background-size:0% 1px;background-position:0 100%;background-repeat:no-repeat;
-  transition:background-size .32s var(--ease-viscoso);
-}
-p a:not(.btn):hover, li a:not(.btn):hover{background-size:100% 1px}
-body{background:var(--trama-fondo);background-attachment:fixed;color:var(--testo);font-family:var(--font-body);font-size:17px;line-height:1.7}
-a{color:var(--funzione)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--funzione);outline-offset:3px;border-radius:2px}
-.icona{width:20px;height:20px;flex:0 0 auto;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
-.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
-.wrap-prosa{max-width:calc(var(--misura-prosa) + 2*clamp(20px,4.5vw,56px));margin:0 auto;padding:0 clamp(20px,4.5vw,56px)}
-
-/* ── MATERIA DI FONDO: la struttura non finisce con la hero.
-   Un livello fisso dietro tutta la pagina, immobile mentre il contenuto scorre.
-   E un'immagine, non lo shader: tenere accesa la GPU per dieci schermate di scroll
-   si paga in batteria e fluidita, e le prestazioni sono una regola non negoziabile.
-   --materia governa quanto emerge: oltre .65 il testo secondario scende sotto 4.5:1,
-   quindi non si alza a occhio. ── */
-.materia{
-  position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:url('assets/materia.webp') center center / cover no-repeat;
-  opacity:var(--materia);
-}
-@media (max-width:760px){.materia{opacity:calc(var(--materia) * .8)}}
-
-/* ── NAV: filetto sottile, nessuna banda ── */
-nav.principale{
-  position:sticky;top:0;z-index:40;
-  display:flex;justify-content:space-between;align-items:center;
-  padding:24px clamp(20px,4.5vw,56px);
-  background:rgba(8,11,24,.985);
-  border-bottom:1px solid var(--bordo);
-  transition:background-color var(--durata-micro) var(--ease-viscoso),
-             border-color var(--durata-micro) var(--ease-viscoso),
-             padding var(--durata-micro) var(--ease-viscoso);
-}
-/* appena si lascia la cima la barra si stringe: resta consultabile senza rubare schermo */
-nav.principale.ancorata{padding-top:14px;padding-bottom:14px}
-/* sulla home galleggia sopra la hero: trasparente in cima, prende corpo quando si scende.
-   Fondo pieno e non sfocato: un blur permanente sopra il canvas si paga a ogni frame */
-nav.principale.sovrapposta{position:fixed;left:0;right:0;background:transparent;border-bottom-color:transparent}
-nav.principale.sovrapposta.ancorata{background:rgba(8,11,24,.985);border-bottom-color:var(--bordo)}
-nav.principale .logo{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:500;font-size:17px;color:var(--testo);text-decoration:none}
-nav.principale ul{display:flex;gap:clamp(16px,2.6vw,32px);list-style:none}
-nav.principale ul a{font-size:15px;font-weight:500;text-decoration:none;color:var(--mezzo);transition:color var(--durata-micro) var(--ease-viscoso)}
-nav.principale ul a:hover{color:var(--funzione)}
-/* Switch di lingua. Stesso modello della barra indice dell'about:
-   l'accento segnala dove sei, e uno stato attivo, non decorazione.
-   Sopra la hero la barra e trasparente e il fondo e la struttura animata:
-   li --mezzo scende a 2,5:1, quindi la lingua non attiva usa --ghiaccio. */
-nav.principale ul li.lingua{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em}
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{
-  /* area di tocco 24x24 minimo (WCAG 2.5.8): i margini negativi la allargano
-     senza spostare il resto della barra */
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:24px;min-height:24px;margin:-4px -2px;
-  font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;
-  border-bottom:2px solid transparent;
-  transition:color var(--durata-micro) var(--ease-viscoso),border-color var(--durata-micro) var(--ease-viscoso);
-}
-/* Space Mono esiste solo in 400 e 700: ereditare il 500 della barra farebbe
-   sintetizzare al browser un finto grassetto. */
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{font-weight:400}
-nav.principale ul li.lingua a{color:var(--ghiaccio);text-decoration:none}
-nav.principale ul li.lingua a:hover,nav.principale ul li.lingua a:focus-visible{color:var(--testo)}
-/* Deroga voluta rispetto alla barra indice, che colora anche il testo di --funzione:
-   qui la barra puo' stare sopra la hero, dove --funzione sul testo scende a 4,3:1.
-   L'accento resta sul filetto (elemento grafico, soglia 3:1), il testo va su --testo. */
-nav.principale ul li.lingua .attiva{color:var(--testo);border-bottom-color:var(--funzione)}
-nav.principale ul li.lingua .sep{color:color-mix(in srgb, var(--ghiaccio) 40%, transparent)}
-@media (prefers-reduced-motion: reduce){nav.principale ul li.lingua a{transition:none}}
-@media(max-width:760px){
-  nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{min-height:44px;margin:-4px -2px}
-}
-.sez-nota{color:var(--mezzo);font-size:14px;margin:-4px 0 30px}
-/* Switch di lingua. Stesso modello della barra indice dell'about:
-   l'accento segnala dove sei, e uno stato attivo, non decorazione.
-   Sopra la hero la barra e trasparente e il fondo e la struttura animata:
-   li --mezzo scende a 2,5:1, quindi la lingua non attiva usa --ghiaccio. */
-nav.principale ul li.lingua{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em}
-nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{
-  /* area di tocco 24x24 minimo (WCAG 2.5.8): i margini negativi la allargano
-     senza spostare il resto della barra */
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:24px;min-height:24px;margin:-4px -2px;
-  font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;
-  border-bottom:2px solid transparent;
-  transition:color var(--durata-micro) var(--ease-viscoso),border-color var(--durata-micro) var(--ease-viscoso);
-}
-nav.principale ul li.lingua a{color:var(--ghiaccio);text-decoration:none}
-nav.principale ul li.lingua a:hover,nav.principale ul li.lingua a:focus-visible{color:var(--testo)}
-/* Deroga voluta rispetto alla barra indice, che colora anche il testo di --funzione:
-   qui la barra puo' stare sopra la hero, dove --funzione sul testo scende a 4,3:1.
-   L'accento resta sul filetto (elemento grafico, soglia 3:1), il testo va su --testo. */
-nav.principale ul li.lingua .attiva{color:var(--testo);border-bottom-color:var(--funzione)}
-nav.principale ul li.lingua .sep{color:color-mix(in srgb, var(--ghiaccio) 40%, transparent)}
-@media (prefers-reduced-motion: reduce){nav.principale ul li.lingua a{transition:none}}
-@media(max-width:760px){
-  nav.principale ul li.lingua a,nav.principale ul li.lingua .attiva{min-height:44px;margin:-4px -2px}
-}
-.sez-nota{color:var(--mezzo);font-size:14px;margin:-4px 0 30px}
-nav.principale ul a[aria-current="page"]{color:var(--testo)}
-@media(max-width:760px){
-  /* sotto i 760px le voci non stanno su una riga con il logo: il logo prende la sua riga,
-     le voci vanno a capo per conto loro e ricevono l'area tattile che a 15px non avevano */
-  nav.principale{flex-direction:column;align-items:flex-start;gap:2px;padding:18px clamp(20px,4.5vw,56px)}
-  nav.principale .logo{white-space:nowrap}
-  nav.principale ul{flex-wrap:wrap;gap:0 20px}
-  nav.principale ul a{font-size:13px;padding:9px 0;display:inline-block}
-  /* a due righe su schermo stretto la barra pesa: da ancorata si stringe ancora */
-  nav.principale.ancorata{padding-top:9px;padding-bottom:7px}
-  nav.principale.ancorata .logo{font-size:15px}
-}
-@media (prefers-reduced-motion: reduce){nav.principale{transition:none}}
-
-/* ── HERO DI PAGINA: sul fondo continuo, separato solo da spazio ── */
-.cs-hero{padding:clamp(64px,8vw,100px) 0 clamp(52px,7vw,80px)}
-.cs-hero .meta{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:14px;margin-bottom:26px}
-.cs-hero h1{font-family:var(--font-display);font-weight:500;font-size:clamp(32px,4.6vw,60px);line-height:1.08;letter-spacing:-.014em;max-width:20ch;margin-bottom:20px;text-wrap:balance}
-.cs-hero .piano{font-size:19px;color:var(--mezzo);max-width:52ch}
-
-/* ── PROSA ── */
-section.blocco{padding:clamp(48px,6vw,72px) 0;border-top:1px solid var(--bordo)}
-.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:14px}
-.blocco h2{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,2.8vw,34px);letter-spacing:-.006em;margin-bottom:22px}
-.blocco h3{font-family:var(--font-display);font-weight:500;font-size:21px;margin:36px 0 14px}
-.blocco p{margin-bottom:1.15em;max-width:var(--misura-prosa)}
-.blocco p.secondario{color:var(--mezzo)}
-.blocco ul{margin:0 0 1.3em 0;padding:0;list-style:none;max-width:var(--misura-prosa)}
-.blocco ul li{position:relative;padding-left:26px;margin-bottom:14px}
-.blocco ul li::before{content:'';position:absolute;left:2px;top:.62em;width:10px;height:2px;background:var(--ghiaccio)}
-.blocco ul li strong{font-weight:500}
-.evidenza{
-  font-family:var(--font-display);font-weight:500;font-size:clamp(21px,2.4vw,29px);line-height:1.42;letter-spacing:-.004em;
-  color:var(--testo);max-width:var(--misura-prosa);
-  padding:6px 0 6px 26px;border-left:2px solid var(--bordo-forte);
-  margin:32px 0;
-}
-
-/* ── FIGURE: diagrammi astratti, pattern e strutture non interfacce reali ── */
-/* ── QUADRO DI MISURA e LETTURE ────────────────────────────────────────────
-   Non sono card: sono una struttura appesa. Un filetto orizzontale comune, e
-   da ogni giunzione scende un montante con il suo nodo, la stessa grammatica
-   del filetto verticale del blocco "Principio emerso". Entrambi i blocchi sono
-   liste: il sistema di motion le riconosce gia' come ul>li e le fa entrare in
-   cascata, quindi non serve una riga di JS in piu'.
-   Nessuna barra di riempimento sulle letture: quattro indicatori su cinque
-   migliorano salendo e uno scendendo, quindi una barra unica mentirebbe. */
-/* ── APPROFONDIMENTO: <details> nativo, zero JS ────────────────────────────
-   Il segno "piu'" e' due filetti da 1px, non un'icona presa altrove: aprendo,
-   il tratto verticale si ritrae e resta l'orizzontale. Stessa materia del
-   reticolo. <details>/<summary> danno gratis tastiera, ruolo e stato
-   annunciato, e senza CSS il contenuto resta comunque leggibile.
-   Qui --funzione e' legittimo: e' un comando, non decorazione. */
-.approfondimento{border-top:1px solid var(--bordo);border-bottom:1px solid var(--bordo);
-  margin:24px 0 28px;max-width:var(--misura-prosa)}
-.approfondimento>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;
-  padding:15px 2px;color:var(--ghiaccio);font-size:15.5px;
-  transition:color var(--durata-micro) var(--ease-viscoso)}
-.approfondimento>summary::-webkit-details-marker{display:none}
-.approfondimento>summary:hover{color:var(--testo)}
-.approfondimento>summary:focus-visible{outline:2px solid var(--funzione);outline-offset:4px;color:var(--testo)}
-.approfondimento .segno{position:relative;flex:0 0 11px;width:11px;height:11px}
-.approfondimento .segno::before,.approfondimento .segno::after{content:'';position:absolute;
-  background:var(--funzione);transition:transform .34s var(--ease-viscoso),opacity .34s var(--ease-viscoso)}
-.approfondimento .segno::before{left:0;top:5px;width:11px;height:1px}
-.approfondimento .segno::after{left:5px;top:0;width:1px;height:11px}
-.approfondimento[open] .segno::after{transform:scaleY(0);opacity:0}
-/* il corpo rientra sotto l'etichetta, non sotto il segno: la colonna del segno
-   resta un canale vuoto e l'approfondimento si legge come un oggetto solo */
-.approfondimento .corpo{padding:10px 0 4px 25px}
-.approfondimento .corpo p{margin:0 0 14px;font-size:15px;line-height:1.62;color:var(--ghiaccio);max-width:none}
-.approfondimento .corpo p:last-child{margin-bottom:0}
-@media(max-width:600px){.approfondimento .corpo{padding-left:0}}
-.approfondimento[open] .corpo{animation:apre .42s var(--ease-viscoso) both}
-@keyframes apre{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion: reduce){
-  .approfondimento .segno::before,.approfondimento .segno::after{transition:none}
-  .approfondimento[open] .corpo{animation:none}
-}
-
-.quadro{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
-  gap:0 26px;margin:34px 0 14px;max-width:var(--misura-prosa)}
-/* il filetto sta sulla cella, non sul contenitore: cosi' ogni riga della griglia
-   ha il suo, e i nodi non restano appesi nel vuoto quando le colonne vanno a capo */
-.quadro .misura{position:relative;padding:26px 0 20px;border-top:1px solid var(--bordo-forte)}
-.quadro .misura::before{content:'';position:absolute;left:0;top:0;width:1px;height:17px;background:var(--bordo-forte)}
-.quadro .misura::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
-  background:var(--ghiaccio);transform:rotate(45deg)}
-.quadro .val{display:block;font-family:var(--font-display);font-weight:500;
-  font-size:clamp(30px,4.2vw,44px);line-height:1;letter-spacing:-.022em;color:var(--testo)}
-.quadro .eti{display:block;margin-top:10px;font-size:14.5px;line-height:1.45;color:var(--ghiaccio)}
-
-.letture{list-style:none;padding:0;margin:30px 0 26px;max-width:var(--misura-prosa);border-top:1px solid var(--bordo)}
-.letture li{position:relative;display:grid;grid-template-columns:minmax(34px,auto) 1fr;
-  gap:5px 22px;align-items:baseline;padding:19px 0 18px;border-bottom:1px solid var(--bordo)}
-/* stessa giunzione del quadro: il nodo da solo galleggiava e sembrava un apostrofo,
-   con il montante che scende diventa una struttura appesa al filetto */
-.letture li::before{content:'';position:absolute;left:0;top:0;width:1px;height:15px;background:var(--bordo-forte)}
-.letture li::after{content:'';position:absolute;left:-2.5px;top:-2.5px;width:5px;height:5px;
-  background:var(--ghiaccio);transform:rotate(45deg)}
-/* l'ordinale, non il valore: i valori misurati riguardano il prodotto di qualcun
-   altro e restano fuori dal sito. Space Mono solo qui, che e' micro-metadata. */
-.letture .ord{font-family:var(--font-mono);font-weight:400;font-size:12px;letter-spacing:.1em;color:var(--mezzo)}
-.letture .nome{font-family:var(--font-display);font-weight:500;font-size:clamp(17px,1.5vw,20px);line-height:1.35;letter-spacing:-.004em;color:var(--testo)}
-.letture .dice{grid-column:2;font-size:14.5px;line-height:1.55;color:var(--ghiaccio)}
-@media(max-width:600px){
-  .letture li{grid-template-columns:1fr;gap:7px}
-  .letture .dice{grid-column:1}
-}
-
-.figure{display:flex;flex-direction:column;gap:28px;max-width:600px;margin:8px 0 20px}
-.figura{
-  position:relative;border:1px solid var(--bordo);border-radius:22px 14px 20px 16px;overflow:hidden;
-  display:flex;flex-direction:column;gap:16px;padding:22px 22px 18px;
-  background:radial-gradient(130% 150% at 30% 24%, color-mix(in srgb, var(--ghiaccio) 8%, var(--abisso)) 0%, var(--superficie) 72%);
-}
-.figura svg{width:100%;height:auto;display:block}
-.figura figcaption{font-size:14px;color:var(--mezzo);max-width:38ch}
-
-/* ── PRINCIPIO (firma editoriale): voce display su filetto, niente corsivi ── */
-.banda-principio{padding:clamp(64px,9vw,104px) 0;border-top:1px solid var(--bordo)}
-.principio{position:relative;max-width:880px;margin:0 auto;padding:6px 0 6px 28px}
-.principio::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--bordo-forte);transform-origin:top;transition:transform .9s var(--ease-viscoso)}
-.reveal-on .principio::before{transform:scaleY(0)}
-.reveal-on .principio.lit::before{transform:scaleY(1)}
-@media (prefers-reduced-motion: reduce){.reveal-on .principio::before{transform:scaleY(1);transition:none}}
-.principio .p-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:16px}
-.principio blockquote{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,3.2vw,38px);line-height:1.4;letter-spacing:-.005em}
-.principio .p-fonte{display:flex;align-items:center;gap:14px;margin-top:26px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
-.principio .p-fonte::before{content:'';width:44px;height:1px;background:var(--bordo-forte)}
-
-/* ── CODA: prossimo case study ── */
-.coda{padding:clamp(60px,8vw,92px) 0;border-top:1px solid var(--bordo)}
-.coda .griglia{display:grid;grid-template-columns:1fr auto;gap:clamp(28px,5vw,64px);align-items:center}
-@media(max-width:760px){.coda .griglia{grid-template-columns:1fr}}
-.cs-card{
-  position:relative;display:block;border-radius:26px 16px 24px 18px;overflow:hidden;text-decoration:none;color:var(--testo);
-  background:var(--superficie);border:1px solid var(--bordo);max-width:420px;
-  transition:transform var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso);
-}
-.cs-card:hover{transform:translateY(-4px);border-color:var(--bordo-forte)}
-.cs-card .luce{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity var(--durata-micro) var(--ease-viscoso);
-  background:radial-gradient(280px circle at var(--lx,72%) var(--ly,22%), color-mix(in srgb, var(--ghiaccio) 14%, transparent) 0%, transparent 70%)}
-.cs-card:hover .luce{opacity:1}
-.cs-cover{height:150px;position:relative;overflow:hidden;
-  background:
-    radial-gradient(120px 96px at 74% 22%, var(--abisso) 32%, transparent 33%),
-    radial-gradient(80px 64px at 24% 78%, var(--abisso) 30%, transparent 31%),
-    radial-gradient(130% 150% at 30% 30%, color-mix(in srgb, var(--ghiaccio) 34%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 11%, var(--abisso)) 62%, var(--superficie) 100%);}
-.cs-body{padding:22px;position:relative;z-index:2}
-.cs-meta{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px}
-.cs-meta .gate{color:var(--funzione)}
-.cs-body h3{font-family:var(--font-display);font-weight:500;font-size:19px;line-height:1.3}
-.coda .oppure{font-size:15px;color:var(--mezzo)}
-.coda .oppure a{font-weight:500}
-
-/* footer: tre livelli distinti invece di righe accatastate.
-   identita (micro-metadata) > la riga sul work in progress (prosa) > il copyright, staccato da un filetto */
-footer{border-top:1px solid var(--bordo);padding:52px 0 40px}
-footer .identita{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);line-height:2}
-footer .identita strong{color:var(--testo);font-weight:400}
-footer .wip{text-transform:none;letter-spacing:0;font-size:14px;line-height:1.6;margin-top:22px;max-width:42ch;color:var(--mezzo)}
-footer .chiudi{
-  margin-top:34px;padding-top:20px;border-top:1px solid var(--bordo);
-  display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo);
-}
-</style>
+<link rel="stylesheet" href="assets/stile.css">
+<link rel="stylesheet" href="assets/caso.css">
 </head>
 <body>
 
 <!-- Sprite iconografica: SOLO Lucide, stroke 2, currentColor -->
+<!-- ═══ ICONOGRAFIA · blocco identico su ogni pagina, vedi storybook ═══
+     Griglia 24, tratto 2, estremi e giunti tondi, nessun riempimento, colore
+     ereditato da currentColor. Quattro segni e basta: freccia (vai), giu'
+     (scendi nella pagina), esterno (esci dal sito), indietro (torna alla home).
+     Uno stato non e' un'icona: lo dice il nodo di .gate. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-freccia" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-giu" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+  <symbol id="i-esterno" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
   <symbol id="i-indietro" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
 </svg>
 
-<div class="materia" aria-hidden="true"></div>
 <nav class="principale" aria-label="Principale">
   <a class="logo" href="index.html"><svg class="icona" style="width:18px;height:18px" aria-hidden="true"><use href="#i-indietro"/></svg>Simone Ariotti</a>
   <ul>
@@ -419,21 +60,37 @@ footer .chiudi{
   </ul>
 </nav>
 
+<nav class="indice" aria-label="Indice della pagina">
+  <ul>
+    <li><a href="#s01">Contesto</a></li>
+    <li><a href="#s02">Problema</a></li>
+    <li><a href="#s03">Ragionamento</a></li>
+    <li><a href="#s04">Ricerca</a></li>
+    <li><a href="#s05">Risultato</a></li>
+    <li><a href="#s06">Cosa resta</a></li>
+  </ul>
+</nav>
+
 <!-- ═══ HERO DI PAGINA ═══ -->
 <header class="cs-hero">
   <div class="wrap-prosa">
     <p class="meta"><span>Progetto personale</span><span>Sistema editoriale</span><span>Rotte e Racconti</span><span>Dal 2026, in corso</span></p>
-    <h1>Le regole non stanno nella testa di chi le ha inventate.</h1>
-    <p class="piano">Un progetto editoriale a due persone che produce come un team, perché il sistema che lo governa è scritto, versionato e gerarchico.</p>
+    <h1>Rotte e Racconti: un sistema editoriale che regge senza di me.</h1>
+    <p class="piano">Un progetto a due persone che produce come un team, perché le regole che lo governano sono scritte, versionate e in gerarchia, invece di stare nella testa di chi le ha inventate.</p>
   </div>
 </header>
 
 <!-- ═══ 01 CONTESTO ═══ -->
-<section class="blocco">
+<section class="blocco" id="s01">
   <div class="wrap-prosa">
     <p class="eyebrow">01 · Contesto</p>
-    <h2>Lui torna con le cartelle. Io costruisco il sistema che le regge.</h2>
-    <p><a href="https://rotte-e-racconti.simone-ariotti97.workers.dev/" target="_blank" rel="noopener">Rotte e Racconti</a> documenta viaggi reali attraverso fotografia, riprese aeree e ricostruzione storico-geografica. La divisione del lavoro è netta e dichiarata: il materiale visivo dei diari è di Emanuele, che percorre gli itinerari e li documenta. Il resto è mio: posizionamento, architettura dell'informazione, design system, prodotto, pipeline dei contenuti, sviluppo e pubblicazione. Ricevo cartelle di foto, un diario in formato testo, una traccia video, e restituisco monografie pubblicate.</p>
+    <h2>Emanuele torna dai viaggi con le cartelle piene. Io costruisco il sistema che le regge e le fa vedere.</h2>
+    <p class="attacco"><a href="https://rotte-e-racconti.simone-ariotti97.workers.dev/" target="_blank" rel="noopener">Rotte e Racconti</a> documenta viaggi reali attraverso fotografia, riprese aeree e ricostruzione storico-geografica. La divisione del lavoro è netta e dichiarata.</p>
+    <ul class="carte">
+      <li><span class="c-eti">Di Emanuele</span><span class="c-testo">Il materiale visivo dei diari: percorre gli itinerari e li documenta.</span></li>
+      <li><span class="c-eti">Mio</span><span class="c-testo">Posizionamento, architettura dell'informazione, design system, prodotto, pipeline dei contenuti, sviluppo e pubblicazione.</span></li>
+      <li><span class="c-eti">Il ciclo</span><span class="c-testo">Ricevo cartelle di foto, un diario in formato testo, una traccia video. Restituisco monografie pubblicate.</span></li>
+    </ul>
 
     <details class="approfondimento">
       <summary><span class="segno" aria-hidden="true"></span>Cos'è Rotte e Racconti</summary>
@@ -445,18 +102,21 @@ footer .chiudi{
 </section>
 
 <!-- ═══ 02 IL PROBLEMA ═══ -->
-<section class="blocco">
+<section class="blocco" id="s02">
   <div class="wrap-prosa">
     <p class="eyebrow">02 · Il problema</p>
     <h2>Regole perfette sul testo, nessuna regola su tutto il resto.</h2>
-    <p>Dopo tre viaggi pubblicati il progetto aveva uno standard editoriale solido e nient'altro. Nessun criterio per valutare un'interfaccia: il manifesto elencava i pattern in uso, senza dire in base a cosa fossero giusti. Nessuna regola sull'apparenza, e i cinque valori visivi documentati erano perfino sbagliati, perché descrivevano i componenti mappa scritti a mano invece del design del sito. Il motivo è banale e istruttivo: il codice si legge, il design no.</p>
-    <p>Sopra a questi, il problema che li contiene tutti. Tre fonti in conflitto dichiaravano tre limiti di caratteri diversi, e nessuno sapeva quale valesse. Le regole non erano scritte male: erano scritte in posti che non si parlavano, e per il resto vivevano nella testa di chi le aveva inventate.</p>
+    <p class="attacco">Dopo tre viaggi pubblicati il progetto aveva uno standard editoriale solido e nient'altro.</p>
+    <ul class="carte">
+      <li><span class="c-eti">Nessun criterio sul design</span><span class="c-testo">Il manifesto elencava i pattern in uso senza dire in base a cosa fossero giusti, e i cinque valori visivi documentati erano perfino sbagliati: descrivevano i componenti mappa scritti a mano invece del design del sito. Il motivo è banale e istruttivo: il codice si legge, il design no.</span></li>
+      <li><span class="c-eti">Tre fonti in conflitto</span><span class="c-testo">Dichiaravano tre limiti di caratteri diversi, e nessuno sapeva quale valesse. Le regole non erano scritte male: erano scritte in posti che non si parlavano, e per il resto vivevano nella testa di chi le aveva inventate.</span></li>
+    </ul>
     <p class="evidenza">Un progetto a due persone con decisioni prese caso per caso non si rompe subito. Si degrada al terzo viaggio.</p>
   </div>
 </section>
 
 <!-- ═══ 03 IL RAGIONAMENTO ═══ -->
-<section class="blocco">
+<section class="blocco" id="s03">
   <div class="wrap-prosa">
     <p class="eyebrow">03 · Il ragionamento</p>
     <h2>Una gerarchia, non un archivio di documenti.</h2>
@@ -511,14 +171,35 @@ footer .chiudi{
     <h3>Il catalogo e il numero magico</h3>
     <p>Le due decisioni di design più istruttive sono la stessa mossa applicata a materie diverse.</p>
     <p><strong>L'impaginazione.</strong> Sul diario del Giappone si rompeva: foto verticali in spazi orizzontali, dislivelli di duecento pixel fra foto accostate, vuoti che si leggevano come errori. La diagnosi non era estetica. Il generatore assegnava lo spazio per posizione, la terza foto va nello spazio alto, e funzionava solo perché su Lanzarote le verticali erano il sedici per cento e capitavano sempre in fondo. Aveva preso una regolarità del materiale per una regola. Sul Giappone le verticali sono il sessantanove per cento e cadono ovunque.</p>
+    <div class="figure">
+      <figure class="figura lastra">
+        <span class="nodo" aria-hidden="true"></span>
+        <div class="telaio"><img src="assets/rr-impaginazione-quattro.webp" width="1080" height="1794" loading="lazy" alt="Un sottocapitolo del diario del Giappone con quattro foto: due verticali e due orizzontali su due righe, ogni riga alla stessa altezza e con larghezze diverse."></div>
+        <figcaption>Quattro foto, due verticali e due orizzontali. Ogni riga condivide l'altezza, le larghezze le decide il rapporto di ciascuna: le didascalie cadono su una linea sola.</figcaption>
+      </figure>
+      <figure class="figura lastra">
+        <span class="nodo" aria-hidden="true"></span>
+        <div class="telaio"><img src="assets/rr-impaginazione-mista.webp" width="1080" height="1801" loading="lazy" alt="Un altro sottocapitolo del Giappone: una foto orizzontale a tutta larghezza, e sotto una verticale accanto a una orizzontale, alte uguali."></div>
+        <figcaption>Una verticale accanto a una orizzontale, alte uguali. È il caso su cui la vecchia regola si rompeva, perché assegnava lo spazio per posizione.</figcaption>
+      </figure>
+    </div>
+    <p class="secondario">Schermate del diario del Giappone pubblicato. Le fotografie sono di Emanuele: l'impaginazione e il generatore che la produce sono miei.</p>
     <p>Ho eliminato il catalogo degli schemi e messo al suo posto una regola sola: dentro una riga le foto hanno la stessa altezza e insieme riempiono tutta la larghezza. Da lì l'impaginazione si calcola invece di essere scelta. Verificata a otto larghezze da 320 a 1920 pixel su due diari: nessun ritaglio, tutte le righe piene. Prima, una foto in tre a due perdeva l'undici per cento della larghezza per entrare in uno spazio quattro a tre.</p>
     <p><strong>Le tappe sulla mappa.</strong> Lo standard imponeva da otto a dodici tappe per viaggio, e quattro diari su cinque lo ignoravano già. Misurato sul pubblicato: dodici tappe su quattro giornate, quindici su cinque, trentacinque su dodici, quarantadue su undici. Un tetto fisso non distingue un viaggio di quattro giorni da uno di dodici, e applicato alla Turchia, nove giornate e 2.450 chilometri, avrebbe prodotto la mappa più spoglia del sito sull'itinerario più lungo. La regola ora scala: due o tre tappe per giornata documentata, ognuna con una foto associata e una coordinata da fonte pubblica. Se manca una delle due, la tappa non si mette.</p>
+    <div class="figure">
+      <figure class="figura lastra">
+        <span class="nodo" aria-hidden="true"></span>
+        <div class="telaio"><img src="assets/rr-mappa-turchia.webp" width="1200" height="681" loading="lazy" alt="La mappa d'insieme del diario della Turchia: immagine satellitare da Istanbul alla Cappadocia, con i segnaposti delle tappe numerati per giornata, ognuno con la miniatura della fotografia scattata lì, collegati da una linea tratteggiata."></div>
+        <figcaption>La regola applicata: ventitré tappe su nove giornate, ognuna con la sua fotografia sul segnaposto. La linea tratteggiata è in linea d'aria, non il tracciato stradale.</figcaption>
+      </figure>
+    </div>
+    <p class="secondario">Schermata della mappa d'insieme pubblicata. Le tile sono di Esri (Esri, Vantor, Earthstar Geographics e la comunità GIS). Le fotografie sui segnaposti sono di Emanuele: la mappa e il generatore che la compone sono miei.</p>
     <p class="evidenza">Una regola che quasi nessuno rispetta non è una regola disattesa. È una regola sbagliata.</p>
   </div>
 </section>
 
 <!-- ═══ 04 LA RICERCA ═══ -->
-<section class="blocco">
+<section class="blocco" id="s04">
   <div class="wrap-prosa">
     <p class="eyebrow">04 · La ricerca</p>
     <h2>Progettare il test, non solo leggerne i risultati.</h2>
@@ -532,7 +213,51 @@ footer .chiudi{
       <li><span class="ord">03</span><span class="nome">In cosa è diverso da altri contenuti</span><span class="dice">Domanda chiusa. Undici su ventinove dicono che ha un'identità chiara, otto rispondono letteralmente che è diverso ma non saprebbero dire in cosa.</span></li>
     </ul>
 
-    <p class="sez-nota">Tre strumenti diversi, la stessa spaccatura, proporzioni simili: non è ambiguità casuale, il sito comunica due cose insieme. E un progetto che il lettore non sa descrivere non genera passaparola, che è l'unico canale coerente con un progetto che rifiuta l'algoritmo.</p>
+    <div class="figure">
+      <figure class="figura">
+        <svg viewBox="0 0 480 224" role="img" aria-labelledby="d6t d6d" xmlns="http://www.w3.org/2000/svg">
+          <title id="d6t">La stessa frattura, misurata due volte</title>
+          <desc id="d6d">Due domande diverse, una aperta e una chiusa, su ventinove persone. Alla prima dodici descrivono uno strumento per pianificare e nove un racconto. Alla seconda undici leggono il payoff come preparazione e quindici come immersione. La lettura strumentale resta intorno a dodici e undici in entrambe: nessuna delle due letture prevale sull'altra.</desc>
+          <style>
+            .t4{font-family:var(--font-mono);font-size:9px;letter-spacing:1.2px;fill:var(--mezzo)}
+            .l4{font-family:var(--font-body);font-size:11px;fill:var(--testo)}
+            .s4{font-family:var(--font-body);font-size:9px;fill:var(--mezzo)}
+            .dentro{font-family:var(--font-display);font-size:11px;font-weight:500;fill:var(--testo)}
+            .seg1{fill:color-mix(in srgb,var(--ghiaccio) 46%,transparent)}
+            .seg2{fill:color-mix(in srgb,var(--ghiaccio) 24%,transparent)}
+            .seg3{fill:color-mix(in srgb,var(--ghiaccio) 13%,transparent)}
+            .leg{stroke:color-mix(in srgb,var(--ghiaccio) 34%,transparent);stroke-width:1}
+          </style>
+          <text x="20" y="26" class="t4">LA STESSA FRATTURA, DUE STRUMENTI &#183; 29 PERSONE</text>
+          <rect class="seg1 leg" x="20" y="52" width="10" height="10" rx="2"/>
+          <text x="35" y="61" class="s4">Lettura strumentale</text>
+          <rect class="seg2 leg" x="170" y="52" width="10" height="10" rx="2"/>
+          <text x="185" y="61" class="s4">Lettura immersiva</text>
+          <rect class="seg3 leg" x="320" y="52" width="10" height="10" rx="2"/>
+          <text x="335" y="61" class="s4">Non classificabile</text>
+          <text x="20" y="84" class="l4">Come lo descriveresti a un amico</text>
+          <text x="460" y="84" class="s4" text-anchor="end">domanda aperta, codificata a mano</text>
+          <rect class="seg1" x="20.0" y="92" width="180.1" height="15" rx="3"/>
+          <text x="110.0" y="103" class="dentro" text-anchor="middle">12</text>
+          <rect class="seg2" x="202.1" y="92" width="134.6" height="15" rx="3"/>
+          <text x="269.3" y="103" class="dentro" text-anchor="middle">9</text>
+          <rect class="seg3" x="338.6" y="92" width="121.4" height="15" rx="3"/>
+          <text x="399.3" y="103" class="dentro" text-anchor="middle">8</text>
+          <text x="20" y="138" class="l4">Come leggi il payoff</text>
+          <text x="460" y="138" class="s4" text-anchor="end">domanda chiusa</text>
+          <rect class="seg1" x="20.0" y="146" width="164.9" height="15" rx="3"/>
+          <text x="102.4" y="157" class="dentro" text-anchor="middle">11</text>
+          <rect class="seg2" x="186.9" y="146" width="225.6" height="15" rx="3"/>
+          <text x="299.7" y="157" class="dentro" text-anchor="middle">15</text>
+          <rect class="seg3" x="414.5" y="146" width="45.5" height="15" rx="3"/>
+          <text x="437.2" y="157" class="dentro" text-anchor="middle">3</text>
+          <text x="20" y="204" class="s4">Categorie accorpate fra le due domande: utilità e preparazione sono la</text>
+          <text x="20" y="216" class="s4">stessa lettura, racconto e immersione anche.</text>
+        </svg>
+        <figcaption>Le due misure della frattura. La lettura strumentale resta intorno a dodici e undici: nessuna delle due prevale.</figcaption>
+      </figure>
+    </div>
+    <p class="sez-nota">Tre strumenti diversi, la stessa spaccatura: la lettura strumentale resta intorno a un terzo in entrambe le misure e in nessuna delle due una lettura prevale. Non è ambiguità casuale, il sito comunica due cose insieme. E un progetto che il lettore non sa descrivere non genera passaparola, che è l'unico canale coerente con un progetto che rifiuta l'algoritmo.</p>
 
     <h3>Decidere quale dato merita di essere usato</h3>
     <p>Il campione era di prossimità: persone che conoscono il progetto o chi lo fa. Una risposta cita i viaggi per nome, un'altra scherza sul licenziare il sottoscritto. Invece di ignorare il limite o di fingere di non vederlo, l'ho trasformato in una regola d'uso del dataset, scritta dentro il report prima dei risultati.</p>
@@ -546,9 +271,45 @@ footer .chiudi{
 
     <h3>Cosa è diventato</h3>
     <p>Il risultato principale: tredici persone su ventinove segnalano attrito su navigazione, mappa o orientamento iniziale. Tutti hanno trovato i diari, ma chi ci è riuscito lo ha fatto per tentativi. Il costo è invisibile in questo dataset proprio perché il campione era motivato ad arrivare in fondo: un lettore freddo se ne va.</p>
+    <div class="figure">
+      <figure class="figura">
+        <svg viewBox="0 0 480 204" role="img" aria-labelledby="d5t d5d" xmlns="http://www.w3.org/2000/svg">
+          <title id="d5t">I temi ricorrenti nelle risposte aperte</title>
+          <desc id="d5d">Su ventinove persone: tredici segnalano attrito su onboarding e mappa, dieci chiedono informazioni pratiche e logistiche, cinque vorrebbero più materiale visivo, quattro trovano i testi troppo scarni. Il conteggio e' per persona su tre domande incrociate, non per menzione.</desc>
+          <style>
+            .t4{font-family:var(--font-mono);font-size:9px;letter-spacing:1.2px;fill:var(--mezzo)}
+            .l4{font-family:var(--font-body);font-size:11px;fill:var(--testo)}
+            .v4{font-family:var(--font-display);font-size:14px;font-weight:500;fill:var(--testo)}
+            .s4{font-family:var(--font-body);font-size:9px;fill:var(--mezzo)}
+            .rail4{fill:color-mix(in srgb,var(--ghiaccio) 7%,transparent)}
+            .fill4{fill:color-mix(in srgb,var(--ghiaccio) 42%,transparent)}
+          </style>
+          <text x="20" y="26" class="t4">TEMI RICORRENTI &#183; PERSONE SU 29</text>
+          <text x="20" y="65" class="l4">Onboarding e mappa</text>
+          <rect class="rail4" x="196" y="56" width="236" height="11" rx="5"/>
+          <path class="fill4" d="M196.0,56.0 h101.8 q4.0,0 4.0,4.0 v3.0 q0,4.0 -4.0,4.0 h-101.8 z"/>
+          <text x="442" y="65" class="v4">13</text>
+          <text x="20" y="96" class="l4">Info pratiche e logistica</text>
+          <rect class="rail4" x="196" y="87" width="236" height="11" rx="5"/>
+          <path class="fill4" d="M196.0,87.0 h77.4 q4.0,0 4.0,4.0 v3.0 q0,4.0 -4.0,4.0 h-77.4 z"/>
+          <text x="442" y="96" class="v4">10</text>
+          <text x="20" y="127" class="l4">Visual da ampliare</text>
+          <rect class="rail4" x="196" y="118" width="236" height="11" rx="5"/>
+          <path class="fill4" d="M196.0,118.0 h36.7 q4.0,0 4.0,4.0 v3.0 q0,4.0 -4.0,4.0 h-36.7 z"/>
+          <text x="442" y="127" class="v4">5</text>
+          <text x="20" y="158" class="l4">Testi troppo scarni</text>
+          <rect class="rail4" x="196" y="149" width="236" height="11" rx="5"/>
+          <path class="fill4" d="M196.0,149.0 h28.6 q4.0,0 4.0,4.0 v3.0 q0,4.0 -4.0,4.0 h-28.6 z"/>
+          <text x="442" y="158" class="v4">4</text>
+          <text x="20" y="184" class="s4">Conteggio per persona su tre domande incrociate, non per menzione:</text>
+          <text x="20" y="196" class="s4">contare le menzioni farebbe pesare di più chi scrive tanto.</text>
+        </svg>
+        <figcaption>I temi che tornano nelle risposte aperte, contati per persona su ventinove.</figcaption>
+      </figure>
+    </div>
     <p>Da lì nasce lo standard di prodotto, che prima non esisteva, con la distinzione che lo rende applicabile. L'assenza di richiami aggressivi è registro, l'assenza di qualsiasi indicazione su cosa fare è attrito. La sobrietà è registro, elementi interattivi indistinguibili da quelli statici sono attrito. La lentezza come ritmo di lettura è registro, la lentezza come tempo perso a capire l'interfaccia è attrito.</p>
-    <p class="evidenza">Il design serve il materiale. Un'interfaccia che il lettore non sa usare non sta servendo il materiale: lo sta nascondendo.</p>
     <p>Insieme allo standard sono usciti tredici debiti tracciati con origine dichiarata e stato verificato sul sito vivo, due decisioni strategiche tenute aperte invece che risolte a intuito, e una cosa che si dimentica sempre: <strong>una lista di cose da non toccare</strong>. Qualità fotografica, leggibilità, struttura per giornate, assenza di pubblicità, sobrietà del registro. Dopo un test la tentazione di migliorare tutto è il rischio più concreto, e le conferme vanno protette con la stessa cura delle critiche.</p>
+    <p><strong>Cosa ha cambiato, e cosa no.</strong> Delle quattro decisioni che la ricerca ha messo sul tavolo, una si è chiusa: il progetto ha smesso di scegliere fra archivio e strumento e ha adottato il doppio strato, che la pagina del progetto adesso dichiara in chiaro. Le altre tre restano aperte e tracciate, con il criterio di chiusura scritto accanto: il meccanismo di ritorno per chi è già passato, l'intervento su homepage e mappa, e la misurazione del traffico che deve venire prima di qualsiasi redesign. Tenerle aperte è una posizione, non un rinvio: finché non esiste un dato di traffico, la frizione sulla mappa resta l'ipotesi più probabile e non un fatto, e riprogettare su un'ipotesi è esattamente l'errore che questa ricerca serviva a evitare.</p>
     <p>Una critica che non ho trasformato in mandato: quattro persone chiedono più personalità autoriale. Su un campione amicale è rumore, e non autorizza a toccare la regola della terza persona. Ma è l'unico riscontro che attacca una decisione di sistema invece di un dettaglio, quindi l'ho registrato per quello che è: la misura del prezzo di quella scelta, non la prova che sia sbagliata.</p>
 
     <h3>Il giro successivo, già progettato</h3>
@@ -561,7 +322,7 @@ footer .chiudi{
 </section>
 
 <!-- ═══ 05 RISULTATO ═══ -->
-<section class="blocco">
+<section class="blocco" id="s05">
   <div class="wrap-prosa">
     <p class="eyebrow">05 · Risultato</p>
     <h2>Il sistema ha retto a sei viaggi e a un cambio di piattaforma.</h2>
@@ -579,16 +340,16 @@ footer .chiudi{
 </section>
 
 <!-- ═══ 06 COSA RESTA APERTO ═══ -->
-<section class="blocco">
+<section class="blocco" id="s06">
   <div class="wrap-prosa">
     <p class="eyebrow">06 · Cosa resta aperto</p>
-    <h2>Un case study che chiude tutto è un case study raccontato male.</h2>
+    <h2>Quattro decisioni ancora aperte, e il motivo per cui lo sono.</h2>
     <ul>
       <li><strong>Nessuna misurazione del traffico installata.</strong> Ogni affermazione sul comportamento reale dei lettori è un'assunzione. È la decisione chiudibile per prima e non l'ho ancora chiusa: è il debito che mi costa di più.</li>
       <li><strong>Nessun meccanismo di ritorno.</strong> Ogni visita è terminale. Quindici persone su ventinove lo segnalavano già, e la decisione è ancora aperta.</li>
-      <li><strong>Attribuzione delle mappe mancante sul pubblicato.</strong> Debito legale, non estetico. Tracciato, non ancora sanato.</li>
       <li><strong>Tensione fra lettore e cliente.</strong> Il progetto è costruito come proprietà editoriale per lettori e sarebbe monetizzabile come studio di contenuti per aziende: due ottimizzazioni opposte. Tracciata come decisione non risolvibile in un passaggio.</li>
     </ul>
+    <p class="secondario">In questa lista c'era un quinto punto: l'attribuzione delle tile delle mappe, debito legale e non estetico. Verificata attiva sul sito attuale il 25 settembre 2026 e chiusa. Resta sul vecchio sito costruito su Framer, ancora online: è la ragione per cui quel sito si chiude adesso e non quando capita.</p>
   </div>
 </section>
 
@@ -632,139 +393,6 @@ footer .chiudi{
   </div>
 </footer>
 
-<script>
-/* la luce del reticolo segue il puntatore (solo pointer fine) */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.querySelectorAll('[data-luce]').forEach(el=>{
-    el.addEventListener('pointermove',e=>{
-      const r=el.getBoundingClientRect();
-      el.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%');
-      el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
-    },{passive:true});
-  });
-})();
-
-/* ancore al caricamento: con scroll-behavior:smooth sulla radice il salto iniziale
-   diventa un'animazione lunga che il browser puo' annullare, e la pagina resta in cima.
-   Lo stato sicuro e' arrivarci subito: si disattiva il morbido per l'istante del salto,
-   si ripete dopo che il layout si e' assestato (font, altezze calcolate), e si riattiva. */
-(function(){
-  if(!location.hash) return;
-  var radice=document.documentElement;
-  function vai(){
-    var t=document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    if(!t) return;
-    var prima=radice.style.scrollBehavior;
-    radice.style.scrollBehavior='auto';
-    t.scrollIntoView();
-    requestAnimationFrame(function(){ radice.style.scrollBehavior=prima; });
-  }
-  if(history.scrollRestoration) history.scrollRestoration='manual';
-  addEventListener('load', function(){ vai(); setTimeout(vai,150); setTimeout(vai,600); });
-})();
-
-/* motion: ogni sezione entra come composizione di gesti tipizzati, in cascata. Degrada a statico con reduced-motion */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.documentElement.classList.add('reveal-on');
-  const groups=document.querySelectorAll('.wrap-prosa, .banda-principio .principio, .coda .griglia');
-  function roleOf(el){
-    if(el.matches('.eyebrow,.p-label,.p-fonte,.meta')) return 'm-eyebrow';
-    if(el.matches('h1,h2,h3')) return 'm-title';
-    if(el.matches('blockquote,.evidenza')) return 'm-quote';
-    return 'm-text';
-  }
-  function unitsOf(g){
-    const out=[];
-    Array.from(g.children).forEach(c=>{
-      if(c.matches('ul,ol')) c.querySelectorAll(':scope > li').forEach(li=>out.push([li,'m-li']));
-      else if(c.matches('.figure')) c.querySelectorAll(':scope > figure').forEach(f=>out.push([f,'m-figure']));
-      else out.push([c,roleOf(c)]);
-    });
-    return out;
-  }
-  const io=new IntersectionObserver((entries,obs)=>{
-    entries.forEach(e=>{
-      if(!e.isIntersecting) return;
-      (e.target.__units||[]).forEach(([el,role],i)=>{
-        const d=Math.min(i*140,720);
-        el.style.transitionDelay=d+'ms';
-        requestAnimationFrame(()=>el.classList.add('in'));
-        setTimeout(()=>{ el.style.transitionDelay=''; el.classList.remove('m',role,'in'); },d+1400);
-      });
-      if(e.target.matches('.principio')) e.target.classList.add('lit');
-      obs.unobserve(e.target);
-    });
-  },{threshold:0.1, rootMargin:'0px 0px -6% 0px'});
-  /* Un gruppo gia' dentro l'area visibile all'avvio non si nasconde affatto:
-     l'osservatore notifica solo i cambiamenti, quindi se la pagina non si muove piu'
-     quel testo resterebbe invisibile per sempre. Lo stato di partenza sicuro e' visibile. */
-  const soglia=innerHeight*0.92;
-  groups.forEach(g=>{
-    if(g.getBoundingClientRect().top < soglia) return;
-    const units=unitsOf(g);
-    units.forEach(([el,role])=>el.classList.add('m',role));
-    g.__units=units;
-    io.observe(g);
-  });
-})();
-
-/* cursore-lampada: stato per oggetto, solo puntatore fine, statico con reduced-motion */
-(function(){
-  if(!window.matchMedia('(pointer:fine)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const cur=document.createElement('div');
-  cur.id='cursore'; cur.setAttribute('aria-hidden','true');
-  document.body.appendChild(cur);
-  document.documentElement.classList.add('cursor-on');
-  let tx=innerWidth/2, ty=innerHeight/2, cx=tx, cy=ty;
-  const intSel='a,button,.btn,.cs-card,[data-luce],input,textarea,label,[role="button"]';
-  const txtSel='h1,h2,h3,h4,h5,p,li,blockquote,figcaption';
-  addEventListener('pointermove',e=>{ tx=e.clientX; ty=e.clientY; cur.style.opacity=1; },{passive:true});
-  addEventListener('pointerover',e=>{
-    const t=e.target;
-    if(t.closest && t.closest(intSel)){ cur.classList.add('is-int'); cur.classList.remove('is-text'); }
-    else if(t.closest && t.closest(txtSel)){ cur.classList.add('is-text'); cur.classList.remove('is-int'); }
-    else { cur.classList.remove('is-int','is-text'); }
-  },{passive:true});
-  document.addEventListener('mouseleave',()=>{ cur.style.opacity=0; });
-  (function loop(){
-    cx+=(tx-cx)*0.3; cy+=(ty-cy)*0.3;
-    cur.style.transform='translate('+cx+'px,'+cy+'px) translate(-50%,-50%)';
-    requestAnimationFrame(loop);
-  })();
-})();
-
-/* magnetismo: i bottoni si muovono verso il cursore. Solo puntatore fine, statico con reduced-motion */
-(function(){
-  if(!window.matchMedia('(pointer:fine)').matches) return;
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.querySelectorAll('.btn').forEach(el=>{
-    el.addEventListener('pointermove',e=>{
-      const r=el.getBoundingClientRect();
-      const mx=Math.max(-2,Math.min(2,(e.clientX-(r.left+r.width/2))*0.04));
-      const my=Math.max(-2,Math.min(2,(e.clientY-(r.top+r.height/2))*0.045));
-      el.style.transform='translate('+mx+'px,'+my+'px)';
-      el.style.setProperty('--lx',((e.clientX-r.left)/r.width*100)+'%');
-      el.style.setProperty('--ly',((e.clientY-r.top)/r.height*100)+'%');
-    });
-    el.addEventListener('pointerleave',()=>{ el.style.transform=''; });
-  });
-})();
-</script>
-<script>
-/* anno del copyright scritto dal browser: il sito non invecchia da solo */
-document.querySelectorAll('[data-anno]').forEach(e=>{e.textContent=new Date().getFullYear();});
-/* la barra si stringe (e sulla home prende corpo) appena si lascia la cima: sempre visibile, mai invadente */
-(function(){
-  const nav=document.querySelector('nav.principale');
-  if(!nav) return;
-  let atteso=false;
-  function stato(){ atteso=false; nav.classList.toggle('ancorata', scrollY>24); }
-  addEventListener('scroll',()=>{ if(!atteso){ atteso=true; requestAnimationFrame(stato); } },{passive:true});
-  stato();
-})();
-</script>
+<script src="assets/sito.js"></script>
 </body>
 </html>

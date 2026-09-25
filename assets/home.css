@@ -1,0 +1,297 @@
+/* Solo la home: hero con lo shader, griglia dei casi, il filo, Rotte e
+   Racconti, i contatti. Caricato dopo stile.css. */
+body{background:var(--trama-fondo);background-attachment:fixed;color:var(--testo);font-family:var(--font-body);font-size:17px;line-height:1.65}
+.salta{position:absolute;left:-9999px;top:0;background:var(--funzione);color:var(--abisso);padding:10px 18px;border-radius:0 0 8px 0;z-index:50}
+.salta:focus{left:0}
+/* il logo usa la regola condivisa in stile.css: questa era un duplicato
+   identico salvo display/gap, e la sua unica conseguenza era duplicare. */
+/* La barra della home sta sopra la hero, dove --mezzo scende a 2,5:1: le voci
+   vanno su --testo. E' una deroga di colore, non una regola base: scritta come
+   regola base sovrascriveva la @media che sotto i 760px porta il corpo a 13px,
+   e i bersagli tattili tornavano a 15px senza che si vedesse. */
+nav.principale.sovrapposta ul a{color:var(--testo)}
+
+/* ── HERO: la materia e il reticolo, momento orchestrato della pagina ── */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+#reticolo{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:pan-y pinch-zoom}
+.hero-scrim{ /* protezione di lettura sul lato del testo */
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(to top, rgba(8,11,24,.88) 0px, rgba(8,11,24,0) 150px),
+    linear-gradient(100deg, rgba(8,11,24,.93) 0%, rgba(8,11,24,.86) 34%, rgba(8,11,24,.55) 58%, rgba(8,11,24,.12) 78%, rgba(8,11,24,0) 92%);
+}
+@media(max-width:900px){
+  /* su schermo stretto il testo va da bordo a bordo: lo scrim diventa una fascia verticale,
+     altrimenti la meta destra di ogni riga finisce sopra la struttura illuminata */
+  .hero-scrim{
+    background:
+      linear-gradient(to top, rgba(8,11,24,.92) 0px, rgba(8,11,24,0) 170px),
+      linear-gradient(180deg, rgba(8,11,24,.58) 0%, rgba(8,11,24,.74) 18%, rgba(8,11,24,.74) 74%, rgba(8,11,24,.42) 100%);
+  }
+}
+.hero-testo{
+  position:relative;z-index:2;
+  padding:96px clamp(20px,4.5vw,56px) 0;
+  max-width:1050px;
+}
+.hero .eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ghiaccio);margin-bottom:24px}
+.hero h1{
+  font-family:var(--font-display);font-weight:500;
+  font-size:clamp(38px,5.8vw,84px);line-height:1.05;letter-spacing:-.015em;text-wrap:balance;
+  margin-bottom:26px;text-shadow:0 4px 54px rgba(8,11,24,.75);
+}
+.hero .firma{font-size:16px;color:var(--ghiaccio);max-width:54ch;margin-bottom:38px;text-shadow:0 2px 30px rgba(8,11,24,.85)}
+.hero .firma strong{color:var(--testo);font-weight:500}
+.hero-basso{
+  position:absolute;bottom:26px;left:0;right:0;z-index:2;
+  display:flex;justify-content:flex-start;align-items:center;
+  padding:0 clamp(20px,4.5vw,56px);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ghiaccio);
+}
+.hero-basso .hint{display:flex;align-items:center;gap:10px}
+.hero-basso .hint::before{
+  content:'';width:7px;height:7px;border-radius:50%;background:var(--funzione);opacity:.85;
+  animation:pulse 3.4s var(--ease-viscoso) infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.55);opacity:.3}}
+@media (pointer:coarse){
+  /* niente cursore da muovere: l'istruzione sparisce, e con essa l'intera riga */
+  .hero-basso{display:none}
+}
+.btn{
+  position:relative;overflow:hidden;isolation:isolate;
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-body);font-weight:500;font-size:15px;
+  border-radius:16px 22px 16px 22px;padding:13px 26px;cursor:pointer;border:1px solid transparent;text-decoration:none;
+  transition:background var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso),
+             color var(--durata-micro) var(--ease-viscoso), transform var(--durata-micro) var(--ease-viscoso);
+}
+.btn:active{transform:scale(.985)}
+.btn .freccia{transition:transform var(--durata-micro) var(--ease-viscoso)}
+.btn:hover .freccia{transform:translateX(4px)}
+.btn:hover .freccia-giu{transform:translateY(3px)}
+.btn-primaria::before{
+  content:'';position:absolute;inset:0;z-index:-1;opacity:0;
+  transition:opacity .55s var(--ease-viscoso);
+  background:radial-gradient(150px circle at var(--lx,50%) var(--ly,50%),
+    color-mix(in srgb, var(--ghiaccio) 58%, transparent) 0%,
+    color-mix(in srgb, var(--ghiaccio) 26%, transparent) 38%,
+    transparent 72%);
+}
+.btn-primaria:hover::before{opacity:1}
+.btn-primaria{background:var(--funzione);color:var(--abisso)}
+.btn-silenziosa{background:transparent;color:var(--funzione);padding-left:0;padding-right:0;border-radius:4px;overflow:visible}
+.btn-silenziosa:hover{text-decoration:underline;text-underline-offset:5px}
+
+/* ── SEZIONI: sfondo continuo, filetti sottili e spazio, MAI bande di colore ── */
+section{padding:clamp(72px,9vw,110px) 0;border-top:1px solid var(--bordo)}
+.hero+section{border-top:none}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:16px}
+.sez-titolo{font-family:var(--font-display);font-weight:500;font-size:clamp(26px,3vw,38px);letter-spacing:-.008em;margin-bottom:14px}
+.sez-intro{color:var(--mezzo);max-width:58ch;margin-bottom:clamp(36px,5vw,56px)}
+
+/* card: la cover buca verso l'abisso, come il reticolo */
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px}
+.cs-card{
+  position:relative;display:block;border-radius:26px 16px 24px 18px;overflow:hidden;text-decoration:none;color:var(--testo);
+  background:var(--superficie);border:1px solid var(--bordo);
+  transition:transform var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso);
+}
+.cs-cover{height:185px;position:relative;overflow:hidden}
+.cs-cover .trama{position:absolute;inset:0;transition:transform 700ms var(--ease-viscoso)}
+.cs-card:hover .trama{transform:scale(1.05)}
+.cover-1 .trama{background:
+  radial-gradient(150px 120px at 74% 20%, var(--abisso) 32%, transparent 33%),
+  radial-gradient(90px 74px at 22% 78%, var(--abisso) 30%, transparent 31%),
+  radial-gradient(130% 140% at 30% 30%, color-mix(in srgb, var(--ghiaccio) 38%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 12%, var(--abisso)) 62%, var(--superficie) 100%);}
+.cover-2 .trama{background:
+  radial-gradient(120px 100px at 26% 26%, var(--abisso) 31%, transparent 32%),
+  radial-gradient(80px 66px at 78% 72%, var(--abisso) 30%, transparent 31%),
+  radial-gradient(130% 140% at 70% 60%, color-mix(in srgb, var(--ghiaccio) 34%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 11%, var(--abisso)) 62%, var(--superficie) 100%);}
+.cover-3 .trama{background:
+  radial-gradient(110px 92px at 68% 76%, var(--abisso) 31%, transparent 32%),
+  radial-gradient(76px 62px at 24% 24%, var(--abisso) 30%, transparent 31%),
+  radial-gradient(130% 140% at 50% 20%, color-mix(in srgb, var(--ghiaccio) 36%, var(--abisso)) 0%, color-mix(in srgb, var(--ghiaccio) 12%, var(--abisso)) 62%, var(--superficie) 100%);}
+.cs-body{padding:24px;position:relative;z-index:2}
+.cs-meta{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo);display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px}
+.cs-body h3{font-family:var(--font-display);font-weight:500;font-size:21px;line-height:1.28;margin-bottom:8px}
+.cs-body p{font-size:15px;color:var(--mezzo)}
+.cs-cover .indice{
+  position:absolute;right:16px;bottom:8px;z-index:1;
+  font-family:var(--font-display);font-weight:500;font-size:80px;line-height:1;
+  color:color-mix(in srgb, var(--ghiaccio) 30%, transparent);
+  pointer-events:none;
+}
+.cs-azione{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--bordo);
+  font-size:14px;font-weight:500;color:var(--funzione);
+}
+.cs-azione .dove{font-weight:400;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
+.cs-azione .vai{display:inline-block;transition:transform var(--durata-micro) var(--ease-viscoso)}
+.cs-card:hover .cs-azione .vai{transform:translateX(4px)}
+.principio blockquote{font-family:var(--font-display);font-weight:500;font-size:clamp(24px,3vw,36px);line-height:1.4;letter-spacing:-.005em}
+
+/* R&R */
+.rr{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,5vw,64px);align-items:center}
+@media(max-width:820px){.rr{grid-template-columns:1fr}}
+.rr-testo p{color:var(--mezzo);max-width:52ch;margin-bottom:28px}
+.rr-testo p strong{color:var(--testo);font-weight:500}
+/* Il riquadro conteneva un gradiente con il marchio scritto sopra: una targa,
+   non una prova. Adesso ospita una schermata del diario pubblicato, che e'
+   l'unica cosa che dimostra qualcosa. Il marchio non serve piu': il titolo
+   della sezione, due centimetri a sinistra, dice gia' Rotte e Racconti. */
+.rr-visual{
+  /* era un elemento della griglia e veniva blocchizzato da li'. Ora sta dentro
+     .rr-lato insieme al credito fotografico, quindi il display va dichiarato:
+     da inline, height non si applica e il riquadro cresce con l'immagine. */
+  display:block;height:280px;border-radius:18px;position:relative;overflow:hidden;border:1px solid var(--bordo);
+  transition:transform var(--durata-micro) var(--ease-viscoso), border-color var(--durata-micro) var(--ease-viscoso);
+}
+.rr-visual img{width:100%;height:100%;object-fit:cover;display:block}
+.rr-visual:hover{transform:translateY(-4px);border-color:var(--bordo-forte)}
+/* la fotografia non e' mia: dove si vede, si dice di chi e' */
+.rr-lato{display:flex;flex-direction:column}
+.rr-credito{margin:10px 0 0;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--mezzo);line-height:1.6}
+@media (prefers-reduced-motion: reduce){.rr-visual{transition:none}.rr-visual:hover{transform:none}}
+
+/* ── CHI C'E DIETRO: il filo rosso, sezione pinnata sotto la hero. Lo scroll pilota la fascia di fuoco ── */
+/* --crescita: quanto cresce la cella a fuoco. Unica fonte di verita: il JS la legge per calcolare gli ingombri a scala piena.
+   Dove c'e meno spazio la cella cresce meno, cosi a scala piena resta dentro il viewport e sotto il titolo.
+   Il JS rilegge la variabile a ogni resize: gli ingombri del filo si adeguano da soli */
+.filo{position:relative;height:680vh;padding:0;--crescita:.6}
+@media (max-width:1200px),(max-height:840px){.filo{--crescita:.4}}
+@media (max-height:700px){.filo{--crescita:.28}}
+.filo .stage{position:sticky;top:0;height:100vh;overflow:hidden;--praw:0}
+/* scrim: le celle scompaiono in modo elegante uscendo in alto (dietro il titolo) ed entrando dal basso */
+.filo .stage::before,.filo .stage::after{content:'';position:absolute;left:0;right:0;z-index:2;pointer-events:none}
+.filo .stage::before{top:0;height:34vh;background:linear-gradient(var(--abisso) 32%, transparent)}
+.filo .stage::after{bottom:0;height:22vh;background:linear-gradient(transparent, var(--abisso))}
+.filo .titolo{position:absolute;top:8vh;left:0;right:0;text-align:center;z-index:3;
+  font-family:var(--font-display);font-weight:500;font-size:clamp(26px,3.4vw,44px);letter-spacing:-.012em;padding:0 24px;text-wrap:balance}
+.filo .titolo .eyebrow{display:block;font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mezzo);margin-bottom:14px;font-weight:400}
+.filo .colonna{position:absolute;left:0;right:0;top:0;margin:0 auto;max-width:640px;text-align:center;transform:translateY(var(--ty,0px));will-change:transform}
+/* il filo e spezzato: un segmento per stazione, che parte dal bordo della cella precedente (misurato a scala piena)
+   e arriva al nodo della successiva. Nessun tratto corre dietro una cella, quindi non la attraversa mai.
+   viewBox in pixel reali: la curvatura disegnata e quella che si vede */
+.filo .thread{position:absolute;left:50%;top:0;transform:translateX(-50%);width:150px;height:100%;overflow:visible;z-index:0}
+.filo .thread path{fill:none;stroke:var(--ghiaccio);stroke-width:2;stroke-linecap:round;
+  filter:drop-shadow(0 0 6px color-mix(in srgb,var(--ghiaccio) 60%,transparent));
+  stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--f,0))}
+.filo .tappe{list-style:none;position:relative;z-index:1;margin:0;padding:0}
+.filo .tappa{position:relative;padding-top:34px;margin:0 auto clamp(150px,20vh,220px);--focus:0;--vis:0;--on:0}
+/* il nodo e il punto d'arrivo del filo: il JS lo posiziona sopra il bordo della cella misurato a scala piena,
+   cosi non le finisce mai dentro quando cresce */
+.filo .nodo{position:absolute;top:var(--nodo-y,0px);left:50%;transform:translateX(-50%) scale(calc(.7 + var(--on)*.3 + var(--focus)*.35));
+  width:13px;height:13px;border-radius:50%;z-index:2;
+  background:color-mix(in srgb, var(--ghiaccio) calc(var(--on)*100%), transparent);
+  border:1.5px solid color-mix(in srgb, var(--ghiaccio) calc(28% + max(var(--on),var(--focus))*72%), transparent);
+  box-shadow:0 0 calc(var(--focus)*20px) color-mix(in srgb, var(--ghiaccio) 75%, transparent)}
+/* la cella del reticolo: bordo e superficie che si accendono col fuoco */
+/* crescita con transform:scale (non font-size): non rifluisce il layout, la cella resta ancorata al centro.
+   Larghezza base contenuta perche a scala piena (x1.6) deve stare nel viewport.
+   Due variabili distinte: --focus tiene la scala (piano largo, uscita lenta), --vis toglie l'opacita prima
+   e piu in fretta. Cosi la cella resta grande piu a lungo ma sparisce netta, senza incrociare il filo */
+.filo .cella{position:relative;z-index:1;display:inline-block;max-width:min(56vw,430px);padding:20px clamp(24px,3vw,36px) 22px;
+  border-radius:38px 22px 34px 24px;transform-origin:center;transform:scale(calc(1 + var(--focus)*var(--crescita)));
+  background:color-mix(in srgb, var(--ghiaccio) calc(5% + var(--focus)*4%), var(--abisso));
+  border:1px solid color-mix(in srgb, var(--ghiaccio) calc(12% + var(--focus)*42%), transparent);
+  box-shadow:0 26px 70px -34px color-mix(in srgb, var(--ghiaccio) calc(var(--focus)*45%), transparent);
+  opacity:var(--vis)}
+.filo .anno{display:block;font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mezzo);margin-bottom:10px}
+.filo .voce{display:block;font-family:var(--font-display);font-weight:500;line-height:1.08;letter-spacing:-.012em;
+  font-size:clamp(22px,2.6vw,32px);overflow-wrap:break-word;   /* una parola lunga non deve mai uscire dalla cella */
+  color:color-mix(in srgb, var(--testo) calc((.42 + max(var(--on)*.5,var(--focus))*.58)*100%), var(--abisso))}
+.filo .desc{display:block;margin:12px auto 0;max-width:34ch;font-family:var(--font-body);line-height:1.55;color:var(--mezzo);
+  font-size:clamp(14px,1.5vw,16px);opacity:var(--focus);transform:translateY(calc((1 - var(--focus))*-4px))}
+.filo .ritratto-wrap{display:flex;justify-content:center;padding-top:26px;position:relative;--focus:0;--vis:0;--on:0}
+/* il ritratto: elemento puramente fotografico, naturale, che si stacca dal concept.
+   Nessun trattamento, forma pulita, entra con una semplice dissolvenza. E l'ultima stazione: il filo ci arriva, non lo taglia */
+.filo .ritratto{position:relative;width:min(74%,340px);aspect-ratio:4/5;
+  border-radius:20px;overflow:hidden;border:1px solid var(--bordo);background:var(--superficie);
+  opacity:var(--vis);transform:scale(calc(.94 + var(--focus)*.06));
+  box-shadow:0 34px 80px -40px rgba(0,0,0,.65)}
+.filo .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+/* su viewport basse il ritratto va limitato: a 640px di altezza la chiusura gli finiva sopra */
+@media (max-height:820px){.filo .ritratto{width:min(74%,300px,32vh)}}
+.filo .chiusura{position:absolute;left:0;right:0;bottom:7vh;z-index:3;text-align:center;padding:0 24px;
+  --c:clamp(0,(var(--praw) - 0.86)/0.14,1);opacity:var(--c);transform:translateY(calc((1 - var(--c))*14px));pointer-events:none}
+.filo .chiusura p{color:var(--mezzo);max-width:52ch;margin:0 auto 18px}
+.filo .chiusura p strong{color:var(--testo);font-weight:500}
+.filo .chiusura p{pointer-events:auto}
+.filo .chiusura .btn{pointer-events:auto}
+/* statico: touch / reduced-motion / no-JS. La sezione diventa un blocco normale, tutto rivelato */
+@media (max-width:760px){
+  /* in modalita statica la cella non deve piu crescere in scala: puo prendersi la larghezza vera.
+     Il blocco resta centrato sotto il filo, ma il testo torna sull'asse sinistro come nel resto del sito */
+  .filo.statico .cella{max-width:86vw;text-align:left;padding:20px 22px 22px}
+  .filo.statico .desc{margin:12px 0 0;max-width:none}
+  .filo.statico .voce{font-size:clamp(20px,5.4vw,26px)}
+}
+/* le stazioni entrano una alla volta invece di essere gia tutte li: senza JS
+   o con reduced-motion la regola non si applica e resta tutto visibile */
+.reveal-on .filo.statico .tappa,.reveal-on .filo.statico .ritratto-wrap{
+  opacity:0;transform:translateY(20px);
+  transition:opacity 760ms var(--ease-viscoso),transform 760ms var(--ease-viscoso);
+}
+.reveal-on .filo.statico .tappa.entra,.reveal-on .filo.statico .ritratto-wrap.entra{opacity:1;transform:none}
+.filo.statico{height:auto}
+.filo.statico .stage{position:static;height:auto;overflow:visible;padding:clamp(64px,9vw,110px) 0}
+.filo.statico .titolo{position:static;margin-bottom:36px}
+.filo.statico .colonna{position:static;transform:none}
+.filo.statico .thread{display:none}
+/* statico: le stazioni sono tutte alla loro forma piena. A .35 restavano a meta
+   accensione e i titoli leggevano come uno stato disabilitato, che non si attiva mai */
+.filo.statico .tappa,.filo.statico .ritratto-wrap{--on:1;--focus:1;--vis:1}
+/* con focus pieno bordo e alone diventerebbero da elemento selezionato: qui nessuna
+   cella e "quella a fuoco", quindi si riportano a un valore di riposo */
+.filo.statico .cella{border-color:color-mix(in srgb, var(--ghiaccio) 24%, transparent);box-shadow:0 20px 50px -34px rgba(0,0,0,.6)}
+.filo.statico .nodo{transform:translateX(-50%) scale(1);box-shadow:0 0 10px color-mix(in srgb, var(--ghiaccio) 45%, transparent)}
+.filo.statico .tappa{margin-bottom:36px}
+.filo.statico .nodo{top:0}
+.filo.statico .desc{opacity:1;transform:none}
+.filo.statico .chiusura{position:static;opacity:1;transform:none;margin-top:36px}
+.filo.statico .ritratto{margin:0 auto;transform:none}
+.filo.statico .cella{opacity:1;transform:none}
+.filo.statico .stage::before,.filo.statico .stage::after{display:none}
+
+/* contatto */
+.contatto h2{font-family:var(--font-display);font-weight:500;font-size:clamp(38px,5.4vw,68px);letter-spacing:-.014em;margin-bottom:14px}
+.contatto .invito{color:var(--mezzo);max-width:52ch;margin-bottom:clamp(34px,5vw,48px)}
+/* la mail non va mai a capo: si dimensiona sulla colonna che la contiene, non sul viewport.
+   La stringa e larga ~13,5 volte il corpo, quindi 7cqw la fa stare dentro con margine.
+   Il clamp in vw resta come ripiego dove i container query non ci sono */
+.contatto-testo{container-type:inline-size}
+/* l'indirizzo e' una sola parola lunga: con la spaziatura del testo forzata
+   dall'utente (WCAG 1.4.12) cresce oltre la riga e sfonda il viewport a 390px.
+   anywhere lo lascia spezzare solo quando non ci sta: a spaziatura normale
+   non cambia nulla. */
+.mail-grande{overflow-wrap:anywhere;
+  display:inline-block;font-family:var(--font-display);font-weight:500;
+  font-size:clamp(20px,3.2vw,50px);
+  font-size:min(7cqw,50px);
+  /* niente nowrap: con la spaziatura del testo imposta dall'utente (WCAG
+     1.4.12) l'indirizzo cresce del 12% e sfonda il viewport da 320 a 820px.
+     Senza nowrap, li' va a capo invece di uscire; a spaziatura normale
+     min(7cqw,50px) lo tiene su una riga sola a ogni larghezza. */
+  letter-spacing:-.01em;
+  color:var(--testo);text-decoration:none;
+  border-bottom:3px solid var(--funzione);padding-bottom:8px;
+  transition:color var(--durata-micro) var(--ease-viscoso);
+}
+.mail-grande:hover{color:var(--funzione)}
+.contatto-meta{margin-top:32px;display:flex;flex-wrap:wrap;gap:10px 26px;font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mezzo)}
+.contatto-meta a{color:var(--funzione);text-decoration:none}
+.contatto-meta a:hover{text-decoration:underline;text-underline-offset:4px}
+.contatto-layout{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(32px,5vw,64px);align-items:center}
+@media(max-width:820px){.contatto-layout{grid-template-columns:1fr}}
+.contatto-foto{
+  aspect-ratio:4/3;border-radius:16px;overflow:hidden;
+  border:1px solid var(--bordo);background:var(--superficie);
+}
+.contatto-foto img{width:100%;height:100%;object-fit:cover;object-position:50% 16%;display:block}
+/* due azioni affiancate: leggere il caso resta la principale, andare al sito
+   e' la prova e sta accanto. Prima la seconda era un link in mezzo al testo. */
+.rr-azioni{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;margin:0}
+@media(max-width:480px){.rr-azioni{flex-direction:column;align-items:flex-start;gap:10px}}
+.rr-gate{margin:0 0 16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mezzo)}
