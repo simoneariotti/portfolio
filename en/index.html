@@ -62,6 +62,7 @@
   </ul>
 </nav>
 
+<main id="contenuto">
 <!-- ═══ HERO: la riga per tutti nel titolo, il concept nella firma ═══ -->
 <header class="hero" id="inizio">
   <canvas id="reticolo" aria-hidden="true"></canvas>
@@ -73,6 +74,7 @@
     <a class="btn btn-primaria" data-luce href="#lavori">See how I work <svg class="icona freccia-giu" aria-hidden="true"><use href="#i-giu"/></svg></a>
   </div>
   <div class="hero-basso">
+    <button class="pausa" type="button" aria-pressed="false" data-ferma="Pause animation" data-riprendi="Resume animation">Pause animation</button>
     <span class="hint">Move the cursor for light, click to deform the structure</span>
   </div>
 </header>
@@ -194,6 +196,8 @@
   </div>
 </section>
 
+</main>
+
 <footer>
   <div class="wrap">
     <p class="identita"><strong>Simone Ariotti</strong> · Digital Product Designer<br>
@@ -202,6 +206,7 @@
     <div class="chiudi">
       <span>© <span data-anno>2026</span> Simone Ariotti</span>
       <span>Built on a structure that holds</span>
+      <a href="../accessibilita.html" hreflang="it">Accessibility (in Italian)</a>
     </div>
   </div>
 </footer>
@@ -429,7 +434,8 @@
   const durate=[];
   function loop(now){
     const dt=Math.min(Math.max((now-prima)/1000,0.001),0.1); prima=now;
-    clock=(now-start)/1000;
+    /* in pausa il tempo dello shader si ferma: la struttura resta dov'e' e risponde ancora al cursore */
+    if(!document.documentElement.classList.contains('fermo')) clock+=dt;
     if(visibile){
       /* Lo smorzamento era 0.07 per fotogramma: a 120Hz arrivava al doppio
          della velocita' e quando un fotogramma saltava faceva uno scatto.

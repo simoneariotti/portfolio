@@ -35,3 +35,10 @@ Askme_Metriche_Business_e_DesignSystem.md
 # di sicurezza se un download futuro finisce di nuovo nella radice del repo.
 certificate-*.jpg
 certificate-*.pdf
+
+# --- Documenti di lavoro personali: contratto, cedolini, lettere aziendali ---
+# Contengono codice fiscale, IBAN e retribuzione. Non devono MAI finire online.
+_lascaux-contratto/
+
+# --- Candidature ITS: moduli firmati e allegati con dati personali ---
+ITS/

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dichiarazione di accessibilità · Simone Ariotti</title>
+<meta name="description" content="Dichiarazione volontaria di accessibilità del portfolio: stato di conformità alle WCAG 2.2 AA, i difetti trovati e corretti, il metodo di verifica e come segnalare un problema.">
+<link rel="canonical" href="https://simoneariotti.github.io/portfolio/accessibilita.html">
+<meta name="author" content="Simone Ariotti">
+<meta name="theme-color" content="#080B18">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Simone Ariotti">
+<meta property="og:locale" content="it_IT">
+<meta property="og:url" content="https://simoneariotti.github.io/portfolio/accessibilita.html">
+<meta property="og:title" content="Dichiarazione di accessibilità · Simone Ariotti">
+<meta property="og:description" content="Dichiarazione volontaria di accessibilità del portfolio: stato di conformità alle WCAG 2.2 AA, i difetti trovati e corretti, il metodo di verifica e come segnalare un problema.">
+<meta property="og:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Struttura reticolare viola-ghiaccio su fondo indaco, con la scritta: Progetto sistemi che reggono la crescita.">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dichiarazione di accessibilità · Simone Ariotti">
+<meta name="twitter:description" content="Dichiarazione volontaria di accessibilità del portfolio: stato di conformità alle WCAG 2.2 AA, i difetti trovati e corretti, il metodo di verifica e come segnalare un problema.">
+<meta name="twitter:image" content="https://simoneariotti.github.io/portfolio/assets/og-image.jpg">
+<link rel="stylesheet" href="assets/stile.css">
+<link rel="stylesheet" href="assets/caso.css">
+</head>
+<body>
+
+<!-- Sprite iconografica: SOLO Lucide, stroke 2, currentColor -->
+<!-- ═══ ICONOGRAFIA · blocco identico su ogni pagina, vedi storybook ═══
+     Griglia 24, tratto 2, estremi e giunti tondi, nessun riempimento, colore
+     ereditato da currentColor. Quattro segni e basta: freccia (vai), giu'
+     (scendi nella pagina), esterno (esci dal sito), indietro (torna alla home).
+     Uno stato non e' un'icona: lo dice il nodo di .gate. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-freccia" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-giu" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+  <symbol id="i-esterno" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-indietro" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
+</svg>
+
+<a class="salta" href="#contenuto">Salta al contenuto</a>
+
+<nav class="principale" aria-label="Principale">
+  <a class="logo" href="index.html"><svg class="icona" style="width:18px;height:18px" aria-hidden="true"><use href="#i-indietro"/></svg>Simone Ariotti</a>
+  <ul>
+    <li><a href="index.html#lavori">Case study</a></li>
+    <li><a href="index.html#rr">Rotte e Racconti</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="index.html#contatti">Contatti</a></li>
+    <li class="lingua"><span class="attiva" aria-current="true">IT</span><span class="sep" aria-hidden="true">/</span><a href="en/index.html" hreflang="en" lang="en" title="This statement is in Italian only: go to the English home">EN</a></li>
+  </ul>
+</nav>
+
+<nav class="indice" aria-label="Indice della pagina">
+  <ul>
+    <li><a href="#s01">Stato</a></li>
+    <li><a href="#s02">Correzioni</a></li>
+    <li><a href="#s03">Limiti</a></li>
+    <li><a href="#s04">Metodo</a></li>
+    <li><a href="#s05">Segnalazioni</a></li>
+  </ul>
+</nav>
+
+<main id="contenuto">
+<!-- ═══ HERO DI PAGINA ═══ -->
+<header class="cs-hero">
+  <div class="wrap-prosa">
+    <p class="meta"><span>Dichiarazione volontaria</span><span>WCAG 2.2 · AA</span><span>22 ottobre 2026</span></p>
+    <h1>Dichiarazione di accessibilità</h1>
+    <p class="piano">Questo sito non è obbligato ad averne una. La scrivo con la struttura del modello AgID perché qui racconto di progettare l’accessibilità dalla sorgente, e chi legge deve poterlo verificare.</p>
+  </div>
+</header>
+
+<section class="blocco" id="s01">
+  <div class="wrap-prosa">
+    <p class="eyebrow">01 · Stato di conformità</p>
+    <h2>Conforme alle WCAG 2.2, livello AA.</h2>
+    <p class="attacco">Il sito rispetta i criteri di successo di livello A e AA delle Web Content Accessibility Guidelines 2.2. Sono anche il riferimento per il web della norma europea EN 301 549, nella versione 4.1.1 pubblicata il 2 settembre 2026. La valutazione copre tutte e dieci le pagine, cinque in italiano e cinque in inglese, nella versione del 22 ottobre 2026.</p>
+    <ul class="carte">
+      <li><span class="c-eti">Perimetro</span><span class="c-testo">Le dieci pagine del portfolio, su desktop e su mobile. Non i siti esterni a cui rimandano i collegamenti.</span></li>
+      <li><span class="c-eti">Obbligo</span><span class="c-testo">Nessuno. Un portfolio personale non rientra nella Legge Stanca e non è uno dei servizi coperti dall’European Accessibility Act.</span></li>
+      <li><span class="c-eti">Modello</span><span class="c-testo">Le sezioni seguono quelle della dichiarazione AgID: stato, contenuti non accessibili, metodo, meccanismo di segnalazione.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="blocco" id="s02">
+  <div class="wrap-prosa">
+    <p class="eyebrow">02 · Cosa ho trovato e corretto</p>
+    <h2>Sei difetti, trovati e corretti il 22 ottobre 2026.</h2>
+    <p class="attacco">Una revisione visiva non bastava a trovarli. Due li ha segnalati il controllo automatico. Gli altri quattro sono emersi solo misurando: il contrasto sui pixel reali invece che sui colori dichiarati, il focus percorso tasto per tasto, l’animazione confrontata fra due fotogrammi.</p>
+    <ol class="difetti">
+      <li>
+        <p class="d-crit">1.4.3 · Contrasto minimo</p>
+        <p><strong>Prima.</strong> Sopra la home la barra di navigazione è trasparente e sotto si muove la struttura chiara. Nei punti più luminosi le voci About e Contatti scendevano fino a 1,2:1, contro una soglia di 4,5:1.</p>
+        <p><strong>Ora.</strong> Una velatura statica scende dall’alto dietro la barra, senza sfocatura, che costerebbe a ogni fotogramma. Nel punto peggiore il contrasto è sopra 15:1.</p>
+      </li>
+      <li>
+        <p class="d-crit">2.2.2 · Pausa, stop, nascondi</p>
+        <p><strong>Prima.</strong> L’animazione della home parte da sola e non si ferma mai. Chi ha attivato il movimento ridotto la vedeva già ferma, tutti gli altri non avevano modo di fermarla.</p>
+        <p><strong>Ora.</strong> Un pulsante “Ferma l’animazione” in fondo alla hero, visibile anche su touch. In pausa la struttura resta ferma e risponde ancora al cursore.</p>
+      </li>
+      <li>
+        <p class="d-crit">2.1.1 · Tastiera</p>
+        <p><strong>Prima.</strong> Nel primo case study il blocco con la descrizione per la macchina scorre in orizzontale su mobile, e da tastiera non si poteva raggiungere: metà del testo era leggibile solo con il dito.</p>
+        <p><strong>Ora.</strong> Il blocco riceve il focus, ha un nome per gli screen reader e si scorre con le frecce.</p>
+      </li>
+      <li>
+        <p class="d-crit">2.4.7 · Focus visibile</p>
+        <p><strong>Prima.</strong> Gli elementi entrano in pagina con una dissolvenza. Percorrendo la pagina con Tab, il focus poteva arrivare su un bottone ancora trasparente: in home, su “Leggi la storia intera”, l’opacità era zero.</p>
+        <p><strong>Ora.</strong> Un elemento che riceve il focus si mostra subito, a qualunque punto sia la sua animazione.</p>
+      </li>
+      <li>
+        <p class="d-crit">1.3.1 e 2.4.1 · Struttura e salto dei blocchi</p>
+        <p><strong>Prima.</strong> Nessuna pagina dichiarava la regione principale, e il collegamento per saltare al contenuto esisteva solo in home.</p>
+        <p><strong>Ora.</strong> Ogni pagina ha la sua regione principale e il collegamento per saltarci, primo elemento raggiungibile da tastiera.</p>
+      </li>
+      <li>
+        <p class="d-crit">2.4.11 · Focus non oscurato</p>
+        <p><strong>Prima.</strong> Tornando indietro con Maiusc+Tab, un elemento poteva fermarsi sotto le barre fisse in cima alla pagina.</p>
+        <p><strong>Ora.</strong> Lo scorrimento lascia sopra l’elemento lo spazio esatto delle barre, misurato su desktop e su mobile, dove sono più alte.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="blocco" id="s03">
+  <div class="wrap-prosa">
+    <p class="eyebrow">03 · Limiti noti</p>
+    <h2>Cosa non viola un criterio, ma pesa su chi usa il sito.</h2>
+    <ul>
+      <li><strong>Termini inglesi nel testo italiano.</strong> Design system, case study, token: non sono marcati come lingua inglese, quindi uno screen reader li pronuncia all’italiana. Il criterio 3.1.2 esclude i termini tecnici di uso corrente, ma l’effetto per chi ascolta resta.</li>
+      <li><strong>La struttura animata della home è decorazione.</strong> È nascosta alle tecnologie assistive e non porta informazioni proprie: tutto quello che dice la home sta anche nel testo.</li>
+      <li><strong>La dichiarazione esiste solo in italiano.</strong> Le pagine inglesi la collegano dichiarandone la lingua.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="blocco" id="s04">
+  <div class="wrap-prosa">
+    <p class="eyebrow">04 · Metodo</p>
+    <h2>Come l’ho verificato, e cosa non ho verificato.</h2>
+    <p class="attacco">Autovalutazione, su Chromium, a 1280 e a 390 pixel di larghezza, più la prova di riadattamento a 320.</p>
+    <ul>
+      <li><strong>Controllo automatico.</strong> axe-core 4.10 con le regole WCAG 2.2 A e AA, su ogni pagina e su entrambe le larghezze. Dopo le correzioni: zero violazioni.</li>
+      <li><strong>Contrasto misurato sul rendering.</strong> Il colore di ogni testo confrontato con i pixel dello sfondo che ha davvero dietro, ad animazioni concluse. Serve perché gran parte dei testi sta su sfumature o sulla struttura animata, dove il controllo automatico dichiara di non poter decidere.</li>
+      <li><strong>Tastiera.</strong> Ogni pagina percorsa con Tab e con Maiusc+Tab, verificando per ogni elemento che il focus sia visibile, non trasparente e non coperto dalle barre.</li>
+      <li><strong>Riadattamento, spaziatura, bersagli, movimento.</strong> Nessuno scorrimento orizzontale a 320 pixel (1.4.10). Nessun testo tagliato con la spaziatura forzata ai valori di 1.4.12. Bersagli di almeno 24 pixel (2.5.8). Con il movimento ridotto attivo, ogni animazione è spenta.</li>
+      <li><strong>Screen reader.</strong> Le pagine percorse con NVDA su Windows: ordine di lettura, titoli, regioni, nomi dei collegamenti e dei pulsanti, alternative testuali delle immagini e dei diagrammi.</li>
+    </ul>
+    <p><strong>Cosa non ho fatto:</strong> un test con persone che usano tecnologie assistive ogni giorno. Una verifica tecnica dice se il sito rispetta i criteri, non se è comodo da usare. È il limite di ogni autovalutazione, e il primo che toglierei.</p>
+  </div>
+</section>
+
+<section class="blocco" id="s05">
+  <div class="wrap-prosa">
+    <p class="eyebrow">05 · Segnalazioni</p>
+    <h2>Se qualcosa non funziona, scrivimi.</h2>
+    <p class="attacco">Scrivi a <a href="mailto:simone.ariotti97@gmail.com">simone.ariotti97@gmail.com</a> indicando la pagina, cosa stavi cercando di fare e con quale strumento: sistema operativo, browser, tecnologia assistiva. Rispondo entro trenta giorni, di solito molto prima. Se il difetto è reale lo correggo e lo aggiungo all’elenco della sezione 02.</p>
+    <p class="d-data">Redatta il 22 ottobre 2026. Si rivede a ogni modifica sostanziale del sito, e comunque entro ottobre 2027.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="identita"><strong>Simone Ariotti</strong> · Digital Product Designer<br>
+    IxDF Local Leader Turin</p>
+    <p class="wip">Questo sito è vivo: cambia, cresce, non è mai finito. Come chi lo scrive. E va bene così.</p>
+    <div class="chiudi">
+      <span>© <span data-anno>2026</span> Simone Ariotti</span>
+      <span>Costruito su una struttura che regge</span>
+      <a href="accessibilita.html" aria-current="page">Accessibilità</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/sito.js"></script>
+</body>
+</html>

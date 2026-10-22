@@ -207,3 +207,22 @@ document.querySelectorAll('[data-anno]').forEach(e=>{e.textContent=new Date().ge
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{misura();attiva();});
   misura(); attiva();
 })();
+
+
+/* ACCESSIBILITA 2026-10-22
+   1. Il focus da tastiera non deve atterrare su un elemento ancora trasparente:
+      se entra in un elemento in attesa di ingresso, lo si mostra subito.
+   2. Comando di pausa dell'animazione della hero (WCAG 2.2.2). */
+(function(){
+  document.addEventListener('focusin', function(e){
+    var m = e.target.closest && e.target.closest('.m');
+    if(m){ m.style.transitionDelay='0ms'; m.classList.add('in'); }
+  });
+  var b = document.querySelector('.hero-basso .pausa');
+  if(!b) return;
+  b.addEventListener('click', function(){
+    var fermo = document.documentElement.classList.toggle('fermo');
+    b.setAttribute('aria-pressed', fermo ? 'true' : 'false');
+    b.textContent = fermo ? b.dataset.riprendi : b.dataset.ferma;
+  });
+})();
